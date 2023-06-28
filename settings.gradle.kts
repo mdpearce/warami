@@ -1,8 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-include(":api")
-
-
 pluginManagement {
     repositories {
         google()
@@ -19,3 +16,9 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Warami"
 include(":app")
+include(":api")
+include(":common")
+include(":featurefeed")
+include(":ui")
+include(":domain")
+include(":data")

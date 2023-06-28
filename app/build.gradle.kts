@@ -52,6 +52,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":api"))
+    implementation(project(":common"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":featurefeed"))
+    implementation(project(":ui"))
+
+
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
