@@ -1,6 +1,6 @@
 plugins {
     id("com.neaniesoft.warami.android-conventions")
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -17,5 +17,5 @@ dependencies {
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    kapt(libs.moshi.kotlin.codegen)
+    ksp(libs.moshi.kotlin.codegen)
 }
