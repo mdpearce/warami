@@ -20,6 +20,7 @@ import com.neaniesoft.warami.api.models.CommentAggregates
 import com.neaniesoft.warami.api.models.Community
 import com.neaniesoft.warami.api.models.Person
 import com.neaniesoft.warami.api.models.Post
+import com.neaniesoft.warami.api.models.SubscribedType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -33,6 +34,7 @@ import com.squareup.moshi.JsonClass
  * @param community 
  * @param counts 
  * @param creatorBannedFromCommunity 
+ * @param subscribed 
  * @param saved 
  * @param creatorBlocked 
  * @param myVote 
@@ -58,6 +60,9 @@ data class CommentView (
 
     @Json(name = "creator_banned_from_community")
     val creatorBannedFromCommunity: kotlin.Boolean,
+
+    @Json(name = "subscribed")
+    val subscribed: SubscribedType,
 
     @Json(name = "saved")
     val saved: kotlin.Boolean,

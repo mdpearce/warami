@@ -15,6 +15,8 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.RegistrationMode
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -31,6 +33,7 @@ import com.squareup.moshi.JsonClass
  * @param requireEmailVerification 
  * @param privateInstance 
  * @param defaultTheme 
+ * @param defaultPostListingType 
  * @param hideModlogModNames 
  * @param applicationEmailAdmins 
  * @param actorNameMaxLength 
@@ -38,6 +41,7 @@ import com.squareup.moshi.JsonClass
  * @param captchaEnabled 
  * @param captchaDifficulty 
  * @param published 
+ * @param registrationMode 
  * @param reportsEmailAdmins 
  * @param applicationQuestion 
  * @param legalInformation 
@@ -75,6 +79,9 @@ data class LocalSite (
     @Json(name = "default_theme")
     val defaultTheme: kotlin.String,
 
+    @Json(name = "default_post_listing_type")
+    val defaultPostListingType: ListingType,
+
     @Json(name = "hide_modlog_mod_names")
     val hideModlogModNames: kotlin.Boolean,
 
@@ -95,6 +102,9 @@ data class LocalSite (
 
     @Json(name = "published")
     val published: kotlin.String,
+
+    @Json(name = "registration_mode")
+    val registrationMode: RegistrationMode,
 
     @Json(name = "reports_email_admins")
     val reportsEmailAdmins: kotlin.Boolean,

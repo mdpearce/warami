@@ -15,6 +15,7 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.PostFeatureType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -24,6 +25,7 @@ import com.squareup.moshi.JsonClass
  *
  * @param postId 
  * @param featured 
+ * @param featureType 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -35,6 +37,9 @@ data class FeaturePost (
 
     @Json(name = "featured")
     val featured: kotlin.Boolean,
+
+    @Json(name = "feature_type")
+    val featureType: PostFeatureType,
 
     @Json(name = "auth")
     val auth: kotlin.String

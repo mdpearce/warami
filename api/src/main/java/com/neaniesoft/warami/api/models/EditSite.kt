@@ -15,6 +15,8 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.RegistrationMode
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -35,6 +37,7 @@ import com.squareup.moshi.JsonClass
  * @param applicationQuestion 
  * @param privateInstance 
  * @param defaultTheme 
+ * @param defaultPostListingType 
  * @param legalInformation 
  * @param applicationEmailAdmins 
  * @param hideModlogModNames 
@@ -60,6 +63,7 @@ import com.squareup.moshi.JsonClass
  * @param allowedInstances 
  * @param blockedInstances 
  * @param taglines 
+ * @param registrationMode 
  * @param reportsEmailAdmins 
  */
 @JsonClass(generateAdapter = true)
@@ -104,6 +108,9 @@ data class EditSite (
 
     @Json(name = "default_theme")
     val defaultTheme: kotlin.String? = null,
+
+    @Json(name = "default_post_listing_type")
+    val defaultPostListingType: ListingType? = null,
 
     @Json(name = "legal_information")
     val legalInformation: kotlin.String? = null,
@@ -179,6 +186,9 @@ data class EditSite (
 
     @Json(name = "taglines")
     val taglines: kotlin.collections.List<kotlin.String>? = null,
+
+    @Json(name = "registration_mode")
+    val registrationMode: RegistrationMode? = null,
 
     @Json(name = "reports_email_admins")
     val reportsEmailAdmins: kotlin.Boolean? = null

@@ -15,6 +15,8 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.SortType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -26,6 +28,8 @@ import com.squareup.moshi.JsonClass
  * @param personId 
  * @param showNsfw 
  * @param theme 
+ * @param defaultSortType 
+ * @param defaultListingType 
  * @param interfaceLanguage 
  * @param showAvatars 
  * @param sendNotificationsToEmail 
@@ -54,6 +58,12 @@ data class LocalUser (
 
     @Json(name = "theme")
     val theme: kotlin.String,
+
+    @Json(name = "default_sort_type")
+    val defaultSortType: SortType,
+
+    @Json(name = "default_listing_type")
+    val defaultListingType: ListingType,
 
     @Json(name = "interface_language")
     val interfaceLanguage: kotlin.String,

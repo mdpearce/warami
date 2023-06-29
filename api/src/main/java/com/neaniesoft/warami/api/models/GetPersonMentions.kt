@@ -15,6 +15,7 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.CommentSortType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,6 +24,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param auth 
+ * @param sort 
  * @param page 
  * @param limit 
  * @param unreadOnly 
@@ -33,6 +35,9 @@ data class GetPersonMentions (
 
     @Json(name = "auth")
     val auth: kotlin.String,
+
+    @Json(name = "sort")
+    val sort: CommentSortType? = null,
 
     @Json(name = "page")
     val page: java.math.BigDecimal? = null,

@@ -15,6 +15,8 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.SortType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -26,6 +28,8 @@ import com.squareup.moshi.JsonClass
  * @param showNsfw 
  * @param showScores 
  * @param theme 
+ * @param defaultSortType 
+ * @param defaultListingType 
  * @param interfaceLanguage 
  * @param avatar 
  * @param banner 
@@ -57,6 +61,12 @@ data class SaveUserSettings (
 
     @Json(name = "theme")
     val theme: kotlin.String? = null,
+
+    @Json(name = "default_sort_type")
+    val defaultSortType: SortType? = null,
+
+    @Json(name = "default_listing_type")
+    val defaultListingType: ListingType? = null,
 
     @Json(name = "interface_language")
     val interfaceLanguage: kotlin.String? = null,

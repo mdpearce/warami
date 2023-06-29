@@ -17,6 +17,7 @@ package com.neaniesoft.warami.api.models
 
 import com.neaniesoft.warami.api.models.Community
 import com.neaniesoft.warami.api.models.CommunityAggregates
+import com.neaniesoft.warami.api.models.SubscribedType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -25,6 +26,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param community 
+ * @param subscribed 
  * @param blocked 
  * @param counts 
  */
@@ -34,6 +36,9 @@ data class CommunityView (
 
     @Json(name = "community")
     val community: Community,
+
+    @Json(name = "subscribed")
+    val subscribed: SubscribedType,
 
     @Json(name = "blocked")
     val blocked: kotlin.Boolean,

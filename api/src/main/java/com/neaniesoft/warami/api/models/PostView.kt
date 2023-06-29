@@ -19,6 +19,7 @@ import com.neaniesoft.warami.api.models.Community
 import com.neaniesoft.warami.api.models.Person
 import com.neaniesoft.warami.api.models.Post
 import com.neaniesoft.warami.api.models.PostAggregates
+import com.neaniesoft.warami.api.models.SubscribedType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -31,6 +32,7 @@ import com.squareup.moshi.JsonClass
  * @param community 
  * @param creatorBannedFromCommunity 
  * @param counts 
+ * @param subscribed 
  * @param saved 
  * @param read 
  * @param creatorBlocked 
@@ -55,6 +57,9 @@ data class PostView (
 
     @Json(name = "counts")
     val counts: PostAggregates,
+
+    @Json(name = "subscribed")
+    val subscribed: SubscribedType,
 
     @Json(name = "saved")
     val saved: kotlin.Boolean,

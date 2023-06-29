@@ -15,6 +15,9 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.SearchType
+import com.neaniesoft.warami.api.models.SortType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -26,6 +29,9 @@ import com.squareup.moshi.JsonClass
  * @param communityId 
  * @param communityName 
  * @param creatorId 
+ * @param type 
+ * @param sort 
+ * @param listingType 
  * @param page 
  * @param limit 
  * @param auth 
@@ -45,6 +51,15 @@ data class Search (
 
     @Json(name = "creator_id")
     val creatorId: java.math.BigDecimal? = null,
+
+    @Json(name = "type_")
+    val type: SearchType? = null,
+
+    @Json(name = "sort")
+    val sort: SortType? = null,
+
+    @Json(name = "listing_type")
+    val listingType: ListingType? = null,
 
     @Json(name = "page")
     val page: java.math.BigDecimal? = null,

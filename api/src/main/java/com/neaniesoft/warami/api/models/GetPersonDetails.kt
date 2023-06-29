@@ -15,6 +15,7 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.SortType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -24,6 +25,7 @@ import com.squareup.moshi.JsonClass
  *
  * @param personId 
  * @param username 
+ * @param sort 
  * @param page 
  * @param limit 
  * @param communityId 
@@ -39,6 +41,9 @@ data class GetPersonDetails (
 
     @Json(name = "username")
     val username: kotlin.String? = null,
+
+    @Json(name = "sort")
+    val sort: SortType? = null,
 
     @Json(name = "page")
     val page: java.math.BigDecimal? = null,

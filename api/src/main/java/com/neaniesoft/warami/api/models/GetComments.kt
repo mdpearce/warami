@@ -15,6 +15,8 @@
 
 package com.neaniesoft.warami.api.models
 
+import com.neaniesoft.warami.api.models.CommentSortType
+import com.neaniesoft.warami.api.models.ListingType
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -22,6 +24,8 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param type 
+ * @param sort 
  * @param maxDepth 
  * @param page 
  * @param limit 
@@ -35,6 +39,12 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 
 data class GetComments (
+
+    @Json(name = "type_")
+    val type: ListingType? = null,
+
+    @Json(name = "sort")
+    val sort: CommentSortType? = null,
 
     @Json(name = "max_depth")
     val maxDepth: java.math.BigDecimal? = null,
