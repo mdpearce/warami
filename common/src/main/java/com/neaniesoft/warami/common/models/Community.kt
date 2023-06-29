@@ -20,15 +20,3 @@ data class Community(
     val icon: UriString?,
     val banner: UriString?,
 )
-
-@JvmInline
-value class CommunityId(val value: Int)
-
-@JvmInline
-value class ActorId(val value: String)
-
-@JvmInline
-value class InstanceId(val value: Int)
-
-@JvmInline
-value class UriString(val value: String)
