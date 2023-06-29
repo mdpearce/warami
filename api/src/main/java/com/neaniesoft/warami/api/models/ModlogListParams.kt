@@ -22,6 +22,7 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param hideModlogNames 
  * @param communityId 
  * @param modPersonId 
  * @param otherPersonId 
@@ -31,6 +32,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 
 data class ModlogListParams (
+
+    @Json(name = "hide_modlog_names")
+    val hideModlogNames: kotlin.Boolean,
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal? = null,

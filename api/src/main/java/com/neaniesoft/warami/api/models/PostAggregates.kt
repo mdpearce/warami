@@ -31,6 +31,8 @@ import com.squareup.moshi.JsonClass
  * @param published 
  * @param newestCommentTimeNecro 
  * @param newestCommentTime 
+ * @param featuredCommunity 
+ * @param featuredLocal 
  * @param hotRank 
  * @param hotRankActive 
  */
@@ -64,6 +66,12 @@ data class PostAggregates (
 
     @Json(name = "newest_comment_time")
     val newestCommentTime: kotlin.String,
+
+    @Json(name = "featured_community")
+    val featuredCommunity: kotlin.Boolean,
+
+    @Json(name = "featured_local")
+    val featuredLocal: kotlin.Boolean,
 
     @Json(name = "hot_rank")
     val hotRank: java.math.BigDecimal,

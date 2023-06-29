@@ -104,6 +104,7 @@ import com.neaniesoft.warami.api.models.PrivateMessageResponse
 import com.neaniesoft.warami.api.models.PrivateMessagesResponse
 import com.neaniesoft.warami.api.models.PurgeComment
 import com.neaniesoft.warami.api.models.PurgeCommunity
+import com.neaniesoft.warami.api.models.PurgeItemResponse
 import com.neaniesoft.warami.api.models.PurgePerson
 import com.neaniesoft.warami.api.models.PurgePost
 import com.neaniesoft.warami.api.models.Register
@@ -817,10 +818,10 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param purgeComment 
-     * @return [kotlin.Any]
+     * @return [PurgeItemResponse]
      */
     @POST("admin/purge/comment")
-    suspend fun purgeComment(@Body purgeComment: PurgeComment): Response<kotlin.Any>
+    suspend fun purgeComment(@Body purgeComment: PurgeComment): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a community from the database.
@@ -829,10 +830,10 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param purgeCommunity 
-     * @return [kotlin.Any]
+     * @return [PurgeItemResponse]
      */
     @POST("admin/purge/community")
-    suspend fun purgeCommunity(@Body purgeCommunity: PurgeCommunity): Response<kotlin.Any>
+    suspend fun purgeCommunity(@Body purgeCommunity: PurgeCommunity): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a person from the database.
@@ -841,10 +842,10 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param purgePerson 
-     * @return [kotlin.Any]
+     * @return [PurgeItemResponse]
      */
     @POST("admin/purge/person")
-    suspend fun purgePerson(@Body purgePerson: PurgePerson): Response<kotlin.Any>
+    suspend fun purgePerson(@Body purgePerson: PurgePerson): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a post from the database.
@@ -853,10 +854,10 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param purgePost 
-     * @return [kotlin.Any]
+     * @return [PurgeItemResponse]
      */
     @POST("admin/purge/post")
-    suspend fun purgePost(@Body purgePost: PurgePost): Response<kotlin.Any>
+    suspend fun purgePost(@Body purgePost: PurgePost): Response<PurgeItemResponse>
 
     /**
      * Register a new user.

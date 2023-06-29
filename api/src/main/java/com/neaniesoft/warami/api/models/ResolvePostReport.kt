@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param reportId 
+ * @param resolved 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class ResolvePostReport (
 
     @Json(name = "report_id")
     val reportId: java.math.BigDecimal,
+
+    @Json(name = "resolved")
+    val resolved: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

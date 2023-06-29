@@ -26,6 +26,7 @@ import com.squareup.moshi.JsonClass
  * @param communityId 
  * @param modPersonId 
  * @param `when` 
+ * @param hidden 
  * @param reason 
  */
 @JsonClass(generateAdapter = true)
@@ -43,6 +44,9 @@ data class ModHideCommunity (
 
     @Json(name = "when_")
     val `when`: kotlin.String,
+
+    @Json(name = "hidden")
+    val hidden: kotlin.Boolean,
 
     @Json(name = "reason")
     val reason: kotlin.String? = null

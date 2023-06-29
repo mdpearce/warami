@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param communityId 
+ * @param follow 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class FollowCommunity (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
+
+    @Json(name = "follow")
+    val follow: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

@@ -26,9 +26,13 @@ import com.squareup.moshi.JsonClass
  * @param creatorId 
  * @param postId 
  * @param content 
+ * @param removed 
  * @param published 
+ * @param deleted 
  * @param apId 
+ * @param local 
  * @param path 
+ * @param distinguished 
  * @param languageId 
  * @param updated 
  */
@@ -48,14 +52,26 @@ data class Comment (
     @Json(name = "content")
     val content: kotlin.String,
 
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
+
     @Json(name = "published")
     val published: kotlin.String,
+
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
 
     @Json(name = "ap_id")
     val apId: kotlin.String,
 
+    @Json(name = "local")
+    val local: kotlin.Boolean,
+
     @Json(name = "path")
     val path: kotlin.String,
+
+    @Json(name = "distinguished")
+    val distinguished: kotlin.Boolean,
 
     @Json(name = "language_id")
     val languageId: java.math.BigDecimal,

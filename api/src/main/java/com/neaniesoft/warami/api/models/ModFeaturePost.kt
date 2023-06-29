@@ -25,7 +25,9 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param postId 
+ * @param featured 
  * @param `when` 
+ * @param isFeaturedCommunity 
  */
 @JsonClass(generateAdapter = true)
 
@@ -40,8 +42,14 @@ data class ModFeaturePost (
     @Json(name = "post_id")
     val postId: java.math.BigDecimal,
 
+    @Json(name = "featured")
+    val featured: kotlin.Boolean,
+
     @Json(name = "when_")
-    val `when`: kotlin.String
+    val `when`: kotlin.String,
+
+    @Json(name = "is_featured_community")
+    val isFeaturedCommunity: kotlin.Boolean
 
 )
 

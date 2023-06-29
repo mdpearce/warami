@@ -26,8 +26,11 @@ import com.squareup.moshi.JsonClass
  * @param creatorId 
  * @param recipientId 
  * @param content 
+ * @param deleted 
+ * @param read 
  * @param published 
  * @param apId 
+ * @param local 
  * @param updated 
  */
 @JsonClass(generateAdapter = true)
@@ -46,11 +49,20 @@ data class PrivateMessage (
     @Json(name = "content")
     val content: kotlin.String,
 
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
+
+    @Json(name = "read")
+    val read: kotlin.Boolean,
+
     @Json(name = "published")
     val published: kotlin.String,
 
     @Json(name = "ap_id")
     val apId: kotlin.String,
+
+    @Json(name = "local")
+    val local: kotlin.Boolean,
 
     @Json(name = "updated")
     val updated: kotlin.String? = null

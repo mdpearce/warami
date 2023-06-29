@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param communityId 
+ * @param removed 
  * @param auth 
  * @param reason 
  * @param expires 
@@ -33,6 +34,9 @@ data class RemoveCommunity (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String,

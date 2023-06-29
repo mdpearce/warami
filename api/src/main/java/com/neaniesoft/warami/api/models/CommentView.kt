@@ -32,6 +32,9 @@ import com.squareup.moshi.JsonClass
  * @param post 
  * @param community 
  * @param counts 
+ * @param creatorBannedFromCommunity 
+ * @param saved 
+ * @param creatorBlocked 
  * @param myVote 
  */
 @JsonClass(generateAdapter = true)
@@ -52,6 +55,15 @@ data class CommentView (
 
     @Json(name = "counts")
     val counts: CommentAggregates,
+
+    @Json(name = "creator_banned_from_community")
+    val creatorBannedFromCommunity: kotlin.Boolean,
+
+    @Json(name = "saved")
+    val saved: kotlin.Boolean,
+
+    @Json(name = "creator_blocked")
+    val creatorBlocked: kotlin.Boolean,
 
     @Json(name = "my_vote")
     val myVote: java.math.BigDecimal? = null

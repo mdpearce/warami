@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
+ * @param approve 
  * @param auth 
  * @param denyReason 
  */
@@ -32,6 +33,9 @@ data class ApproveRegistrationApplication (
 
     @Json(name = "id")
     val id: java.math.BigDecimal,
+
+    @Json(name = "approve")
+    val approve: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String,

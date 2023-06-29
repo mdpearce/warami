@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param personId 
+ * @param block 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class BlockPerson (
 
     @Json(name = "person_id")
     val personId: java.math.BigDecimal,
+
+    @Json(name = "block")
+    val block: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

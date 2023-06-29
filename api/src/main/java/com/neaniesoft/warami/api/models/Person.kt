@@ -24,8 +24,13 @@ import com.squareup.moshi.JsonClass
  *
  * @param id 
  * @param name 
+ * @param banned 
  * @param published 
  * @param actorId 
+ * @param local 
+ * @param deleted 
+ * @param admin 
+ * @param botAccount 
  * @param instanceId 
  * @param displayName 
  * @param avatar 
@@ -45,11 +50,26 @@ data class Person (
     @Json(name = "name")
     val name: kotlin.String,
 
+    @Json(name = "banned")
+    val banned: kotlin.Boolean,
+
     @Json(name = "published")
     val published: kotlin.String,
 
     @Json(name = "actor_id")
     val actorId: kotlin.String,
+
+    @Json(name = "local")
+    val local: kotlin.Boolean,
+
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
+
+    @Json(name = "admin")
+    val admin: kotlin.Boolean,
+
+    @Json(name = "bot_account")
+    val botAccount: kotlin.Boolean,
 
     @Json(name = "instance_id")
     val instanceId: java.math.BigDecimal,

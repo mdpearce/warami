@@ -24,10 +24,21 @@ import com.squareup.moshi.JsonClass
  *
  * @param id 
  * @param siteId 
+ * @param siteSetup 
+ * @param enableDownvotes 
+ * @param enableNsfw 
+ * @param communityCreationAdminOnly 
+ * @param requireEmailVerification 
+ * @param privateInstance 
  * @param defaultTheme 
+ * @param hideModlogModNames 
+ * @param applicationEmailAdmins 
  * @param actorNameMaxLength 
+ * @param federationEnabled 
+ * @param captchaEnabled 
  * @param captchaDifficulty 
  * @param published 
+ * @param reportsEmailAdmins 
  * @param applicationQuestion 
  * @param legalInformation 
  * @param slurFilterRegex 
@@ -43,17 +54,50 @@ data class LocalSite (
     @Json(name = "site_id")
     val siteId: java.math.BigDecimal,
 
+    @Json(name = "site_setup")
+    val siteSetup: kotlin.Boolean,
+
+    @Json(name = "enable_downvotes")
+    val enableDownvotes: kotlin.Boolean,
+
+    @Json(name = "enable_nsfw")
+    val enableNsfw: kotlin.Boolean,
+
+    @Json(name = "community_creation_admin_only")
+    val communityCreationAdminOnly: kotlin.Boolean,
+
+    @Json(name = "require_email_verification")
+    val requireEmailVerification: kotlin.Boolean,
+
+    @Json(name = "private_instance")
+    val privateInstance: kotlin.Boolean,
+
     @Json(name = "default_theme")
     val defaultTheme: kotlin.String,
 
+    @Json(name = "hide_modlog_mod_names")
+    val hideModlogModNames: kotlin.Boolean,
+
+    @Json(name = "application_email_admins")
+    val applicationEmailAdmins: kotlin.Boolean,
+
     @Json(name = "actor_name_max_length")
     val actorNameMaxLength: java.math.BigDecimal,
+
+    @Json(name = "federation_enabled")
+    val federationEnabled: kotlin.Boolean,
+
+    @Json(name = "captcha_enabled")
+    val captchaEnabled: kotlin.Boolean,
 
     @Json(name = "captcha_difficulty")
     val captchaDifficulty: kotlin.String,
 
     @Json(name = "published")
     val published: kotlin.String,
+
+    @Json(name = "reports_email_admins")
+    val reportsEmailAdmins: kotlin.Boolean,
 
     @Json(name = "application_question")
     val applicationQuestion: kotlin.String? = null,

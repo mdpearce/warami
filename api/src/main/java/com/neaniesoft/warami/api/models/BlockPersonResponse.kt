@@ -24,13 +24,17 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param personView 
+ * @param blocked 
  */
 @JsonClass(generateAdapter = true)
 
 data class BlockPersonResponse (
 
     @Json(name = "person_view")
-    val personView: PersonView
+    val personView: PersonView,
+
+    @Json(name = "blocked")
+    val blocked: kotlin.Boolean
 
 )
 

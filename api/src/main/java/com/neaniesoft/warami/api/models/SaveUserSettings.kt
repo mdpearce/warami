@@ -23,6 +23,8 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param auth 
+ * @param showNsfw 
+ * @param showScores 
  * @param theme 
  * @param interfaceLanguage 
  * @param avatar 
@@ -31,7 +33,14 @@ import com.squareup.moshi.JsonClass
  * @param email 
  * @param bio 
  * @param matrixUserId 
+ * @param showAvatars 
+ * @param sendNotificationsToEmail 
+ * @param botAccount 
+ * @param showBotAccounts 
+ * @param showReadPosts 
+ * @param showNewPostNotifs 
  * @param discussionLanguages 
+ * @param generateTotp2fa 
  */
 @JsonClass(generateAdapter = true)
 
@@ -39,6 +48,12 @@ data class SaveUserSettings (
 
     @Json(name = "auth")
     val auth: kotlin.String,
+
+    @Json(name = "show_nsfw")
+    val showNsfw: kotlin.Boolean? = null,
+
+    @Json(name = "show_scores")
+    val showScores: kotlin.Boolean? = null,
 
     @Json(name = "theme")
     val theme: kotlin.String? = null,
@@ -64,8 +79,29 @@ data class SaveUserSettings (
     @Json(name = "matrix_user_id")
     val matrixUserId: kotlin.String? = null,
 
+    @Json(name = "show_avatars")
+    val showAvatars: kotlin.Boolean? = null,
+
+    @Json(name = "send_notifications_to_email")
+    val sendNotificationsToEmail: kotlin.Boolean? = null,
+
+    @Json(name = "bot_account")
+    val botAccount: kotlin.Boolean? = null,
+
+    @Json(name = "show_bot_accounts")
+    val showBotAccounts: kotlin.Boolean? = null,
+
+    @Json(name = "show_read_posts")
+    val showReadPosts: kotlin.Boolean? = null,
+
+    @Json(name = "show_new_post_notifs")
+    val showNewPostNotifs: kotlin.Boolean? = null,
+
     @Json(name = "discussion_languages")
-    val discussionLanguages: kotlin.collections.List<java.math.BigDecimal>? = null
+    val discussionLanguages: kotlin.collections.List<java.math.BigDecimal>? = null,
+
+    @Json(name = "generate_totp_2fa")
+    val generateTotp2fa: kotlin.Boolean? = null
 
 )
 

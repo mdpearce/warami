@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param commentId 
+ * @param save 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class SaveComment (
 
     @Json(name = "comment_id")
     val commentId: java.math.BigDecimal,
+
+    @Json(name = "save")
+    val save: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

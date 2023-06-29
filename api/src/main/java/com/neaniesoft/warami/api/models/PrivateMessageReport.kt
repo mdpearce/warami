@@ -27,6 +27,7 @@ import com.squareup.moshi.JsonClass
  * @param privateMessageId 
  * @param originalPmText 
  * @param reason 
+ * @param resolved 
  * @param published 
  * @param resolverId 
  * @param updated 
@@ -49,6 +50,9 @@ data class PrivateMessageReport (
 
     @Json(name = "reason")
     val reason: kotlin.String,
+
+    @Json(name = "resolved")
+    val resolved: kotlin.Boolean,
 
     @Json(name = "published")
     val published: kotlin.String,

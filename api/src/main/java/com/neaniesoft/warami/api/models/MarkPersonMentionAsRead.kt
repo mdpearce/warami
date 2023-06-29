@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param personMentionId 
+ * @param read 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class MarkPersonMentionAsRead (
 
     @Json(name = "person_mention_id")
     val personMentionId: java.math.BigDecimal,
+
+    @Json(name = "read")
+    val read: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param privateMessageId 
+ * @param deleted 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class DeletePrivateMessage (
 
     @Json(name = "private_message_id")
     val privateMessageId: java.math.BigDecimal,
+
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

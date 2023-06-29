@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param commentId 
+ * @param removed 
  * @param `when` 
  * @param reason 
  */
@@ -40,6 +41,9 @@ data class ModRemoveComment (
 
     @Json(name = "comment_id")
     val commentId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "when_")
     val `when`: kotlin.String,

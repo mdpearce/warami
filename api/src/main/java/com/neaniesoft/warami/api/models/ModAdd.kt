@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param otherPersonId 
+ * @param removed 
  * @param `when` 
  */
 @JsonClass(generateAdapter = true)
@@ -39,6 +40,9 @@ data class ModAdd (
 
     @Json(name = "other_person_id")
     val otherPersonId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "when_")
     val `when`: kotlin.String

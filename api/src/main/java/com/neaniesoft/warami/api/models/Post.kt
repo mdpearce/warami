@@ -26,9 +26,16 @@ import com.squareup.moshi.JsonClass
  * @param name 
  * @param creatorId 
  * @param communityId 
+ * @param removed 
+ * @param locked 
  * @param published 
+ * @param deleted 
+ * @param nsfw 
  * @param apId 
+ * @param local 
  * @param languageId 
+ * @param featuredCommunity 
+ * @param featuredLocal 
  * @param url 
  * @param body 
  * @param updated 
@@ -53,14 +60,35 @@ data class Post (
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
 
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
+
+    @Json(name = "locked")
+    val locked: kotlin.Boolean,
+
     @Json(name = "published")
     val published: kotlin.String,
+
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
+
+    @Json(name = "nsfw")
+    val nsfw: kotlin.Boolean,
 
     @Json(name = "ap_id")
     val apId: kotlin.String,
 
+    @Json(name = "local")
+    val local: kotlin.Boolean,
+
     @Json(name = "language_id")
     val languageId: java.math.BigDecimal,
+
+    @Json(name = "featured_community")
+    val featuredCommunity: kotlin.Boolean,
+
+    @Json(name = "featured_local")
+    val featuredLocal: kotlin.Boolean,
 
     @Json(name = "url")
     val url: kotlin.String? = null,

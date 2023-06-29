@@ -28,9 +28,16 @@ import com.squareup.moshi.JsonClass
  * @param description 
  * @param icon 
  * @param banner 
+ * @param enableDownvotes 
+ * @param enableNsfw 
+ * @param communityCreationAdminOnly 
+ * @param requireEmailVerification 
  * @param applicationQuestion 
+ * @param privateInstance 
  * @param defaultTheme 
  * @param legalInformation 
+ * @param applicationEmailAdmins 
+ * @param hideModlogModNames 
  * @param discussionLanguages 
  * @param slurFilterRegex 
  * @param actorNameMaxLength 
@@ -46,10 +53,14 @@ import com.squareup.moshi.JsonClass
  * @param rateLimitCommentPerSecond 
  * @param rateLimitSearch 
  * @param rateLimitSearchPerSecond 
+ * @param federationEnabled 
+ * @param federationDebug 
+ * @param captchaEnabled 
  * @param captchaDifficulty 
  * @param allowedInstances 
  * @param blockedInstances 
  * @param taglines 
+ * @param reportsEmailAdmins 
  */
 @JsonClass(generateAdapter = true)
 
@@ -73,14 +84,35 @@ data class EditSite (
     @Json(name = "banner")
     val banner: kotlin.String? = null,
 
+    @Json(name = "enable_downvotes")
+    val enableDownvotes: kotlin.Boolean? = null,
+
+    @Json(name = "enable_nsfw")
+    val enableNsfw: kotlin.Boolean? = null,
+
+    @Json(name = "community_creation_admin_only")
+    val communityCreationAdminOnly: kotlin.Boolean? = null,
+
+    @Json(name = "require_email_verification")
+    val requireEmailVerification: kotlin.Boolean? = null,
+
     @Json(name = "application_question")
     val applicationQuestion: kotlin.String? = null,
+
+    @Json(name = "private_instance")
+    val privateInstance: kotlin.Boolean? = null,
 
     @Json(name = "default_theme")
     val defaultTheme: kotlin.String? = null,
 
     @Json(name = "legal_information")
     val legalInformation: kotlin.String? = null,
+
+    @Json(name = "application_email_admins")
+    val applicationEmailAdmins: kotlin.Boolean? = null,
+
+    @Json(name = "hide_modlog_mod_names")
+    val hideModlogModNames: kotlin.Boolean? = null,
 
     @Json(name = "discussion_languages")
     val discussionLanguages: kotlin.collections.List<java.math.BigDecimal>? = null,
@@ -127,6 +159,15 @@ data class EditSite (
     @Json(name = "rate_limit_search_per_second")
     val rateLimitSearchPerSecond: java.math.BigDecimal? = null,
 
+    @Json(name = "federation_enabled")
+    val federationEnabled: kotlin.Boolean? = null,
+
+    @Json(name = "federation_debug")
+    val federationDebug: kotlin.Boolean? = null,
+
+    @Json(name = "captcha_enabled")
+    val captchaEnabled: kotlin.Boolean? = null,
+
     @Json(name = "captcha_difficulty")
     val captchaDifficulty: kotlin.String? = null,
 
@@ -137,7 +178,10 @@ data class EditSite (
     val blockedInstances: kotlin.collections.List<kotlin.String>? = null,
 
     @Json(name = "taglines")
-    val taglines: kotlin.collections.List<kotlin.String>? = null
+    val taglines: kotlin.collections.List<kotlin.String>? = null,
+
+    @Json(name = "reports_email_admins")
+    val reportsEmailAdmins: kotlin.Boolean? = null
 
 )
 

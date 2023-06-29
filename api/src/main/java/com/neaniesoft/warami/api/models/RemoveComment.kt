@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param commentId 
+ * @param removed 
  * @param auth 
  * @param reason 
  */
@@ -32,6 +33,9 @@ data class RemoveComment (
 
     @Json(name = "comment_id")
     val commentId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String,

@@ -22,11 +22,19 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param registrationCreated 
+ * @param verifyEmailSent 
  * @param jwt 
  */
 @JsonClass(generateAdapter = true)
 
 data class LoginResponse (
+
+    @Json(name = "registration_created")
+    val registrationCreated: kotlin.Boolean,
+
+    @Json(name = "verify_email_sent")
+    val verifyEmailSent: kotlin.Boolean,
 
     @Json(name = "jwt")
     val jwt: kotlin.String? = null

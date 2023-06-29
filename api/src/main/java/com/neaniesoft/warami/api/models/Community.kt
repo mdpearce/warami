@@ -25,8 +25,14 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param name 
  * @param title 
+ * @param removed 
  * @param published 
+ * @param deleted 
+ * @param nsfw 
  * @param actorId 
+ * @param local 
+ * @param hidden 
+ * @param postingRestrictedToMods 
  * @param instanceId 
  * @param description 
  * @param updated 
@@ -46,11 +52,29 @@ data class Community (
     @Json(name = "title")
     val title: kotlin.String,
 
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
+
     @Json(name = "published")
     val published: kotlin.String,
 
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
+
+    @Json(name = "nsfw")
+    val nsfw: kotlin.Boolean,
+
     @Json(name = "actor_id")
     val actorId: kotlin.String,
+
+    @Json(name = "local")
+    val local: kotlin.Boolean,
+
+    @Json(name = "hidden")
+    val hidden: kotlin.Boolean,
+
+    @Json(name = "posting_restricted_to_mods")
+    val postingRestrictedToMods: kotlin.Boolean,
 
     @Json(name = "instance_id")
     val instanceId: java.math.BigDecimal,

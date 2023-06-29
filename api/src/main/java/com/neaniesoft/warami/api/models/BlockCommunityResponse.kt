@@ -24,13 +24,17 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param communityView 
+ * @param blocked 
  */
 @JsonClass(generateAdapter = true)
 
 data class BlockCommunityResponse (
 
     @Json(name = "community_view")
-    val communityView: CommunityView
+    val communityView: CommunityView,
+
+    @Json(name = "blocked")
+    val blocked: kotlin.Boolean
 
 )
 

@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param username 
  * @param password 
  * @param passwordVerify 
+ * @param showNsfw 
  * @param email 
  * @param captchaUuid 
  * @param captchaAnswer 
@@ -43,6 +44,9 @@ data class Register (
 
     @Json(name = "password_verify")
     val passwordVerify: kotlin.String,
+
+    @Json(name = "show_nsfw")
+    val showNsfw: kotlin.Boolean,
 
     @Json(name = "email")
     val email: kotlin.String? = null,

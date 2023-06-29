@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param communityId 
+ * @param deleted 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class DeleteCommunity (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
+
+    @Json(name = "deleted")
+    val deleted: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

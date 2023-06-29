@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param auth 
+ * @param unreadOnly 
  * @param page 
  * @param limit 
  */
@@ -32,6 +33,9 @@ data class ListRegistrationApplications (
 
     @Json(name = "auth")
     val auth: kotlin.String,
+
+    @Json(name = "unread_only")
+    val unreadOnly: kotlin.Boolean? = null,
 
     @Json(name = "page")
     val page: java.math.BigDecimal? = null,

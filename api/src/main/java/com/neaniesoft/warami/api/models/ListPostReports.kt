@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param auth 
  * @param page 
  * @param limit 
+ * @param unresolvedOnly 
  * @param communityId 
  */
 @JsonClass(generateAdapter = true)
@@ -39,6 +40,9 @@ data class ListPostReports (
 
     @Json(name = "limit")
     val limit: java.math.BigDecimal? = null,
+
+    @Json(name = "unresolved_only")
+    val unresolvedOnly: kotlin.Boolean? = null,
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal? = null

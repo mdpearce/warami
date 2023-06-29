@@ -32,6 +32,7 @@ import com.squareup.moshi.JsonClass
  * @param community 
  * @param creator 
  * @param postCreator 
+ * @param creatorBannedFromCommunity 
  * @param counts 
  * @param myVote 
  * @param resolver 
@@ -54,6 +55,9 @@ data class PostReportView (
 
     @Json(name = "post_creator")
     val postCreator: Person,
+
+    @Json(name = "creator_banned_from_community")
+    val creatorBannedFromCommunity: kotlin.Boolean,
 
     @Json(name = "counts")
     val counts: PostAggregates,

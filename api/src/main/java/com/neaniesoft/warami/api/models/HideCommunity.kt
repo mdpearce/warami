@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param communityId 
+ * @param hidden 
  * @param auth 
  * @param reason 
  */
@@ -32,6 +33,9 @@ data class HideCommunity (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
+
+    @Json(name = "hidden")
+    val hidden: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String,

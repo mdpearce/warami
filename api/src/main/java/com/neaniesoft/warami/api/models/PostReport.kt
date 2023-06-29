@@ -27,6 +27,7 @@ import com.squareup.moshi.JsonClass
  * @param postId 
  * @param originalPostName 
  * @param reason 
+ * @param resolved 
  * @param published 
  * @param originalPostUrl 
  * @param originalPostBody 
@@ -51,6 +52,9 @@ data class PostReport (
 
     @Json(name = "reason")
     val reason: kotlin.String,
+
+    @Json(name = "resolved")
+    val resolved: kotlin.Boolean,
 
     @Json(name = "published")
     val published: kotlin.String,

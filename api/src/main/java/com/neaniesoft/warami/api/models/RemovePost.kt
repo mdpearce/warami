@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param postId 
+ * @param removed 
  * @param auth 
  * @param reason 
  */
@@ -32,6 +33,9 @@ data class RemovePost (
 
     @Json(name = "post_id")
     val postId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String,

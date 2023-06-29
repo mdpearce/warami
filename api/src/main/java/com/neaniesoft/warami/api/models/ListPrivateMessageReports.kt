@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param auth 
  * @param page 
  * @param limit 
+ * @param unresolvedOnly 
  */
 @JsonClass(generateAdapter = true)
 
@@ -37,7 +38,10 @@ data class ListPrivateMessageReports (
     val page: java.math.BigDecimal? = null,
 
     @Json(name = "limit")
-    val limit: java.math.BigDecimal? = null
+    val limit: java.math.BigDecimal? = null,
+
+    @Json(name = "unresolved_only")
+    val unresolvedOnly: kotlin.Boolean? = null
 
 )
 

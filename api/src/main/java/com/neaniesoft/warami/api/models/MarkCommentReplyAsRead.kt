@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param commentReplyId 
+ * @param read 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class MarkCommentReplyAsRead (
 
     @Json(name = "comment_reply_id")
     val commentReplyId: java.math.BigDecimal,
+
+    @Json(name = "read")
+    val read: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

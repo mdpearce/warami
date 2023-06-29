@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param otherPersonId 
+ * @param banned 
  * @param `when` 
  * @param reason 
  * @param expires 
@@ -41,6 +42,9 @@ data class ModBan (
 
     @Json(name = "other_person_id")
     val otherPersonId: java.math.BigDecimal,
+
+    @Json(name = "banned")
+    val banned: kotlin.Boolean,
 
     @Json(name = "when_")
     val `when`: kotlin.String,

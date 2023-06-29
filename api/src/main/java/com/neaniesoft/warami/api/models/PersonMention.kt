@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param recipientId 
  * @param commentId 
+ * @param read 
  * @param published 
  */
 @JsonClass(generateAdapter = true)
@@ -39,6 +40,9 @@ data class PersonMention (
 
     @Json(name = "comment_id")
     val commentId: java.math.BigDecimal,
+
+    @Json(name = "read")
+    val read: kotlin.Boolean,
 
     @Json(name = "published")
     val published: kotlin.String

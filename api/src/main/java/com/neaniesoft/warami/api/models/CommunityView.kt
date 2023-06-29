@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param community 
+ * @param blocked 
  * @param counts 
  */
 @JsonClass(generateAdapter = true)
@@ -33,6 +34,9 @@ data class CommunityView (
 
     @Json(name = "community")
     val community: Community,
+
+    @Json(name = "blocked")
+    val blocked: kotlin.Boolean,
 
     @Json(name = "counts")
     val counts: CommunityAggregates

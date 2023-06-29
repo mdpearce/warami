@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param communityId 
+ * @param removed 
  * @param `when` 
  * @param reason 
  * @param expires 
@@ -41,6 +42,9 @@ data class ModRemoveCommunity (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal,
+
+    @Json(name = "removed")
+    val removed: kotlin.Boolean,
 
     @Json(name = "when_")
     val `when`: kotlin.String,

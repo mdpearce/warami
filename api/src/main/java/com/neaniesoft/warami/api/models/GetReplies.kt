@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param auth 
  * @param page 
  * @param limit 
+ * @param unreadOnly 
  */
 @JsonClass(generateAdapter = true)
 
@@ -37,7 +38,10 @@ data class GetReplies (
     val page: java.math.BigDecimal? = null,
 
     @Json(name = "limit")
-    val limit: java.math.BigDecimal? = null
+    val limit: java.math.BigDecimal? = null,
+
+    @Json(name = "unread_only")
+    val unreadOnly: kotlin.Boolean? = null
 
 )
 

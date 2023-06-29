@@ -28,6 +28,8 @@ import com.squareup.moshi.JsonClass
  * @param description 
  * @param icon 
  * @param banner 
+ * @param nsfw 
+ * @param postingRestrictedToMods 
  * @param discussionLanguages 
  */
 @JsonClass(generateAdapter = true)
@@ -51,6 +53,12 @@ data class EditCommunity (
 
     @Json(name = "banner")
     val banner: kotlin.String? = null,
+
+    @Json(name = "nsfw")
+    val nsfw: kotlin.Boolean? = null,
+
+    @Json(name = "posting_restricted_to_mods")
+    val postingRestrictedToMods: kotlin.Boolean? = null,
 
     @Json(name = "discussion_languages")
     val discussionLanguages: kotlin.collections.List<java.math.BigDecimal>? = null

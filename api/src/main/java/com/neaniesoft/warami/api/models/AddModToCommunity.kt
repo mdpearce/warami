@@ -24,6 +24,7 @@ import com.squareup.moshi.JsonClass
  *
  * @param communityId 
  * @param personId 
+ * @param added 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -35,6 +36,9 @@ data class AddModToCommunity (
 
     @Json(name = "person_id")
     val personId: java.math.BigDecimal,
+
+    @Json(name = "added")
+    val added: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

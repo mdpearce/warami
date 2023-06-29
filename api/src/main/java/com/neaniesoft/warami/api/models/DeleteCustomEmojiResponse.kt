@@ -23,13 +23,17 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
+ * @param success 
  */
 @JsonClass(generateAdapter = true)
 
 data class DeleteCustomEmojiResponse (
 
     @Json(name = "id")
-    val id: java.math.BigDecimal
+    val id: java.math.BigDecimal,
+
+    @Json(name = "success")
+    val success: kotlin.Boolean
 
 )
 

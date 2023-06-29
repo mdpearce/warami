@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param privateMessageId 
+ * @param read 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class MarkPrivateMessageAsRead (
 
     @Json(name = "private_message_id")
     val privateMessageId: java.math.BigDecimal,
+
+    @Json(name = "read")
+    val read: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

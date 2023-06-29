@@ -29,6 +29,7 @@ import com.squareup.moshi.JsonClass
  * @param communityName 
  * @param postId 
  * @param parentId 
+ * @param savedOnly 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -55,6 +56,9 @@ data class GetComments (
 
     @Json(name = "parent_id")
     val parentId: java.math.BigDecimal? = null,
+
+    @Json(name = "saved_only")
+    val savedOnly: kotlin.Boolean? = null,
 
     @Json(name = "auth")
     val auth: kotlin.String? = null

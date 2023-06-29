@@ -27,6 +27,7 @@ import com.squareup.moshi.JsonClass
  * @param page 
  * @param limit 
  * @param communityId 
+ * @param savedOnly 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -47,6 +48,9 @@ data class GetPersonDetails (
 
     @Json(name = "community_id")
     val communityId: java.math.BigDecimal? = null,
+
+    @Json(name = "saved_only")
+    val savedOnly: kotlin.Boolean? = null,
 
     @Json(name = "auth")
     val auth: kotlin.String? = null

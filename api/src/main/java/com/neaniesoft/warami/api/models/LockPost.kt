@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param postId 
+ * @param locked 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class LockPost (
 
     @Json(name = "post_id")
     val postId: java.math.BigDecimal,
+
+    @Json(name = "locked")
+    val locked: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

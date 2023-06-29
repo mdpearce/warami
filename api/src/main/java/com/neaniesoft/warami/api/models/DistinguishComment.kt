@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param commentId 
+ * @param distinguished 
  * @param auth 
  */
 @JsonClass(generateAdapter = true)
@@ -31,6 +32,9 @@ data class DistinguishComment (
 
     @Json(name = "comment_id")
     val commentId: java.math.BigDecimal,
+
+    @Json(name = "distinguished")
+    val distinguished: kotlin.Boolean,
 
     @Json(name = "auth")
     val auth: kotlin.String

@@ -24,9 +24,18 @@ import com.squareup.moshi.JsonClass
  *
  * @param id 
  * @param personId 
+ * @param showNsfw 
  * @param theme 
  * @param interfaceLanguage 
+ * @param showAvatars 
+ * @param sendNotificationsToEmail 
  * @param validatorTime 
+ * @param showScores 
+ * @param showBotAccounts 
+ * @param showReadPosts 
+ * @param showNewPostNotifs 
+ * @param emailVerified 
+ * @param acceptedApplication 
  * @param email 
  * @param totp2faUrl 
  */
@@ -40,14 +49,41 @@ data class LocalUser (
     @Json(name = "person_id")
     val personId: java.math.BigDecimal,
 
+    @Json(name = "show_nsfw")
+    val showNsfw: kotlin.Boolean,
+
     @Json(name = "theme")
     val theme: kotlin.String,
 
     @Json(name = "interface_language")
     val interfaceLanguage: kotlin.String,
 
+    @Json(name = "show_avatars")
+    val showAvatars: kotlin.Boolean,
+
+    @Json(name = "send_notifications_to_email")
+    val sendNotificationsToEmail: kotlin.Boolean,
+
     @Json(name = "validator_time")
     val validatorTime: kotlin.String,
+
+    @Json(name = "show_scores")
+    val showScores: kotlin.Boolean,
+
+    @Json(name = "show_bot_accounts")
+    val showBotAccounts: kotlin.Boolean,
+
+    @Json(name = "show_read_posts")
+    val showReadPosts: kotlin.Boolean,
+
+    @Json(name = "show_new_post_notifs")
+    val showNewPostNotifs: kotlin.Boolean,
+
+    @Json(name = "email_verified")
+    val emailVerified: kotlin.Boolean,
+
+    @Json(name = "accepted_application")
+    val acceptedApplication: kotlin.Boolean,
 
     @Json(name = "email")
     val email: kotlin.String? = null,

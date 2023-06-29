@@ -27,6 +27,7 @@ import com.squareup.moshi.JsonClass
  * @param name 
  * @param url 
  * @param body 
+ * @param nsfw 
  * @param languageId 
  */
 @JsonClass(generateAdapter = true)
@@ -47,6 +48,9 @@ data class EditPost (
 
     @Json(name = "body")
     val body: kotlin.String? = null,
+
+    @Json(name = "nsfw")
+    val nsfw: kotlin.Boolean? = null,
 
     @Json(name = "language_id")
     val languageId: java.math.BigDecimal? = null

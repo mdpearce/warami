@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param modPersonId 
  * @param postId 
+ * @param locked 
  * @param `when` 
  */
 @JsonClass(generateAdapter = true)
@@ -39,6 +40,9 @@ data class ModLockPost (
 
     @Json(name = "post_id")
     val postId: java.math.BigDecimal,
+
+    @Json(name = "locked")
+    val locked: kotlin.Boolean,
 
     @Json(name = "when_")
     val `when`: kotlin.String

@@ -24,7 +24,9 @@ import com.squareup.moshi.JsonClass
  *
  * @param communityId 
  * @param personId 
+ * @param ban 
  * @param auth 
+ * @param removeData 
  * @param reason 
  * @param expires 
  */
@@ -38,8 +40,14 @@ data class BanFromCommunity (
     @Json(name = "person_id")
     val personId: java.math.BigDecimal,
 
+    @Json(name = "ban")
+    val ban: kotlin.Boolean,
+
     @Json(name = "auth")
     val auth: kotlin.String,
+
+    @Json(name = "remove_data")
+    val removeData: kotlin.Boolean? = null,
 
     @Json(name = "reason")
     val reason: kotlin.String? = null,
