@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.common.models
 
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 data class Community(
@@ -7,7 +8,7 @@ data class Community(
     val name: String,
     val title: String,
     val isRemoved: Boolean,
-    val publishedAt: ZonedDateTime,
+    val publishedAt: LocalDateTime,
     val isDeleted: Boolean,
     val isNsfw: Boolean,
     val actorId: ActorId,
@@ -16,7 +17,7 @@ data class Community(
     val isPostingRestrictedToMods: Boolean,
     val instanceId: InstanceId,
     val description: String?,
-    val updatedAt: ZonedDateTime?,
+    val updatedAt: LocalDateTime?,
     val icon: UriString?,
     val banner: UriString?,
 )
