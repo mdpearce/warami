@@ -1,0 +1,32 @@
+CREATE TABLE person (
+	id	INTEGER NOT NULL,
+	name	TEXT NOT NULL,
+	isBanned	INTEGER NOT NULL,
+	publishedAt	TEXT NOT NULL,
+	actorId	TEXT NOT NULL,
+	isLocal	INTEGER NOT NULL,
+	isDeleted	INTEGER NOT NULL,
+	isAdmin	INTEGER NOT NULL,
+	isBotAccount	INTEGER NOT NULL,
+	instanceId	INTEGER NOT NULL,
+	displayName	TEXT,
+	avatarUrl	TEXT,
+	updatedAt	TEXT,
+	bio	TEXT,
+	bannerUrl	TEXT,
+	matrixUserId	TEXT,
+	banExpires	TEXT,
+	PRIMARY KEY(id)
+);
+
+CREATE INDEX person_displayName ON person (
+	displayName
+);
+
+CREATE INDEX person_id ON person (
+	id
+);
+
+CREATE INDEX person_name ON person (
+	name
+);

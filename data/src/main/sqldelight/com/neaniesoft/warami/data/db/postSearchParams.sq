@@ -1,0 +1,11 @@
+CREATE TABLE postSearchParams (
+	id	INTEGER NOT NULL,
+	listingType	TEXT,
+	sortType	TEXT,
+	page	INTEGER,
+	postLimit	INTEGER,
+	communityId	INTEGER,
+	communityName	TEXT,
+	isSavedOnly	INTEGER,
+	PRIMARY KEY(id)
+);

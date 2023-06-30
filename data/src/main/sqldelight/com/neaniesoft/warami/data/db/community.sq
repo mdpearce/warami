@@ -1,0 +1,27 @@
+CREATE TABLE community (
+	id	INTEGER NOT NULL,
+	name	TEXT NOT NULL,
+	title	TEXT NOT NULL,
+	isRemoved	INTEGER NOT NULL,
+	isPublished	INTEGER NOT NULL,
+	isDeleted	INTEGER NOT NULL,
+	isNsfw	INTEGER NOT NULL,
+	actorId	TEXT NOT NULL,
+	isLocal	INTEGER NOT NULL,
+	isHidden	INTEGER NOT NULL,
+	isPostingRestrictedToMods	INTEGER NOT NULL,
+	instanceId	INTEGER NOT NULL,
+	description	TEXT,
+	updatedAt	TEXT,
+	iconUrl	TEXT,
+	bannerUrl	TEXT,
+	PRIMARY KEY(id)
+);
+
+CREATE INDEX community_id ON community (
+	id
+);
+
+CREATE INDEX community_name ON community (
+	name
+);

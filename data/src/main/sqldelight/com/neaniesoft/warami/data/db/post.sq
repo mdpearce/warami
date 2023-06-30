@@ -1,0 +1,42 @@
+CREATE TABLE post (
+	id	INTEGER NOT NULL,
+	name	TEXT NOT NULL,
+	creatorId	INTEGER NOT NULL,
+	communityId	INTEGER NOT NULL,
+	isRemoved	INTEGER NOT NULL,
+	isLocked	INTEGER NOT NULL,
+	publishedAt	TEXT NOT NULL,
+	isDeleted	INTEGER NOT NULL,
+	isNsfw	INTEGER NOT NULL,
+	apId	TEXT NOT NULL,
+	isLocal	INTEGER NOT NULL,
+	languageId	INTEGER NOT NULL,
+	isFeaturedCommunity	INTEGER NOT NULL,
+	url	TEXT,
+	body	TEXT,
+	updatedAt	TEXT,
+	embedTitle	TEXT,
+	embedDescription	TEXT,
+	thumbnailUrl	TEXT,
+	embedVideoUrl	TEXT,
+	isCreatorBannedFromCommunity	INTEGER NOT NULL,
+	counts	INTEGER NOT NULL,
+	subscribedType	TEXT NOT NULL,
+	isSaved	INTEGER NOT NULL,
+	isRead	INTEGER NOT NULL,
+	isCreatorBlocked	INTEGER NOT NULL,
+	myVote	INTEGER,
+	searchParams	INTEGER NOT NULL,
+	FOREIGN KEY(searchParams) REFERENCES postSearchParams(id),
+	FOREIGN KEY(communityId) REFERENCES community(id),
+	FOREIGN KEY(creatorId) REFERENCES person(id),
+	PRIMARY KEY(id)
+);
+
+CREATE INDEX post_communityId ON post (
+	communityId
+);
+
+CREATE INDEX post_id ON post (
+	id
+);

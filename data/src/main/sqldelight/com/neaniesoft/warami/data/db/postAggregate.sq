@@ -1,0 +1,20 @@
+CREATE TABLE postAggregate (
+	id	INTEGER NOT NULL,
+	postId	INTEGER NOT NULL,
+	comments	INTEGER NOT NULL,
+	score	INTEGER NOT NULL,
+	upVotes	INTEGER NOT NULL,
+	downVotes	INTEGER NOT NULL,
+	publishedAt	TEXT NOT NULL,
+	newestCommentTimeNecro	TEXT NOT NULL,
+	newestCommentTime	TEXT NOT NULL,
+	isFeaturedCommunity	INTEGER NOT NULL,
+	isFeaturedLocal	INTEGER NOT NULL,
+	hotRank	INTEGER NOT NULL,
+	hotRankActive	INTEGER NOT NULL,
+	PRIMARY KEY(id)
+);
+
+CREATE INDEX postAggregate_id ON postAggregate (
+	id
+);
