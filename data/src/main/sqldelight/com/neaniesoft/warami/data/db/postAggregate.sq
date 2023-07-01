@@ -18,3 +18,20 @@ CREATE TABLE postAggregate (
 CREATE INDEX postAggregate_id ON postAggregate (
 	id
 );
+
+insert:
+INSERT INTO postAggregate(
+    id,
+    postId,
+    comments,
+    score,
+    upVotes,
+    downVotes,
+    publishedAt,
+    newestCommentTimeNecro,
+    newestCommentTime,
+    isFeaturedCommunity,
+    isFeaturedLocal,
+    hotRank,
+    hotRankActive
+) VALUES ?;

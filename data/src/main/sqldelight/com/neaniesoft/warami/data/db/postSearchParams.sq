@@ -9,3 +9,15 @@ CREATE TABLE postSearchParams (
 	isSavedOnly	INTEGER,
 	PRIMARY KEY(id)
 );
+
+insert:
+INSERT INTO postSearchParams (
+    id,
+    listingType,
+    sortType,
+    page,
+    postLimit,
+    communityId,
+    communityName,
+    isSavedOnly
+) VALUES ?;

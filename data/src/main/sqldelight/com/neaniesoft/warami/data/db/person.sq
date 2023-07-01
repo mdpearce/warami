@@ -30,3 +30,24 @@ CREATE INDEX person_id ON person (
 CREATE INDEX person_name ON person (
 	name
 );
+
+insert:
+INSERT INTO person (
+    id,
+    name,
+    isBanned,
+    publishedAt,
+    actorId,
+    isLocal,
+    isDeleted,
+    isAdmin,
+    isBotAccount,
+    instanceId,
+    displayName,
+    avatarUrl,
+    updatedAt,
+    bio,
+    bannerUrl,
+    matrixUserId,
+    banExpires
+) VALUES ?;

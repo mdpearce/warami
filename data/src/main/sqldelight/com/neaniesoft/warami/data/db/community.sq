@@ -25,3 +25,23 @@ CREATE INDEX community_id ON community (
 CREATE INDEX community_name ON community (
 	name
 );
+
+insert:
+INSERT INTO community (
+    id,
+    name,
+    title,
+    isRemoved,
+    isPublished,
+    isDeleted,
+    isNsfw,
+    actorId,
+    isLocal,
+    isHidden,
+    isPostingRestrictedToMods,
+    instanceId,
+    description,
+    updatedAt,
+    iconUrl,
+    bannerUrl
+) VALUES ?;

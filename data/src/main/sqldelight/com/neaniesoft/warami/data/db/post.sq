@@ -20,7 +20,7 @@ CREATE TABLE post (
 	thumbnailUrl	TEXT,
 	embedVideoUrl	TEXT,
 	isCreatorBannedFromCommunity	INTEGER NOT NULL,
-	counts	INTEGER NOT NULL,
+	aggregates	INTEGER NOT NULL,
 	subscribedType	TEXT NOT NULL,
 	isSaved	INTEGER NOT NULL,
 	isRead	INTEGER NOT NULL,
@@ -30,6 +30,7 @@ CREATE TABLE post (
 	FOREIGN KEY(searchParams) REFERENCES postSearchParams(id),
 	FOREIGN KEY(communityId) REFERENCES community(id),
 	FOREIGN KEY(creatorId) REFERENCES person(id),
+	FOREIGN KEY(aggregates) REFERENCES postAggregate(id),
 	PRIMARY KEY(id)
 );
 
@@ -40,3 +41,35 @@ CREATE INDEX post_communityId ON post (
 CREATE INDEX post_id ON post (
 	id
 );
+
+insert:
+INSERT INTO post (
+    id,
+    name,
+    creatorId,
+    communityId,
+    isRemoved,
+    isLocked,
+    publishedAt,
+    isDeleted,
+    isNsfw,
+    apId,
+    isLocal,
+    languageId,
+    isFeaturedCommunity,
+    url,
+    body,
+    updatedAt,
+    embedTitle,
+    embedDescription,
+    thumbnailUrl,
+    embedVideoUrl,
+    isCreatorBannedFromCommunity,
+    aggregates,
+    subscribedType,
+    isSaved,
+    isRead,
+    isCreatorBlocked,
+    myVote,
+    searchParams
+) VALUES ?;
