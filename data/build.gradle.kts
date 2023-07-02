@@ -22,4 +22,5 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.coroutines.extensions)
 }
