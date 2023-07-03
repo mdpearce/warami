@@ -31,23 +31,61 @@ CREATE INDEX person_name ON person (
 	name
 );
 
-insert:
-INSERT INTO person (
-    id,
-    name,
-    isBanned,
-    publishedAt,
-    actorId,
-    isLocal,
-    isDeleted,
-    isAdmin,
-    isBotAccount,
-    instanceId,
-    displayName,
-    avatarUrl,
-    updatedAt,
-    bio,
-    bannerUrl,
-    matrixUserId,
-    banExpires
-) VALUES ?;
+upsert {
+    UPDATE person SET
+        name = :name,
+        isBanned = :isBanned,
+        publishedAt = :publishedAt,
+        actorId = :actorId,
+        isLocal = :isLocal,
+        isDeleted = :isDeleted,
+        isAdmin = :isAdmin,
+        isBotAccount = :isAdmin,
+        instanceId = :instanceId,
+        displayName = :displayName,
+        avatarUrl = :avatarUrl,
+        updatedAt = :updatedAt,
+        bio = :bio,
+        bannerUrl = :bannerUrl,
+        matrixUserId = :matrixUserId,
+        banExpires = :banExpires
+    WHERE id = :id;
+
+    INSERT OR IGNORE INTO person (
+        id,
+        name,
+        isBanned,
+        publishedAt,
+        actorId,
+        isLocal,
+        isDeleted,
+        isAdmin,
+        isBotAccount,
+        instanceId,
+        displayName,
+        avatarUrl,
+        updatedAt,
+        bio,
+        bannerUrl,
+        matrixUserId,
+        banExpires
+    ) VALUES (
+        :id,
+        :name,
+        :isBanned,
+        :publishedAt,
+        :actorId,
+        :isLocal,
+        :isDeleted,
+        :isAdmin,
+        :isBotAccount,
+        :instanceId,
+        :displayName,
+        :avatarUrl,
+        :updatedAt,
+        :bio,
+        :bannerUrl,
+        :matrixUserId,
+        :banExpires
+    );
+}

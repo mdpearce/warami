@@ -10,4 +10,5 @@ android {
 
 dependencies {
     implementation(project(":api"))
+    api(libs.ulid.creator)
 }

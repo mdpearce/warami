@@ -1,7 +1,9 @@
 package com.neaniesoft.warami.common.models
 
+import com.github.f4b6a3.ulid.Ulid
+
 data class PostSearchParameters(
-    val id: Int = 0,
+    val id: Ulid,
     val listingType: ListingType?,
     val sortType: SortType?,
     val pageNumber: Int?,

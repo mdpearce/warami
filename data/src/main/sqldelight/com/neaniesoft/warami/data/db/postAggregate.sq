@@ -19,19 +19,49 @@ CREATE INDEX postAggregate_id ON postAggregate (
 	id
 );
 
-insert:
-INSERT INTO postAggregate(
-    id,
-    postId,
-    comments,
-    score,
-    upVotes,
-    downVotes,
-    publishedAt,
-    newestCommentTimeNecro,
-    newestCommentTime,
-    isFeaturedCommunity,
-    isFeaturedLocal,
-    hotRank,
-    hotRankActive
-) VALUES ?;
+upsert {
+    UPDATE postAggregate SET
+        postId = :postId,
+        comments = :comments,
+        score = :score,
+        upVotes = :upVotes,
+        downVotes = :downVotes,
+        publishedAt = :publishedAt,
+        newestCommentTimeNecro = :newestCommentTimeNecro,
+        newestCommentTime = :newestCommentTime,
+        isFeaturedCommunity = :isFeaturedCommunity,
+        isFeaturedLocal = :isFeaturedLocal,
+        hotRank = :hotRank,
+        hotRankActive = :hotRankActive
+    WHERE id = :id;
+
+    INSERT OR IGNORE INTO postAggregate(
+            id,
+            postId,
+            comments,
+            score,
+            upVotes,
+            downVotes,
+            publishedAt,
+            newestCommentTimeNecro,
+            newestCommentTime,
+            isFeaturedCommunity,
+            isFeaturedLocal,
+            hotRank,
+            hotRankActive
+    ) VALUES (
+        :id,
+        :postId,
+        :comments,
+        :score,
+        :upVotes,
+        :downVotes,
+        :publishedAt,
+        :newestCommentTimeNecro,
+        :newestCommentTime,
+        :isFeaturedCommunity,
+        :isFeaturedLocal,
+        :hotRank,
+        :hotRankActive
+    );
+}

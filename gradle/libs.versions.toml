@@ -51,3 +51,4 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 material = { module = "com.google.android.material:material", version = "1.9.0" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sql-delight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sql-delight" }
+ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version = "5.2.0" }

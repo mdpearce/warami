@@ -26,22 +26,58 @@ CREATE INDEX community_name ON community (
 	name
 );
 
-insert:
-INSERT INTO community (
-    id,
-    name,
-    title,
-    isRemoved,
-    published,
-    isDeleted,
-    isNsfw,
-    actorId,
-    isLocal,
-    isHidden,
-    isPostingRestrictedToMods,
-    instanceId,
-    description,
-    updatedAt,
-    iconUrl,
-    bannerUrl
-) VALUES ?;
+upsert {
+    UPDATE community
+    SET name = :name,
+        title = :title,
+        isRemoved = :isRemoved,
+        published = :published,
+        isDeleted = :isDeleted,
+        isNsfw = :isNsfw,
+        actorId = :actorId,
+        isLocal = :isLocal,
+        isHidden = :isHidden,
+        isPostingRestrictedToMods = :isPostingRestrictedToMods,
+        instanceId = :instanceId,
+        description = :description,
+        updatedAt = :updatedAt,
+        iconUrl = :iconUrl,
+        bannerUrl = :bannerUrl
+    WHERE id = :id;
+
+    INSERT OR IGNORE INTO community(
+        id,
+        name,
+        title,
+        isRemoved,
+        published,
+        isDeleted,
+        isNsfw,
+        actorId,
+        isLocal,
+        isHidden,
+        isPostingRestrictedToMods,
+        instanceId,
+        description,
+        updatedAt,
+        iconUrl,
+        bannerUrl
+    ) VALUES (
+        :id,
+        :name,
+        :title,
+        :isRemoved,
+        :published,
+        :isDeleted,
+        :isNsfw,
+        :actorId,
+        :isLocal,
+        :isHidden,
+        :isPostingRestrictedToMods,
+        :instanceId,
+        :description,
+        :updatedAt,
+        :iconUrl,
+        :bannerUrl
+    );
+}
