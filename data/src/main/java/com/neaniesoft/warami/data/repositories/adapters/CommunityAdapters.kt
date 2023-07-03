@@ -2,7 +2,7 @@ package com.neaniesoft.warami.data.repositories.adapters
 
 import com.neaniesoft.warami.common.adapters.DomainCommunity
 import com.neaniesoft.warami.common.extensions.toLong
-import com.neaniesoft.warami.data.repositories.DbCommunity
+import com.neaniesoft.warami.data.repositories.post.DbCommunity
 import java.time.format.DateTimeFormatter
 
 fun DomainCommunity.toDb(dateTimeFormatter: DateTimeFormatter): DbCommunity {

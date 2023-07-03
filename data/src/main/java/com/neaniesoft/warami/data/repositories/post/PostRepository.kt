@@ -1,9 +1,9 @@
-package com.neaniesoft.warami.data.repositories
+package com.neaniesoft.warami.data.repositories.post
 
-import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToList
 import com.neaniesoft.warami.api.apis.DefaultApi
+import com.neaniesoft.warami.api.models.GetPosts
 import com.neaniesoft.warami.common.adapters.DomainCommunity
+import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostSearchParameters
@@ -13,11 +13,15 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
+import com.neaniesoft.warami.data.repositories.RemoteApiError
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import java.io.IOException
 import java.time.format.DateTimeFormatter
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
@@ -30,27 +34,57 @@ class PostRepository(
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
-    private val coroutineDispatcher: CoroutineDispatcher
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)
 
     private fun DomainCommunity.toDb(): DbCommunity = this.toDb(localDateTimeFormatter)
 
-    fun listPostsFlow(searchParameters: PostSearchParameters): Flow<List<Post>> {
-        return postQueries.selectBySearchParams(searchParameters.id.toString()).asFlow()
-            .mapToList(coroutineDispatcher)
-            .map { select ->
-                select.map { it.toDomain(searchParameters) }
-            }
-    }
+    fun listPostsFlow(
+        searchParameters: PostSearchParameters,
+        updateFromApi: Boolean
+    ): Flow<PostListResult> {
 
-    fun upsertPostList(postList: List<Post>) {
-        postQueries.transaction {
-            postList.forEach { post ->
-                upsertPost(post)
+        return flow {
+            emit(
+                PostList(
+                    postQueries.selectBySearchParams(searchParameters.id.toString()).executeAsList()
+                        .map { it.toDomain(searchParameters) })
+            )
+            if (updateFromApi) {
+                emit(Fetching)
+                try {
+                    val response = api.getPosts(GetPosts())
+                    val body = response.body()
+                    if (!response.isSuccessful) {
+                        emit(
+                            ErrorFetching(
+                                RemoteApiError(
+                                    response.code(),
+                                    response.errorBody()?.string() ?: ""
+                                )
+                            )
+                        )
+                    } else if (body == null) {
+                        emit(ErrorFetching(RemoteApiError(response.code(), "Empty response body")))
+                    } else {
+                        postQueries.transaction {
+                            postQueries.deleteBySearchParams(searchParameters.id.toString())
+                            body.posts.forEach { postView ->
+                                upsertPost(postView.toDomain(searchParameters))
+                            }
+                        }
+                        emit(PostList(
+                            body.posts.map { postView -> postView.toDomain(searchParameters) }
+                        ))
+                        emit(Finished)
+                    }
+                } catch (e: IOException) {
+                    emit(ErrorFetching(e))
+                }
             }
-        }
+        }.flowOn(coroutineDispatcher)
     }
 
     private fun upsertPost(post: Post) {
@@ -128,6 +162,8 @@ class PostRepository(
                     id = id.toString()
                 )
             }
+
+            postQueries.insert(post.toDb(localDateTimeFormatter))
         }
     }
 }

@@ -12,7 +12,7 @@ android {
 dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.adapters)
-    implementation(libs.retrofit)
+    api(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.okhttp)
