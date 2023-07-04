@@ -3,6 +3,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -51,6 +53,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(project(":api"))
     implementation(project(":common"))
@@ -70,11 +76,15 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation(libs.material)
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
     testImplementation(libs.junit)
+    testImplementation(libs.dagger.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation(libs.dagger.hilt.android.testing)
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
