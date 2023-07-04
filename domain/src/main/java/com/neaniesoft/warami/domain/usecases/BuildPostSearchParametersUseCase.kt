@@ -8,13 +8,13 @@ import com.neaniesoft.warami.data.repositories.DomainSortType
 
 class BuildPostSearchParametersUseCase {
     operator fun invoke(
-        listingType: DomainListingType?,
-        sortType: DomainSortType?,
-        pageNumber: Int?,
-        postLimit: Int?,
-        communityId: CommunityId?,
-        communityName: String?,
-        isSavedOnly: Boolean?
+        listingType: DomainListingType? = null,
+        sortType: DomainSortType? = null,
+        pageNumber: Int? = null,
+        postLimit: Int? = null,
+        communityId: CommunityId? = null,
+        communityName: String? = null,
+        isSavedOnly: Boolean? = null,
     ): PostSearchParameters {
         return PostSearchParameters(
             id = UlidCreator.getMonotonicUlid(),
