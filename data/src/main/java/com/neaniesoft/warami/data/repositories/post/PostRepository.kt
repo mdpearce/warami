@@ -68,7 +68,6 @@ class PostRepository @Inject constructor(
                         communityId = searchParameters.communityId?.value?.toBigDecimal(),
                         communityName = searchParameters.communityName,
                         savedOnly = searchParameters.isSavedOnly,
-                        auth = null // TODO add this...
                     )
                     val body = response.body()
                     if (!response.isSuccessful) {

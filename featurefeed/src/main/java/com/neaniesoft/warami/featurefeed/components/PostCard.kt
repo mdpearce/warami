@@ -49,7 +49,6 @@ fun PostCard(
                     thumbnailUrl = thumbnailUrl
                 )
             }
-
         }
     }
 }
