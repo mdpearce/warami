@@ -38,7 +38,7 @@ fun PostView.toDomain(searchParameters: PostSearchParameters): Post {
         embedVideo = post.embedVideoUrl?.let { UriString(it) },
         isCreatorBannedFromCommunity = creatorBannedFromCommunity,
         aggregates = counts.toDomain(),
-        subscribedTyped = SubscribedType.valueOf(subscribed.value),
+        subscribedTyped = SubscribedType.parse(subscribed.value),
         isSaved = saved,
         isRead = read,
         isCreatorBlocked = creatorBlocked,

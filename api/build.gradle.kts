@@ -1,11 +1,21 @@
+import java.util.Properties
+
 plugins {
     id("com.neaniesoft.warami.android-conventions")
     alias(libs.plugins.ksp)
 }
 
+val localProperties = Properties()
+localProperties.load(rootProject.file("local.properties").inputStream())
+
 android {
     defaultConfig {
         namespace = "com.neaniesoft.warami.api"
+        resValue(
+            "string",
+            "warami_base_url",
+            localProperties["com.neaniesoft.warami.api.baseUrl"] as String
+        )
     }
 }
 

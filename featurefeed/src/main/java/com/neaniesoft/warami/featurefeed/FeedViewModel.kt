@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.featurefeed
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.data.repositories.post.ErrorFetching
@@ -15,13 +16,18 @@ import com.neaniesoft.warami.featurefeed.models.NotRefreshing
 import com.neaniesoft.warami.featurefeed.models.PostFeed
 import com.neaniesoft.warami.featurefeed.models.Refreshing
 import com.neaniesoft.warami.featurefeed.models.RefreshingIndicator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FeedViewModel(
+
+@HiltViewModel
+class FeedViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
     private val getPostsForSearchParams: GetPostsForSearchParamsUseCase
 ) : ViewModel() {

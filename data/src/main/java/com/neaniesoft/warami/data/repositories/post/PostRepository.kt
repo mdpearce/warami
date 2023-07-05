@@ -1,7 +1,6 @@
 package com.neaniesoft.warami.data.repositories.post
 
 import com.neaniesoft.warami.api.apis.DefaultApi
-import com.neaniesoft.warami.api.models.GetPosts
 import com.neaniesoft.warami.common.adapters.DomainCommunity
 import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.toLong
@@ -13,7 +12,9 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
+import com.neaniesoft.warami.data.di.DatabaseModule
 import com.neaniesoft.warami.data.repositories.RemoteApiError
+import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,10 +24,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.io.IOException
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
-class PostRepository(
+@Singleton
+class PostRepository @Inject constructor(
     private val api: DefaultApi,
     private val postQueries: PostQueries,
     private val communityQueries: CommunityQueries,
@@ -34,7 +39,7 @@ class PostRepository(
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+    @Named(DatabaseModule.DISPATCHER_IO) private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)
@@ -55,7 +60,16 @@ class PostRepository(
             if (updateFromApi) {
                 emit(Fetching)
                 try {
-                    val response = api.getPosts(GetPosts())
+                    val response = api.getPosts(
+                        type = searchParameters.listingType?.toApi(),
+                        sort = searchParameters.sortType?.toApi(),
+                        page = searchParameters.pageNumber?.toBigDecimal(),
+                        limit = searchParameters.postLimit?.toBigDecimal(),
+                        communityId = searchParameters.communityId?.value?.toBigDecimal(),
+                        communityName = searchParameters.communityName,
+                        savedOnly = searchParameters.isSavedOnly,
+                        auth = null // TODO add this...
+                    )
                     val body = response.body()
                     if (!response.isSuccessful) {
                         emit(
