@@ -54,7 +54,7 @@ class PostRepository @Inject constructor(
         return flow {
             emit(
                 PostList(
-                    postQueries.selectBySearchParams(searchParameters.id.toString()).executeAsList()
+                    postQueries.selectBySearchParams(searchParameters.id).executeAsList()
                         .map { it.toDomain(searchParameters) })
             )
             if (updateFromApi) {
@@ -84,7 +84,7 @@ class PostRepository @Inject constructor(
                         emit(ErrorFetching(RemoteApiError(response.code(), "Empty response body")))
                     } else {
                         postQueries.transaction {
-                            postQueries.deleteBySearchParams(searchParameters.id.toString())
+                            postQueries.deleteBySearchParams(searchParameters.id)
                             body.posts.forEach { postView ->
                                 upsertPost(postView.toDomain(searchParameters))
                             }
@@ -173,11 +173,42 @@ class PostRepository @Inject constructor(
                     communityId = communityId?.value?.toLong(),
                     communityName = communityName,
                     isSavedOnly = isSavedOnly?.toLong(),
-                    id = id.toString()
+                    id = id
                 )
             }
 
-            postQueries.insert(post.toDb(localDateTimeFormatter))
+            with(post) {
+                postQueries.upsert(
+                    id = id.value.toLong(),
+                    name = name,
+                    creatorId = creator.id.value.toLong(),
+                    communityId = community.id.value.toLong(),
+                    isRemoved = isRemoved.toLong(),
+                    isLocked = isLocked.toLong(),
+                    publishedAt = publishedAt.format(localDateTimeFormatter),
+                    isDeleted = isDeleted.toLong(),
+                    isNsfw = isNsfw.toLong(),
+                    apId = apId,
+                    isLocal = isLocal.toLong(),
+                    languageId = languageId.toLong(),
+                    isFeaturedCommunity = isFeaturedCommunity.toLong(),
+                    url = url?.value,
+                    body = body,
+                    updatedAt = updatedAt?.format(localDateTimeFormatter),
+                    embedTitle = embedTitle,
+                    embedDescription = embedDescription,
+                    thumbnailUrl = thumbnail?.value,
+                    embedVideoUrl = embedVideo?.value,
+                    isCreatorBannedFromCommunity = isCreatorBannedFromCommunity.toLong(),
+                    aggregates = aggregates.id.toLong(),
+                    subscribedType = subscribedTyped.value,
+                    isSaved = isSaved.toLong(),
+                    isRead = isRead.toLong(),
+                    isCreatorBlocked = isCreatorBlocked.toLong(),
+                    myVote = myVote?.toLong(),
+                    searchParams = searchParameters.id
+                )
+            }
         }
     }
 }
