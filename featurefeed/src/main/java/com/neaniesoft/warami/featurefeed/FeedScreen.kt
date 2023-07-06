@@ -43,7 +43,9 @@ fun FeedScreen(viewModel: FeedViewModel = viewModel()) {
                     communityThumbnailUri = post.thumbnail,
                     postTitle = post.name,
                     postThumbnailUri = post.thumbnail,
-                    postUri = post.url
+                    postUri = post.url,
+                    commentCount = post.aggregates.commentCount,
+                    score = post.aggregates.score,
                 )
             }
         }

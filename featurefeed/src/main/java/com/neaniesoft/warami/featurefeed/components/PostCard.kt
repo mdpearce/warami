@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +33,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.R
+import com.neaniesoft.warami.featurefeed.components.icons.rememberArrowDownward
+import com.neaniesoft.warami.featurefeed.components.icons.rememberArrowUpward
+import com.neaniesoft.warami.featurefeed.components.icons.rememberBookmark
+import com.neaniesoft.warami.featurefeed.components.icons.rememberModeComment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +47,9 @@ fun PostCard(
     communityThumbnailUri: UriString?,
     postTitle: String,
     postThumbnailUri: UriString?,
-    postUri: UriString?
+    postUri: UriString?,
+    commentCount: Int,
+    score: Int,
 ) {
     Card(
         onClick = {},
@@ -61,6 +70,8 @@ fun PostCard(
                     thumbnailUrl = postThumbnailUri,
                     url = postUri
                 )
+
+                PostSummaryRow(commentCount = commentCount, score = score)
             }
         }
     }
@@ -128,6 +139,7 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?)
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.weight(1f)
         )
+        Spacer(modifier = Modifier.width(16.dp))
         PostContentRowThumbnail(thumbnailUrl = thumbnailUrl, url = url)
     }
 }
@@ -167,6 +179,52 @@ fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
     }
 }
 
+@Composable
+fun PostSummaryRow(commentCount: Int, score: Int) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Icon(
+            rememberModeComment(),
+            contentDescription = stringResource(id = R.string.content_description_comments_icon),
+            modifier = Modifier.size(24.dp)
+        )
+        Text(
+            text = commentCount.toString(), style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .padding(16.dp)
+        )
+        Icon(
+            rememberArrowUpward(),
+            contentDescription = stringResource(id = R.string.content_description_upvote_icon),
+            modifier = Modifier.size(24.dp)
+        )
+        Text(
+            text = score.toString(),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        )
+        Icon(
+            rememberArrowDownward(),
+            contentDescription = stringResource(R.string.content_description_down_vote_icon),
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            rememberBookmark(),
+            contentDescription = stringResource(R.string.content_description_save_icon),
+            modifier = Modifier
+                .size(24.dp)
+        )
+    }
+}
+
 @Preview
 @Composable
 fun PreviewPostCard() {
@@ -178,7 +236,9 @@ fun PreviewPostCard() {
             null,
             "Title of the post.",
             null,
-            UriString("https://google.com")
+            UriString("https://google.com"),
+            376,
+            2436,
         )
     }
 }

@@ -4,4 +4,8 @@
     <string name="content_description_post_thumbnail">Post Thumbnail Icon</string>
     <string name="content_description_post_icon">Post Icon</string>
     <string name="content_description_post_link">Post Link Icon</string>
+    <string name="content_description_comments_icon">Comments Icon</string>
+    <string name="content_description_upvote_icon">Upvote Icon</string>
+    <string name="content_description_down_vote_icon">Down Vote Icon</string>
+    <string name="content_description_save_icon">Save Icon</string>
 </resources>
