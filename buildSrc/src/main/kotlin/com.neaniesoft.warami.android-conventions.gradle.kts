@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.appcompat.resources)
     kapt(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)

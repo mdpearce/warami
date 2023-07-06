@@ -40,7 +40,10 @@ fun FeedScreen(viewModel: FeedViewModel = viewModel()) {
                     communityName = post.community.name,
                     creatorName = post.creator.name,
                     postedTime = "12h",
-                    thumbnailUrl = post.thumbnail?.value
+                    communityThumbnailUri = post.thumbnail,
+                    postTitle = post.name,
+                    postThumbnailUri = post.thumbnail,
+                    postUri = post.url
                 )
             }
         }

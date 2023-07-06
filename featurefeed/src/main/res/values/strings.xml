@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="content_description_community_icon">Community Icon</string>
+    <string name="content_description_post_thumbnail">Post Thumbnail Icon</string>
+    <string name="content_description_post_icon">Post Icon</string>
+    <string name="content_description_post_link">Post Link Icon</string>
 </resources>

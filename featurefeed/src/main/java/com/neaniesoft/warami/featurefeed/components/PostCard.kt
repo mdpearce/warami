@@ -2,6 +2,7 @@ package com.neaniesoft.warami.featurefeed.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -25,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,11 +37,14 @@ fun PostCard(
     communityName: String,
     creatorName: String,
     postedTime: String,
-    thumbnailUrl: String?
+    communityThumbnailUri: UriString?,
+    postTitle: String,
+    postThumbnailUri: UriString?,
+    postUri: UriString?
 ) {
     Card(
         onClick = {},
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.padding(bottom = 16.dp)
     ) {
         Surface(modifier = Modifier.fillMaxWidth()) {
@@ -46,7 +53,13 @@ fun PostCard(
                     communityName = communityName,
                     creatorName = creatorName,
                     postedTime = postedTime,
-                    thumbnailUrl = thumbnailUrl
+                    thumbnailUrl = communityThumbnailUri?.value
+                )
+
+                PostContentRow(
+                    postTitle = postTitle,
+                    thumbnailUrl = postThumbnailUri,
+                    url = postUri
                 )
             }
         }
@@ -104,11 +117,68 @@ fun PostHeaderRow(
     }
 }
 
+@Composable
+fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+    ) {
+        Text(
+            text = postTitle,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f)
+        )
+        PostContentRowThumbnail(thumbnailUrl = thumbnailUrl, url = url)
+    }
+}
+
+@Composable
+fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
+    if (thumbnailUrl != null) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).crossfade(true).build(),
+            contentDescription = stringResource(
+                id = R.string.content_description_post_thumbnail
+            ),
+            placeholder = painterResource(id = R.drawable.placeholder),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(72.dp)
+                .clip(MaterialTheme.shapes.medium)
+        )
+    } else if (url != null) {
+        Box(contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.placeholder),
+                contentDescription = stringResource(id = R.string.content_description_post_icon),
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(MaterialTheme.shapes.medium), contentScale = ContentScale.FillBounds
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.baseline_link_24),
+                contentDescription = stringResource(id = R.string.content_description_post_link),
+                modifier = Modifier
+                    .size(48.dp)
+                    .rotate(-45f)
+            )
+        }
+    }
+}
 
 @Preview
 @Composable
 fun PreviewPostCard() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        PostCard("communityName", "creatorName", "12h", null)
+        PostCard(
+            "communityName",
+            "creatorName",
+            "12h",
+            null,
+            "Title of the post.",
+            null,
+            UriString("https://google.com")
+        )
     }
 }
