@@ -6,6 +6,7 @@ import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostSearchParameters
+import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.db.PostAggregateQueries
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.io.IOException
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -82,14 +84,21 @@ class PostRepository @Inject constructor(
                     } else if (body == null) {
                         emit(ErrorFetching(RemoteApiError(response.code(), "Empty response body")))
                     } else {
-                        postQueries.transaction {
+                        val posts = postQueries.transactionWithResult {
                             postQueries.deleteBySearchParams(searchParameters.id)
+                            val sortIndex = AtomicInteger(0)
                             body.posts.forEach { postView ->
-                                upsertPost(postView.toDomain(searchParameters))
+                                upsertPost(
+                                    postView.toDomain(
+                                        searchParameters,
+                                        SortIndex(sortIndex.incrementAndGet())
+                                    )
+                                )
                             }
+                            postQueries.selectBySearchParams(searchParameters.id).executeAsList()
                         }
                         emit(PostList(
-                            body.posts.map { postView -> postView.toDomain(searchParameters) }
+                            posts.map { it.toDomain(searchParameters) }
                         ))
                         emit(Finished)
                     }
@@ -179,6 +188,7 @@ class PostRepository @Inject constructor(
             with(post) {
                 postQueries.upsert(
                     id = id.value.toLong(),
+                    sortIndex = sortIndex.value.toLong(),
                     name = name,
                     creatorId = creator.id.value.toLong(),
                     communityId = community.id.value.toLong(),

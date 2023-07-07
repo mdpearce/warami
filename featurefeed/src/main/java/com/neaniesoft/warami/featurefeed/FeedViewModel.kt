@@ -1,8 +1,9 @@
 package com.neaniesoft.warami.featurefeed
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.neaniesoft.warami.common.models.ListingType
+import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.data.repositories.post.ErrorFetching
 import com.neaniesoft.warami.data.repositories.post.Fetching
 import com.neaniesoft.warami.data.repositories.post.Finished
@@ -27,7 +28,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
     private val getPostsForSearchParams: GetPostsForSearchParamsUseCase
 ) : ViewModel() {
@@ -40,7 +40,8 @@ class FeedViewModel @Inject constructor(
     val refreshing: StateFlow<RefreshingIndicator> = _refreshing.asStateFlow()
 
     // TODO: Remove temporary hard-coded search params used while testing
-    private val searchParams = buildPostSearchParameters()
+    private val searchParams =
+        buildPostSearchParameters(sortType = SortType.ACTIVE, listingType = ListingType.ALL)
 
     private var refreshJob: Job? = null
 

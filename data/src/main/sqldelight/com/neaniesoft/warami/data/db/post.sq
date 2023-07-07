@@ -1,5 +1,6 @@
 CREATE TABLE post (
 	id	INTEGER NOT NULL,
+	sortIndex INTEGER NOT NULL,
 	name	TEXT NOT NULL,
 	creatorId	INTEGER NOT NULL,
 	communityId	INTEGER NOT NULL,
@@ -49,6 +50,7 @@ CREATE INDEX post_search_params ON post (
 insert:
 INSERT INTO post (
     id,
+    sortIndex,
     name,
     creatorId,
     communityId,
@@ -81,6 +83,7 @@ INSERT INTO post (
 upsert {
     UPDATE post SET
         id = :id,
+        sortIndex = :sortIndex,
         name = :name,
         creatorId = :creatorId,
         communityId = :communityId,
@@ -112,6 +115,7 @@ upsert {
 
     INSERT OR IGNORE INTO post(
         id,
+        sortIndex,
         name,
         creatorId,
         communityId,
@@ -141,6 +145,7 @@ upsert {
         searchParams
     ) VALUES (
         :id,
+        :sortIndex,
         :name,
         :creatorId,
         :communityId,
@@ -221,7 +226,8 @@ INNER JOIN community ON post.communityId = community.id
 INNER JOIN person ON post.creatorId = person.id
 INNER JOIN postAggregate ON post.aggregates = postAggregate.id
 INNER JOIN postSearchParams ON post.searchParams = postSearchParams.id
-WHERE post.searchParams = ?;
+WHERE post.searchParams = ?
+ORDER BY post.sortIndex ASC;
 
 deleteBySearchParams:
 DELETE FROM post WHERE searchParams = ?;

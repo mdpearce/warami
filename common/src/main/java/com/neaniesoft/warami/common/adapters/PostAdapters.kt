@@ -4,14 +4,16 @@ import com.neaniesoft.warami.api.models.PostView
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
+import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostView.toDomain(searchParameters: PostSearchParameters): Post {
+fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex): Post {
     return Post(
         id = PostId(post.id.intValueExact()),
+        sortIndex = sortIndex,
         name = post.name,
         creator = creator.toDomain(),
         community = community.toDomain(),

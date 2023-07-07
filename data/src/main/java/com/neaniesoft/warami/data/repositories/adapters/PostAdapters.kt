@@ -14,6 +14,7 @@ import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostAggregates
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
+import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
@@ -86,6 +87,7 @@ fun SelectBySearchParams.toDomain(
 
     return Post(
         id = PostId(id.toInt()),
+        sortIndex = SortIndex(sortIndex.toInt()),
         name = name,
         creator = creator,
         community = community,
@@ -121,6 +123,7 @@ typealias DbPost = com.neaniesoft.warami.data.db.Post
 fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
     return DbPost(
         id = id.value.toLong(),
+        sortIndex = sortIndex.value.toLong(),
         name = name,
         creatorId = creator.id.value.toLong(),
         communityId = community.id.value.toLong(),
@@ -147,7 +150,7 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
         isRead = isRead.toLong(),
         isCreatorBlocked = isCreatorBlocked.toLong(),
         myVote = myVote?.toLong(),
-        searchParams = searchParameters.id.toString()
+        searchParams = searchParameters.id,
     )
 }
 
