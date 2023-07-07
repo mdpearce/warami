@@ -3,36 +3,40 @@ package com.neaniesoft.warami
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.neaniesoft.warami.api.di.ApiComponent
+import com.neaniesoft.warami.api.di.create
+import com.neaniesoft.warami.data.di.DatabaseComponent
+import com.neaniesoft.warami.data.di.create
+import com.neaniesoft.warami.di.AppComponent
+import com.neaniesoft.warami.di.create
+import com.neaniesoft.warami.domain.di.DomainComponent
+import com.neaniesoft.warami.domain.di.create
+import com.neaniesoft.warami.featurefeed.di.FeedComponent
+import com.neaniesoft.warami.featurefeed.di.create
 import com.neaniesoft.warami.ui.WaramiApp
-import com.neaniesoft.warami.ui.theme.AppTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val appComponent = buildAppComponent()
+
         setContent {
-            WaramiApp()
+            WaramiApp(appComponent.feedComponent.feedViewModelProvider)
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun buildAppComponent(): AppComponent {
+        val apiComponent = ApiComponent::class.create(WaramiApplication.getInstance())
+        val databaseComponent = DatabaseComponent::class.create(apiComponent)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppTheme {
-        Greeting("Android")
+        return AppComponent::class.create(
+            databaseComponent = databaseComponent,
+            feedComponent = FeedComponent::class.create(
+                DomainComponent::class.create(
+                    dataComponent = databaseComponent
+                )
+            )
+        )
     }
 }

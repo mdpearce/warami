@@ -7,18 +7,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.neaniesoft.warami.featurefeed.FeaturefeedNavGraph
+import com.neaniesoft.warami.featurefeed.FeedViewModel
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
+import com.neaniesoft.warami.ui.nav.RootNavGraph
 import com.neaniesoft.warami.ui.theme.AppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.spec.DestinationSpec
-import com.ramcosta.composedestinations.spec.NavGraphSpec
-import com.ramcosta.composedestinations.spec.Route
+import com.ramcosta.composedestinations.navigation.dependency
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 @Composable
-fun WaramiApp() {
+fun WaramiApp(feedViewModel: () -> FeedViewModel) {
     AppTheme {
         val navController = rememberNavController()
         Surface(
@@ -29,7 +28,13 @@ fun WaramiApp() {
             DestinationsNavHost(
                 navController = navController,
                 navGraph = RootNavGraph,
-                startRoute = FeaturefeedNavGraph, modifier = Modifier.fillMaxSize()
+                startRoute = FeaturefeedNavGraph,
+                modifier = Modifier.fillMaxSize(),
+                dependenciesContainerBuilder = {
+                    dependency(FeedScreenDestination) {
+                        feedViewModel
+                    }
+                }
             ) {
 
             }
@@ -37,20 +42,4 @@ fun WaramiApp() {
     }
 }
 
-@RootNavGraph(start = true)
-@Destination
-@Composable
-fun HomeScreen(navigator: DestinationsNavigator) {
-    // do nothingq
-}
-
-object RootNavGraph : NavGraphSpec {
-    override val destinationsByRoute: Map<String, DestinationSpec<*>> = emptyMap()
-    override val route: String = "root"
-    override val startRoute: Route = UiNavGraph
-    override val nestedNavGraphs: List<NavGraphSpec> = listOf(
-        UiNavGraph,
-        FeaturefeedNavGraph
-    )
-
-}
+typealias WaramiApp = @Composable () -> Unit

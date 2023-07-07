@@ -13,27 +13,26 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
-import com.neaniesoft.warami.data.di.DatabaseModule
+import com.neaniesoft.warami.data.di.DatabaseScope
+import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.RemoteApiError
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import me.tatarka.inject.annotations.Inject
 import java.io.IOException
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicInteger
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
-@Singleton
-class PostRepository @Inject constructor(
+@Inject
+@DatabaseScope
+class PostRepository(
     private val api: DefaultApi,
     private val postQueries: PostQueries,
     private val communityQueries: CommunityQueries,
@@ -41,7 +40,7 @@ class PostRepository @Inject constructor(
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
-    @Named(DatabaseModule.DISPATCHER_IO) private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val coroutineDispatcher: IODispatcher = Dispatchers.IO
 ) {
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)

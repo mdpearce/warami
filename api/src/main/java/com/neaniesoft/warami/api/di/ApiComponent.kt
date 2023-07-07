@@ -6,25 +6,24 @@ import com.neaniesoft.warami.api.R
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.api.auth.ApiKeyAuth
 import com.neaniesoft.warami.api.infrastructure.ApiClient
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@Module
-@InstallIn(SingletonComponent::class)
-class ApiModule {
+@ApiScope
+@Component
+abstract class ApiComponent(
+    @get:Provides val context: Context
+) {
+
     @Provides
-    @Singleton
+    @ApiScope
     fun provideApi(apiClient: ApiClient): DefaultApi {
         return apiClient.createService(DefaultApi::class.java)
     }
 
     @Provides
-    @Singleton
-    fun provideApiClient(@ApplicationContext context: Context): ApiClient {
+    @ApiScope
+    fun provideApiClient(context: Context): ApiClient {
         val baseUrl = context.getString(R.string.warami_base_url)
         return ApiClient(baseUrl = baseUrl)
             .setLogger { message -> Log.d("ApiClient", message) }

@@ -1,5 +1,5 @@
 plugins {
-    id("com.neaniesoft.warami.android-conventions")
+    id("com.neaniesoft.warami.android-compose-conventions")
 }
 
 android {
@@ -10,5 +10,4 @@ android {
 
 dependencies {
     implementation(project(":api"))
-    api(libs.ulid.creator)
 }

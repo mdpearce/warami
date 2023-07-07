@@ -10,6 +10,7 @@ import com.neaniesoft.warami.data.repositories.post.Finished
 import com.neaniesoft.warami.data.repositories.post.PostList
 import com.neaniesoft.warami.domain.usecases.BuildPostSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetPostsForSearchParamsUseCase
+import com.neaniesoft.warami.featurefeed.di.FeedScope
 import com.neaniesoft.warami.featurefeed.models.EmptyFeed
 import com.neaniesoft.warami.featurefeed.models.ErrorFeed
 import com.neaniesoft.warami.featurefeed.models.FeedListContent
@@ -17,17 +18,16 @@ import com.neaniesoft.warami.featurefeed.models.NotRefreshing
 import com.neaniesoft.warami.featurefeed.models.PostFeed
 import com.neaniesoft.warami.featurefeed.models.Refreshing
 import com.neaniesoft.warami.featurefeed.models.RefreshingIndicator
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-
-@HiltViewModel
-class FeedViewModel @Inject constructor(
+@Inject
+@FeedScope
+class FeedViewModel(
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
     private val getPostsForSearchParams: GetPostsForSearchParamsUseCase
 ) : ViewModel() {
