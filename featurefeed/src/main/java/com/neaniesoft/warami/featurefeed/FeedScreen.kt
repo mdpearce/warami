@@ -16,7 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.PostCard
 import com.neaniesoft.warami.featurefeed.models.EmptyFeed
 import com.neaniesoft.warami.featurefeed.models.ErrorFeed
@@ -24,13 +24,20 @@ import com.neaniesoft.warami.featurefeed.models.PostFeed
 import com.neaniesoft.warami.featurefeed.models.Refreshing
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import me.tatarka.inject.annotations.Inject
 
+typealias FeedScreen = @Composable () -> Unit
 
 @OptIn(ExperimentalMaterialApi::class)
 @RootNavGraph(start = true)
 @Destination
+@Inject
 @Composable
-fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
+fun FeedScreen(feedViewModel: () -> FeedViewModel) {
+    val viewModel = viewModel {
+        feedViewModel()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.onRefresh()
     }

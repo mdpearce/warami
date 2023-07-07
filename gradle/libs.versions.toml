@@ -17,6 +17,7 @@ coil = "2.4.0"
 ksp = "1.8.21-1.0.11"
 compose-destinations = "1.9.42-beta"
 kotlin-inject = "0.6.1"
+appcompat = "1.6.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -72,3 +73,4 @@ compose-destinations-animations-core = { module = "io.github.raamcosta.compose-d
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 kotlin-inject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlin-inject" }
 kotlin-inject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
