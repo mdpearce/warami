@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.appcompat.resources)
+    implementation(libs.kotlin.inject.runtime)
+    ksp(libs.kotlin.inject.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

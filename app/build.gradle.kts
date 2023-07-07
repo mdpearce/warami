@@ -53,10 +53,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
     implementation(project(":api"))
     implementation(project(":common"))
@@ -65,7 +61,8 @@ dependencies {
     implementation(project(":featurefeed"))
     implementation(project(":ui"))
 
-
+    implementation(libs.kotlin.inject.runtime)
+    ksp(libs.kotlin.inject.compiler)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
