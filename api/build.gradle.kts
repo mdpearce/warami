@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     id("com.neaniesoft.warami.android-conventions")
-    alias(libs.plugins.ksp)
 }
 
 val localProperties = Properties()

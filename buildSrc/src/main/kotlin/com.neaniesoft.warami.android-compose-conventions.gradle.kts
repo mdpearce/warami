@@ -15,6 +15,11 @@ android {
     }
 }
 
+ksp {
+    arg("compose-destinations.mode", "navgraphs")
+    arg("compose-destinations.moduleName", project.name)
+}
+
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -22,6 +27,9 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.accompanist.drawablepainter)
+    implementation(libs.compose.destinations.core)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.compose.destinations.ksp)
     implementation(platform(libs.androidx.compose.bom))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

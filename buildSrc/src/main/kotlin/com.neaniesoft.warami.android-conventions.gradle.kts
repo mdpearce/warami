@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     id("com.android.library")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 val libs = the<LibrariesForLibs>()

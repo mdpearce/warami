@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.kotlin.android.gradle.plugin)
     implementation(libs.kotlin.android.extensions.gradle.plugin)
     implementation(libs.dagger.hilt.plugin)
+    implementation(libs.ksp.plugin)
 }
