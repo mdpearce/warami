@@ -2,7 +2,6 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     kotlin("android")
-    kotlin("kapt")
     id("com.android.library")
     id("com.google.devtools.ksp")
 }

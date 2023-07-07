@@ -12,7 +12,6 @@ moshi = "1.15.0"
 okhttp = "4.11.0"
 coroutines = "1.7.1"
 sql-delight = "2.0.0-rc02"
-dagger-hilt = "2.46.1"
 coil = "2.4.0"
 ksp = "1.8.21-1.0.11"
 compose-destinations = "1.9.42-beta"
@@ -23,7 +22,6 @@ appcompat = "1.6.1"
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sql-delight" }
 
@@ -32,8 +30,6 @@ android-gradle-library-plugin = { module = "com.android.library:com.android.libr
 android-gradle-application-plugin = { module = "com.android.application:com.android.application.gradle.plugin", version.ref = "android-gradle-plugin" }
 kotlin-android-gradle-plugin = { module = "org.jetbrains.kotlin.android:org.jetbrains.kotlin.android.gradle.plugin", version.ref = "kotlin" }
 kotlin-android-extensions-gradle-plugin = { module = "org.jetbrains.kotlin.android.extensions:org.jetbrains.kotlin.android.extensions.gradle.plugin", version.ref = "kotlin" }
-kotlin-kapt-gradle-plugin = { module = "org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "kotlin" }
-dagger-hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
 ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.10.1" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -59,10 +55,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 material = { module = "com.google.android.material:material", version = "1.9.0" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sql-delight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sql-delight" }
-ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version = "5.2.0" }
-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
-dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
-dagger-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version = "0.31.5-beta" }
@@ -70,7 +62,6 @@ androidx-appcompat-resources = { group = "androidx.appcompat", name = "appcompat
 compose-destinations-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "compose-destinations" }
 compose-destinations-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destinations" }
 compose-destinations-animations-core = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "compose-destinations" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 kotlin-inject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlin-inject" }
 kotlin-inject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
