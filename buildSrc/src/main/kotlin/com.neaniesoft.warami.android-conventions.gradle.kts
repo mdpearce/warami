@@ -4,6 +4,7 @@ plugins {
     kotlin("android")
     id("com.android.library")
     id("com.google.devtools.ksp")
+    id("org.jmailen.kotlinter")
 }
 
 val libs = the<LibrariesForLibs>()

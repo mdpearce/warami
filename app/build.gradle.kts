@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("com.google.devtools.ksp")
+    id("org.jmailen.kotlinter")
 }
 
 android {
