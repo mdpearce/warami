@@ -1,6 +1,7 @@
 plugins {
     id("com.neaniesoft.warami.android-conventions")
     alias(libs.plugins.sqldelight)
+    id("org.jmailen.kotlinter")
 }
 
 android {

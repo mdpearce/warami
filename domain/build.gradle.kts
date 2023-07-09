@@ -1,5 +1,6 @@
 plugins {
     id("com.neaniesoft.warami.android-conventions")
+    id("org.jmailen.kotlinter")
 }
 
 android {
