@@ -28,4 +28,5 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     testImplementation(libs.androidx.paging.common)
+    implementation(libs.androidx.security.crypto)
 }

@@ -11,6 +11,7 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
+import com.neaniesoft.warami.data.repositories.AuthRepository
 import com.neaniesoft.warami.data.repositories.post.PostRepository
 import com.neaniesoft.warami.data.repositories.post.PostTransactor
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,6 +30,7 @@ abstract class DatabaseComponent(
 ) {
 
     abstract val postRepository: PostRepository
+    abstract val authRepository: AuthRepository
 
     @Provides
     @DatabaseScope
