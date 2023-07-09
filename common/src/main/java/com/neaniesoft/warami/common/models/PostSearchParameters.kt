@@ -6,8 +6,6 @@ import java.security.MessageDigest
 data class PostSearchParameters(
     val listingType: ListingType?,
     val sortType: SortType?,
-    val pageNumber: Int?,
-    val postLimit: Int?,
     val communityId: CommunityId?,
     val communityName: String?,
     val isSavedOnly: Boolean?
@@ -15,7 +13,7 @@ data class PostSearchParameters(
     val id: String
         get() {
             val plainText =
-                "${listingType?.value}:${sortType?.value}:$pageNumber:$postLimit:${communityId?.value}:$communityName:$isSavedOnly"
+                "${listingType?.value}:${sortType?.value}:${communityId?.value}:$communityName:$isSavedOnly"
             return sha256(plainText)
         }
 

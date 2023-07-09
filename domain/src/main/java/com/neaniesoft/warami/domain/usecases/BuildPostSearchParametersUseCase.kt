@@ -13,14 +13,12 @@ class BuildPostSearchParametersUseCase {
     operator fun invoke(
         listingType: DomainListingType? = null,
         sortType: DomainSortType? = null,
-        pageNumber: Int? = null,
-        postLimit: Int? = null,
         communityId: CommunityId? = null,
         communityName: String? = null,
         isSavedOnly: Boolean? = null,
     ): PostSearchParameters {
         return PostSearchParameters(
-            listingType, sortType, pageNumber, postLimit, communityId, communityName, isSavedOnly
+            listingType, sortType, communityId, communityName, isSavedOnly
         )
     }
 }

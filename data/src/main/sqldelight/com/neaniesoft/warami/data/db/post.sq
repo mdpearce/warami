@@ -231,3 +231,9 @@ ORDER BY post.sortIndex ASC;
 
 deleteBySearchParams:
 DELETE FROM post WHERE searchParams = ?;
+
+selectLatestSortIndexForSearchParams:
+SELECT sortIndex FROM post WHERE searchParams = :searchParamsId ORDER BY sortIndex DESC LIMIT 1;
+
+selectPostIdsForSearchParams:
+SELECT id FROM post WHERE searchParams = :searchParamsId ORDER BY id;
