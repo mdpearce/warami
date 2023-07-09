@@ -16,12 +16,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.neaniesoft.warami.common.models.Resource
 import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.PostCard
-import com.neaniesoft.warami.featurefeed.models.EmptyFeed
-import com.neaniesoft.warami.featurefeed.models.ErrorFeed
-import com.neaniesoft.warami.featurefeed.models.PostFeed
-import com.neaniesoft.warami.featurefeed.models.Refreshing
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import me.tatarka.inject.annotations.Inject
@@ -38,15 +35,14 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
         feedViewModel()
     }
 
+    val postsResource by viewModel.posts.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.onRefresh()
     }
 
-    val feedList by viewModel.feedList.collectAsState()
-    val isRefreshing by viewModel.refreshing.collectAsState()
-
     val refreshIndicatorState = rememberPullRefreshState(
-        refreshing = isRefreshing is Refreshing,
+        refreshing = postsResource is Resource.Loading,
         onRefresh = { viewModel.onRefresh() }
     )
 
@@ -56,17 +52,17 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 .fillMaxSize()
                 .pullRefresh(refreshIndicatorState)
         ) {
-            when (val feedListValue = feedList) {
-                is EmptyFeed -> item { }
-                is ErrorFeed -> item {
+            when (val postsResource = postsResource) {
+                is Resource.Loading -> item { }
+                is Resource.Error -> item {
                     Text(
-                        text = feedListValue.e.localizedMessage ?: "",
+                        text = postsResource.message,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error
                     )
                 }
 
-                is PostFeed -> items(items = feedListValue.posts) { post ->
+                is Resource.Success -> items(items = postsResource.data) { post ->
                     PostCard(
                         communityName = post.community.name,
                         creatorName = post.creator.name,
@@ -81,6 +77,9 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 }
             }
         }
-        PullRefreshIndicator(refreshing = isRefreshing is Refreshing, state = refreshIndicatorState)
+        PullRefreshIndicator(
+            refreshing = postsResource is Resource.Loading,
+            state = refreshIndicatorState
+        )
     }
 }

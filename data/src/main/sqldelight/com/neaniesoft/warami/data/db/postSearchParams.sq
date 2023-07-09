@@ -2,8 +2,6 @@ CREATE TABLE postSearchParams (
 	id	TEXT NOT NULL,
 	listingType	TEXT,
 	sortType	TEXT,
-	page	INTEGER,
-	postLimit	INTEGER,
 	communityId	INTEGER,
 	communityName	TEXT,
 	isSavedOnly	INTEGER,
@@ -15,8 +13,6 @@ upsert {
     SET
         listingType = :listingType,
         sortType = :sortType,
-        page = :page,
-        postLimit = :postLimit,
         communityId = :communityId,
         communityName = :communityName,
         isSavedOnly = :isSavedOnly
@@ -26,8 +22,6 @@ upsert {
         id,
         listingType,
         sortType,
-        page,
-        postLimit,
         communityId,
         communityName,
         isSavedOnly
@@ -35,8 +29,6 @@ upsert {
         :id,
         :listingType,
         :sortType,
-        :page,
-        :postLimit,
         :communityId,
         :communityName,
         :isSavedOnly
