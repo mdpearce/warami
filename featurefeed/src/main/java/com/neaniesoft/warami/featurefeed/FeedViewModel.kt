@@ -2,26 +2,21 @@ package com.neaniesoft.warami.featurefeed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.ListingType
+import com.neaniesoft.warami.common.models.Post
+import com.neaniesoft.warami.common.models.Resource
+import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SortType
-import com.neaniesoft.warami.data.repositories.post.ErrorFetching
-import com.neaniesoft.warami.data.repositories.post.Fetching
-import com.neaniesoft.warami.data.repositories.post.Finished
-import com.neaniesoft.warami.data.repositories.post.PostList
+import com.neaniesoft.warami.common.models.split
+import com.neaniesoft.warami.data.repositories.DomainListingType
+import com.neaniesoft.warami.data.repositories.DomainSortType
 import com.neaniesoft.warami.domain.usecases.BuildPostSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetPostsForSearchParamsUseCase
 import com.neaniesoft.warami.featurefeed.di.FeedScope
-import com.neaniesoft.warami.featurefeed.models.EmptyFeed
-import com.neaniesoft.warami.featurefeed.models.ErrorFeed
-import com.neaniesoft.warami.featurefeed.models.FeedListContent
-import com.neaniesoft.warami.featurefeed.models.NotRefreshing
-import com.neaniesoft.warami.featurefeed.models.PostFeed
-import com.neaniesoft.warami.featurefeed.models.Refreshing
-import com.neaniesoft.warami.featurefeed.models.RefreshingIndicator
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
@@ -29,38 +24,71 @@ import me.tatarka.inject.annotations.Inject
 @FeedScope
 class FeedViewModel(
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
-    private val getPostsForSearchParams: GetPostsForSearchParamsUseCase
+    private val getPostsForSearchParams: GetPostsForSearchParamsUseCase,
 ) : ViewModel() {
 
-    // Flows for UI updates
-    private val _feedList: MutableStateFlow<FeedListContent> = MutableStateFlow(EmptyFeed)
-    val feedList: StateFlow<FeedListContent> = _feedList.asStateFlow()
+    private var currentPage = 0
+    private val searchParameters = MutableStateFlow(
+        buildPostSearchParameters(
+            sortType = SortType.ACTIVE,
+            listingType = ListingType.ALL
+        )
+    )
 
-    private val _refreshing: MutableStateFlow<RefreshingIndicator> = MutableStateFlow(NotRefreshing)
-    val refreshing: StateFlow<RefreshingIndicator> = _refreshing.asStateFlow()
+    private val postResource = MutableStateFlow<Resource<List<Post>>>(Resource.Loading())
 
-    // TODO: Remove temporary hard-coded search params used while testing
-    private val searchParams =
-        buildPostSearchParameters(sortType = SortType.ACTIVE, listingType = ListingType.ALL)
+    private val _posts: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
+    val posts = _posts.asStateFlow()
 
-    private var refreshJob: Job? = null
+    private val _loadingState: MutableStateFlow<Resource<List<Post>>> =
+        MutableStateFlow(Resource.Loading())
+    val loadingState = _loadingState.asStateFlow()
 
-    // UI events
-    fun onRefresh() {
-        refreshJob?.cancel()
-        refreshJob = viewModelScope.launch {
-            handleRefreshRequested()
+    init {
+        postResource.split(_posts, _loadingState).launchIn(viewModelScope)
+    }
+
+    private fun fetchPosts(refresh: Boolean) {
+        val sortIndex = if (refresh) {
+            SortIndex(0)
+        } else {
+            posts.value.lastOrNull()?.sortIndex ?: SortIndex(0)
+        }
+        searchParameters.value = buildPostSearchParameters()
+        viewModelScope.launch {
+            getPostsForSearchParams(
+                ++currentPage,
+                sortIndex,
+                searchParameters.value
+            ).collect { resource ->
+                postResource.value = resource
+            }
         }
     }
 
-    private suspend fun handleRefreshRequested() {
-        getPostsForSearchParams(searchParams).collect { result ->
-            when (result) {
-                is ErrorFetching -> _feedList.emit(ErrorFeed(result.exception))
-                Fetching -> _refreshing.emit(Refreshing)
-                Finished -> _refreshing.emit(NotRefreshing)
-                is PostList -> _feedList.emit(PostFeed(result.posts))
-            }
-        }
+    // UI events
+    fun onRefresh() {
+        currentPage = 0
+        fetchPosts(true)
+    }
+
+    fun onLoadMorePosts() {
+        fetchPosts(false)
+    }
+
+    fun onSearchParamsChanged(
+        listingType: DomainListingType? = null,
+        sortType: DomainSortType? = null,
+        communityId: CommunityId? = null,
+        communityName: String? = null,
+        isSavedOnly: Boolean? = null,
+    ) {
+        searchParameters.value = buildPostSearchParameters(
+            listingType,
+            sortType,
+            communityId,
+            communityName,
+            isSavedOnly
+        )
     }
 }

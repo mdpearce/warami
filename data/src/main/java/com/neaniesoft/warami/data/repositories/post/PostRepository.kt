@@ -6,6 +6,7 @@ import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostSearchParameters
+import com.neaniesoft.warami.common.models.Resource
 import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
@@ -15,18 +16,16 @@ import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
 import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.di.IODispatcher
-import com.neaniesoft.warami.data.repositories.RemoteApiError
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import me.tatarka.inject.annotations.Inject
+import retrofit2.HttpException
 import java.io.IOException
 import java.time.format.DateTimeFormatter
-import java.util.concurrent.atomic.AtomicInteger
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
@@ -42,70 +41,71 @@ class PostRepository(
     private val localDateTimeFormatter: DateTimeFormatter,
     private val coroutineDispatcher: IODispatcher = Dispatchers.IO
 ) {
+    companion object {
+        private const val POSTS_PER_PAGE = 20
+    }
+
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)
 
     private fun DomainCommunity.toDb(): DbCommunity = this.toDb(localDateTimeFormatter)
 
-    fun listPostsFlow(
-        searchParameters: PostSearchParameters,
-        updateFromApi: Boolean
-    ): Flow<PostListResult> {
-
-        return flow {
-            emit(
-                PostList(
-                    postQueries.selectBySearchParams(searchParameters.id).executeAsList()
-                        .map { it.toDomain(searchParameters) })
+    /**
+     * Fetch a new page of posts. Posts will be fetched from the API and cached locally before being emitted.
+     * If [initialSortIndex] is 0, the fetch will be treated as a refresh and all existing records will be
+     * deleted for that search query.
+     */
+    fun fetchItems(
+        page: Int,
+        initialSortIndex: Int,
+        searchParameters: PostSearchParameters
+    ): Flow<Resource<List<Post>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = api.getPosts(
+                type = searchParameters.listingType?.toApi(),
+                sort = searchParameters.sortType?.toApi(),
+                page = page.toBigDecimal(),
+                limit = POSTS_PER_PAGE.toBigDecimal(),
+                communityId = searchParameters.communityId?.value?.toBigDecimal(),
+                communityName = searchParameters.communityName,
+                savedOnly = searchParameters.isSavedOnly
             )
-            if (updateFromApi) {
-                emit(Fetching)
-                try {
-                    val response = api.getPosts(
-                        type = searchParameters.listingType?.toApi(),
-                        sort = searchParameters.sortType?.toApi(),
-                        page = searchParameters.pageNumber?.toBigDecimal(),
-                        limit = searchParameters.postLimit?.toBigDecimal(),
-                        communityId = searchParameters.communityId?.value?.toBigDecimal(),
-                        communityName = searchParameters.communityName,
-                        savedOnly = searchParameters.isSavedOnly,
-                    )
-                    val body = response.body()
-                    if (!response.isSuccessful) {
-                        emit(
-                            ErrorFetching(
-                                RemoteApiError(
-                                    response.code(),
-                                    response.errorBody()?.string() ?: ""
-                                )
-                            )
-                        )
-                    } else if (body == null) {
-                        emit(ErrorFetching(RemoteApiError(response.code(), "Empty response body")))
-                    } else {
-                        val posts = postQueries.transactionWithResult {
-                            postQueries.deleteBySearchParams(searchParameters.id)
-                            val sortIndex = AtomicInteger(0)
-                            body.posts.forEach { postView ->
-                                upsertPost(
-                                    postView.toDomain(
-                                        searchParameters,
-                                        SortIndex(sortIndex.incrementAndGet())
-                                    )
+            val body = response.body()
+            if (!response.isSuccessful) {
+                emit(Resource.Error("Unsuccessful response: ${response.code()}"))
+            } else if (body == null) {
+                emit(Resource.Error("Empty body"))
+            } else {
+                val posts = postQueries.transactionWithResult {
+                    if (initialSortIndex == 0) {
+                        postQueries.deleteBySearchParams(searchParameters.id)
+                    }
+                    val existingIdsForSearch =
+                        postQueries.selectPostIdsForSearchParams(searchParameters.id)
+                            .executeAsList()
+                    val items =
+                        body.posts.filterNot { postView -> existingIdsForSearch.contains(postView.post.id.toLong()) }
+                            .mapIndexed { index, postView ->
+                                postView.toDomain(
+                                    searchParameters,
+                                    SortIndex(initialSortIndex + index + 1)
                                 )
                             }
-                            postQueries.selectBySearchParams(searchParameters.id).executeAsList()
-                        }
-                        emit(PostList(
-                            posts.map { it.toDomain(searchParameters) }
-                        ))
-                        emit(Finished)
+                    items.forEach { post ->
+                        upsertPost(post)
                     }
-                } catch (e: IOException) {
-                    emit(ErrorFetching(e))
+                    postQueries.selectBySearchParams(searchParams = searchParameters.id)
+                        .executeAsList()
+                        .map { it.toDomain(searchParameters) }
                 }
+                emit(Resource.Success(posts))
             }
-        }.flowOn(coroutineDispatcher)
+        } catch (e: IOException) {
+            emit(Resource.Error("IOException: ${e.localizedMessage}"))
+        } catch (e: HttpException) {
+            emit(Resource.Error("HttpError: ${e.localizedMessage}"))
+        }
     }
 
     private fun upsertPost(post: Post) {
@@ -175,8 +175,6 @@ class PostRepository(
                 postSearchParamsQueries.upsert(
                     listingType = listingType?.value,
                     sortType = sortType?.value,
-                    page = pageNumber?.toLong(),
-                    postLimit = postLimit?.toLong(),
                     communityId = communityId?.value?.toLong(),
                     communityName = communityName,
                     isSavedOnly = isSavedOnly?.toLong(),
