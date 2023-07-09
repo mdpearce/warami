@@ -34,9 +34,9 @@ class MainActivity : ComponentActivity() {
             databaseComponent = databaseComponent,
             feedComponent = FeedComponent::class.create(
                 DomainComponent::class.create(
-                    dataComponent = databaseComponent
-                )
-            )
+                    dataComponent = databaseComponent,
+                ),
+            ),
         )
     }
 }

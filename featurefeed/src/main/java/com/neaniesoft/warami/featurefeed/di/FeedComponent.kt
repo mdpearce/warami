@@ -7,8 +7,11 @@ import me.tatarka.inject.annotations.Component
 
 @Component
 @FeedScope
-abstract class FeedComponent(@Component val domainComponent: DomainComponent) {
+abstract class FeedComponent(
+    @Component val domainComponent: DomainComponent,
+) {
     abstract val feedScreen: FeedScreen
+
     @get:FeedScope
     abstract val feedViewModelProvider: () -> FeedViewModel
 }

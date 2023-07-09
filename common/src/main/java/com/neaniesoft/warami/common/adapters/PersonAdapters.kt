@@ -28,8 +28,8 @@ fun ApiPerson.toDomain(): DomainPerson {
         banExpiresAt = banExpires?.let {
             LocalDateTime.parse(
                 it,
-                DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             )
-        }
+        },
     )
 }

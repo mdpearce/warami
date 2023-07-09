@@ -13,7 +13,7 @@ sealed class Resource<T> {
 
 fun <T> Flow<Resource<T>>.split(
     itemsFlow: MutableStateFlow<T>,
-    stateFlow: MutableStateFlow<Resource<T>>
+    stateFlow: MutableStateFlow<Resource<T>>,
 ) = onEach { resource ->
     when (resource) {
         is Resource.Success -> {

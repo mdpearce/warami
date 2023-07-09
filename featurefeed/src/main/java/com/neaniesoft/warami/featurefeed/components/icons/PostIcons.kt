@@ -19,7 +19,7 @@ fun rememberModeComment(): ImageVector {
             defaultWidth = 40.0.dp,
             defaultHeight = 40.0.dp,
             viewportWidth = 40.0f,
-            viewportHeight = 40.0f
+            viewportHeight = 40.0f,
         ).apply {
             path(
                 fill = SolidColor(Color.Black),
@@ -30,7 +30,7 @@ fun rememberModeComment(): ImageVector {
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(34.167f, 34.042f)
                 lineToRelative(-4.292f, -4.292f)
@@ -71,7 +71,7 @@ fun rememberArrowUpward(): ImageVector {
             defaultWidth = 40.0.dp,
             defaultHeight = 40.0.dp,
             viewportWidth = 40.0f,
-            viewportHeight = 40.0f
+            viewportHeight = 40.0f,
         ).apply {
             path(
                 fill = SolidColor(Color.Black),
@@ -82,7 +82,7 @@ fun rememberArrowUpward(): ImageVector {
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(20f, 33.125f)
                 quadToRelative(-0.542f, 0f, -0.917f, -0.375f)
@@ -121,7 +121,7 @@ fun rememberArrowDownward(): ImageVector {
             defaultWidth = 40.0.dp,
             defaultHeight = 40.0.dp,
             viewportWidth = 40.0f,
-            viewportHeight = 40.0f
+            viewportHeight = 40.0f,
         ).apply {
             path(
                 fill = SolidColor(Color.Black),
@@ -132,7 +132,7 @@ fun rememberArrowDownward(): ImageVector {
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(20f, 32.583f)
                 quadToRelative(-0.25f, 0f, -0.479f, -0.083f)
@@ -171,7 +171,7 @@ fun rememberBookmark(): ImageVector {
             defaultWidth = 40.0.dp,
             defaultHeight = 40.0.dp,
             viewportWidth = 40.0f,
-            viewportHeight = 40.0f
+            viewportHeight = 40.0f,
         ).apply {
             path(
                 fill = SolidColor(Color.Black),
@@ -182,7 +182,7 @@ fun rememberBookmark(): ImageVector {
                 strokeLineCap = StrokeCap.Butt,
                 strokeLineJoin = StrokeJoin.Miter,
                 strokeLineMiter = 1f,
-                pathFillType = PathFillType.NonZero
+                pathFillType = PathFillType.NonZero,
             ) {
                 moveTo(11.208f, 30.667f)
                 lineTo(20f, 26.917f)

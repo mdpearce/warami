@@ -12,7 +12,6 @@ object RootNavGraph : NavGraphSpec {
     override val startRoute: Route = UiNavGraph
     override val nestedNavGraphs: List<NavGraphSpec> = listOf(
         UiNavGraph,
-        FeaturefeedNavGraph
+        FeaturefeedNavGraph,
     )
-
 }

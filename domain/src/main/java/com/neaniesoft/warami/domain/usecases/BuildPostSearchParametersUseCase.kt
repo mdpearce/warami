@@ -18,7 +18,11 @@ class BuildPostSearchParametersUseCase {
         isSavedOnly: Boolean? = null,
     ): PostSearchParameters {
         return PostSearchParameters(
-            listingType, sortType, communityId, communityName, isSavedOnly
+            listingType,
+            sortType,
+            communityId,
+            communityName,
+            isSavedOnly,
         )
     }
 }

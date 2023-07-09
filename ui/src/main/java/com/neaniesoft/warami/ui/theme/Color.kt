@@ -63,5 +63,4 @@ val md_theme_dark_surfaceTint = Color(0xFFFFB4AA)
 val md_theme_dark_outlineVariant = Color(0xFF534341)
 val md_theme_dark_scrim = Color(0xFF000000)
 
-
 val seed = Color(0xFFE8493D)

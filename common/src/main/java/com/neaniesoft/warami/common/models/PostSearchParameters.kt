@@ -8,7 +8,7 @@ data class PostSearchParameters(
     val sortType: SortType?,
     val communityId: CommunityId?,
     val communityName: String?,
-    val isSavedOnly: Boolean?
+    val isSavedOnly: Boolean?,
 ) {
     val id: String
         get() {

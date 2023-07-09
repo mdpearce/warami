@@ -39,7 +39,7 @@ class PostRepository(
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
-    private val coroutineDispatcher: IODispatcher = Dispatchers.IO
+    private val coroutineDispatcher: IODispatcher = Dispatchers.IO,
 ) {
     companion object {
         private const val POSTS_PER_PAGE = 20
@@ -58,7 +58,7 @@ class PostRepository(
     fun fetchItems(
         page: Int,
         initialSortIndex: Int,
-        searchParameters: PostSearchParameters
+        searchParameters: PostSearchParameters,
     ): Flow<Resource<List<Post>>> = flow {
         emit(Resource.Loading())
         try {
@@ -69,7 +69,7 @@ class PostRepository(
                 limit = POSTS_PER_PAGE.toBigDecimal(),
                 communityId = searchParameters.communityId?.value?.toBigDecimal(),
                 communityName = searchParameters.communityName,
-                savedOnly = searchParameters.isSavedOnly
+                savedOnly = searchParameters.isSavedOnly,
             )
             val body = response.body()
             if (!response.isSuccessful) {
@@ -89,7 +89,7 @@ class PostRepository(
                             .mapIndexed { index, postView ->
                                 postView.toDomain(
                                     searchParameters,
-                                    SortIndex(initialSortIndex + index + 1)
+                                    SortIndex(initialSortIndex + index + 1),
                                 )
                             }
                     items.forEach { post ->
@@ -127,7 +127,7 @@ class PostRepository(
                     updatedAt = updatedAt?.format(localDateTimeFormatter),
                     iconUrl = icon?.value,
                     bannerUrl = banner?.value,
-                    id = id.value.toLong()
+                    id = id.value.toLong(),
                 )
             }
 
@@ -149,7 +149,7 @@ class PostRepository(
                     matrixUserId = matrixUserId,
                     banExpires = banExpiresAt?.format(localDateTimeFormatter),
                     id = id.value.toLong(),
-                    isBotAccount = isBotAccount.toLong()
+                    isBotAccount = isBotAccount.toLong(),
                 )
             }
 
@@ -167,7 +167,7 @@ class PostRepository(
                     isFeaturedLocal = isFeaturedLocal.toLong(),
                     hotRank = hotRank.toLong(),
                     hotRankActive = hotRankActive.toLong(),
-                    id = id.toLong()
+                    id = id.toLong(),
                 )
             }
 
@@ -178,7 +178,7 @@ class PostRepository(
                     communityId = communityId?.value?.toLong(),
                     communityName = communityName,
                     isSavedOnly = isSavedOnly?.toLong(),
-                    id = id
+                    id = id,
                 )
             }
 
@@ -212,7 +212,7 @@ class PostRepository(
                     isRead = isRead.toLong(),
                     isCreatorBlocked = isCreatorBlocked.toLong(),
                     myVote = myVote?.toLong(),
-                    searchParams = searchParameters.id
+                    searchParams = searchParameters.id,
                 )
             }
         }

@@ -22,6 +22,6 @@ fun DomainCommunity.toDb(dateTimeFormatter: DateTimeFormatter): DbCommunity {
         description = description,
         updatedAt = updatedAt?.format(dateTimeFormatter),
         iconUrl = icon?.value,
-        bannerUrl = banner?.value
+        bannerUrl = banner?.value,
     )
 }

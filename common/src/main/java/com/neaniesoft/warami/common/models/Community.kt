@@ -1,7 +1,6 @@
 package com.neaniesoft.warami.common.models
 
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 
 data class Community(
     val id: CommunityId,

@@ -56,7 +56,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
 
     val refreshIndicatorState = rememberPullRefreshState(
         refreshing = loadingState is Resource.Loading,
-        onRefresh = { viewModel.onRefresh() }
+        onRefresh = { viewModel.onRefresh() },
     )
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -64,7 +64,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .pullRefresh(refreshIndicatorState)
+                .pullRefresh(refreshIndicatorState),
         ) {
             items(items = posts) { post ->
                 PostCard(
@@ -83,7 +83,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
 
         PullRefreshIndicator(
             refreshing = loadingState is Resource.Loading,
-            state = refreshIndicatorState
+            state = refreshIndicatorState,
         )
     }
 }

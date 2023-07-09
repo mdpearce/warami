@@ -5,6 +5,8 @@ import com.neaniesoft.warami.ui.WaramiApp
 import me.tatarka.inject.annotations.Component
 
 @Component
-abstract class WaramiAppComponent(@Component val feedComponent: FeedComponent) {
+abstract class WaramiAppComponent(
+    @Component val feedComponent: FeedComponent,
+) {
     abstract val waramiApp: WaramiApp
 }

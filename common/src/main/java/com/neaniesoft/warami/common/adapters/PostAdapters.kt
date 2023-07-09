@@ -31,7 +31,7 @@ fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortInd
         updatedAt = post.updated?.let {
             LocalDateTime.parse(
                 it,
-                DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             )
         },
         embedTitle = post.embedTitle,

@@ -31,7 +31,7 @@ data class Post(
     val isRead: Boolean,
     val isCreatorBlocked: Boolean,
     val myVote: Int?,
-    val searchParameters: PostSearchParameters
+    val searchParameters: PostSearchParameters,
 )
 
 @JvmInline

@@ -54,7 +54,7 @@ fun PostCard(
     Card(
         onClick = {},
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.padding(bottom = 16.dp)
+        modifier = Modifier.padding(bottom = 16.dp),
     ) {
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -62,13 +62,13 @@ fun PostCard(
                     communityName = communityName,
                     creatorName = creatorName,
                     postedTime = postedTime,
-                    thumbnailUrl = communityThumbnailUri?.value
+                    thumbnailUrl = communityThumbnailUri?.value,
                 )
 
                 PostContentRow(
                     postTitle = postTitle,
                     thumbnailUrl = postThumbnailUri,
-                    url = postUri
+                    url = postUri,
                 )
 
                 PostSummaryRow(commentCount = commentCount, score = score)
@@ -87,15 +87,15 @@ fun PostHeaderRow(
     Row(
         horizontalArrangement = Arrangement.Start,
         modifier = Modifier.padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (thumbnailUrl == null) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_circle_24),
                 contentDescription = stringResource(
-                    R.string.content_description_community_icon
+                    R.string.content_description_community_icon,
                 ),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         } else {
             AsyncImage(
@@ -106,24 +106,24 @@ fun PostHeaderRow(
                 contentDescription = stringResource(id = R.string.content_description_community_icon),
                 placeholder = painterResource(id = R.drawable.baseline_circle_24),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
         Text(
             text = communityName,
             modifier = Modifier.padding(start = 16.dp),
             color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
         )
         Text(
             text = creatorName,
             modifier = Modifier.padding(start = 24.dp),
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
         )
         Text(
             text = postedTime,
             modifier = Modifier.padding(start = 24.dp),
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
         )
     }
 }
@@ -132,12 +132,12 @@ fun PostHeaderRow(
 fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
         Text(
             text = postTitle,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Spacer(modifier = Modifier.width(16.dp))
         PostContentRowThumbnail(thumbnailUrl = thumbnailUrl, url = url)
@@ -150,13 +150,13 @@ fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).crossfade(true).build(),
             contentDescription = stringResource(
-                id = R.string.content_description_post_thumbnail
+                id = R.string.content_description_post_thumbnail,
             ),
             placeholder = painterResource(id = R.drawable.placeholder),
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(72.dp)
-                .clip(MaterialTheme.shapes.medium)
+                .clip(MaterialTheme.shapes.medium),
         )
     } else if (url != null) {
         Box(contentAlignment = Alignment.Center) {
@@ -165,7 +165,8 @@ fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
                 contentDescription = stringResource(id = R.string.content_description_post_icon),
                 modifier = Modifier
                     .size(72.dp)
-                    .clip(MaterialTheme.shapes.medium), contentScale = ContentScale.FillBounds
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.FillBounds,
             )
 
             Image(
@@ -173,7 +174,7 @@ fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
                 contentDescription = stringResource(id = R.string.content_description_post_link),
                 modifier = Modifier
                     .size(48.dp)
-                    .rotate(-45f)
+                    .rotate(-45f),
             )
         }
     }
@@ -184,43 +185,44 @@ fun PostSummaryRow(commentCount: Int, score: Int) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(16.dp),
     ) {
         Icon(
             rememberModeComment(),
             contentDescription = stringResource(id = R.string.content_description_comments_icon),
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
         Text(
-            text = commentCount.toString(), style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(start = 8.dp)
+            text = commentCount.toString(),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 8.dp),
         )
         Spacer(
             modifier = Modifier
                 .weight(1f)
-                .padding(16.dp)
+                .padding(16.dp),
         )
         Icon(
             rememberArrowUpward(),
             contentDescription = stringResource(id = R.string.content_description_upvote_icon),
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
         Text(
             text = score.toString(),
             style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
         )
         Icon(
             rememberArrowDownward(),
             contentDescription = stringResource(R.string.content_description_down_vote_icon),
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Icon(
             rememberBookmark(),
             contentDescription = stringResource(R.string.content_description_save_icon),
             modifier = Modifier
-                .size(24.dp)
+                .size(24.dp),
         )
     }
 }

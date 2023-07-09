@@ -18,5 +18,5 @@ inline fun <reified VM : ViewModel> viewModel(
     key = key,
     factory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = factory() as T
-    }
+    },
 )

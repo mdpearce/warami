@@ -19,5 +19,5 @@ data class Person(
     val bio: String?,
     val bannerUrl: UriString?,
     val matrixUserId: String?,
-    val banExpiresAt: LocalDateTime?
+    val banExpiresAt: LocalDateTime?,
 )

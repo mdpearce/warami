@@ -15,7 +15,7 @@ class GetPostsForSearchParamsUseCase(private val postRepository: PostRepository)
     operator fun invoke(
         page: Int,
         initialSortIndex: SortIndex,
-        searchParameters: PostSearchParameters
+        searchParameters: PostSearchParameters,
     ): Flow<Resource<List<Post>>> {
         return postRepository.fetchItems(page, initialSortIndex.value, searchParameters)
     }

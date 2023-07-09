@@ -22,7 +22,7 @@ typealias IODispatcher = CoroutineDispatcher
 @Component
 @DatabaseScope
 abstract class DatabaseComponent(
-    @Component val apiComponent: ApiComponent
+    @Component val apiComponent: ApiComponent,
 ) {
 
     abstract val postRepository: PostRepository

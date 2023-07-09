@@ -8,7 +8,9 @@ import me.tatarka.inject.annotations.Scope
 
 @Component
 @DomainScope
-abstract class DomainComponent(@Component val dataComponent: DatabaseComponent) {
+abstract class DomainComponent(
+    @Component val dataComponent: DatabaseComponent,
+) {
     abstract val buildPostSearchParametersUseCase: BuildPostSearchParametersUseCase
     abstract val getPostsForSearchParamsUseCase: GetPostsForSearchParamsUseCase
 }

@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 
 fun SelectBySearchParams.toDomain(
     dateTimeFormatter: DateTimeFormatter,
-    searchParameters: PostSearchParameters
+    searchParameters: PostSearchParameters,
 ): Post {
     fun String.parseLocalDateTime(): LocalDateTime = this.parseLocalDateTime(dateTimeFormatter)
 
@@ -49,7 +49,7 @@ fun SelectBySearchParams.toDomain(
         description = communityDescription,
         updatedAt = communityUpdatedAt?.parseLocalDateTime(),
         icon = communityIconUrl?.let { UriString(it) },
-        banner = communityBannerUrl?.let { UriString(it) }
+        banner = communityBannerUrl?.let { UriString(it) },
     )
     val creator = Person(
         id = PersonId(creatorId.toInt()),
@@ -68,7 +68,7 @@ fun SelectBySearchParams.toDomain(
         bio = creatorBio,
         bannerUrl = creatorBannerUrl?.let { UriString(it) },
         matrixUserId = creatorMatrixUserId,
-        banExpiresAt = creatorBanExpires?.parseLocalDateTime()
+        banExpiresAt = creatorBanExpires?.parseLocalDateTime(),
     )
     val counts = PostAggregates(
         id = aggregates.toInt(),
@@ -82,7 +82,7 @@ fun SelectBySearchParams.toDomain(
         isFeaturedCommunity = countsIsFeaturedCommunity.toBoolean(),
         isFeaturedLocal = countsIsFeaturedLocal.toBoolean(),
         hotRank = countsHotRank.toInt(),
-        hotRankActive = countsHotRankActive.toInt()
+        hotRankActive = countsHotRankActive.toInt(),
     )
 
     return Post(
@@ -114,7 +114,7 @@ fun SelectBySearchParams.toDomain(
         isRead = isRead.toBoolean(),
         isCreatorBlocked = isCreatorBlocked.toBoolean(),
         myVote = myVote?.toInt(),
-        searchParameters = searchParameters
+        searchParameters = searchParameters,
     )
 }
 
@@ -190,6 +190,6 @@ fun PostSearchParameters.toApi(): GetPosts {
             SortType.TOP_SIX_MONTHS -> ApiSortType.topSixMonths
             SortType.TOP_NINE_MONTHS -> ApiSortType.topNineMonths
             null -> null
-        }
+        },
     )
 }

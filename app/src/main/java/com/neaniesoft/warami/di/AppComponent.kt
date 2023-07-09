@@ -11,7 +11,7 @@ import me.tatarka.inject.annotations.Provides
 @Component
 abstract class AppComponent(
     @Component val databaseComponent: DatabaseComponent,
-    @Component val feedComponent: FeedComponent
+    @Component val feedComponent: FeedComponent,
 ) {
     @AppScope
     @Provides

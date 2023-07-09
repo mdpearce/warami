@@ -22,9 +22,8 @@ fun WaramiApp(feedViewModel: () -> FeedViewModel) {
         val navController = rememberNavController()
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
         ) {
-
             DestinationsNavHost(
                 navController = navController,
                 navGraph = RootNavGraph,
@@ -34,9 +33,8 @@ fun WaramiApp(feedViewModel: () -> FeedViewModel) {
                     dependency(FeedScreenDestination) {
                         feedViewModel
                     }
-                }
+                },
             ) {
-
             }
         }
     }

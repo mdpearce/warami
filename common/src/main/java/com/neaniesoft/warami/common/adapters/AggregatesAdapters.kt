@@ -15,15 +15,15 @@ fun ApiAggregates.toDomain(): DomainAggregates {
         publishedAt = LocalDateTime.parse(published, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
         newestCommentTimeNecro = LocalDateTime.parse(
             newestCommentTimeNecro,
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
         ),
         newestComment = LocalDateTime.parse(
             newestCommentTime,
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
         ),
         isFeaturedCommunity = featuredCommunity,
         isFeaturedLocal = featuredLocal,
         hotRank = hotRank.intValueExact(),
-        hotRankActive = hotRankActive.intValueExact()
+        hotRankActive = hotRankActive.intValueExact(),
     )
 }

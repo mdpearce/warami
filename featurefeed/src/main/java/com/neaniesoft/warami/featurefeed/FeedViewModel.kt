@@ -31,8 +31,8 @@ class FeedViewModel(
     private val searchParameters = MutableStateFlow(
         buildPostSearchParameters(
             sortType = SortType.ACTIVE,
-            listingType = ListingType.ALL
-        )
+            listingType = ListingType.ALL,
+        ),
     )
 
     private val postResource = MutableStateFlow<Resource<List<Post>>>(Resource.Loading())
@@ -59,7 +59,7 @@ class FeedViewModel(
             getPostsForSearchParams(
                 ++currentPage,
                 sortIndex,
-                searchParameters.value
+                searchParameters.value,
             ).collect { resource ->
                 postResource.value = resource
             }
@@ -88,7 +88,7 @@ class FeedViewModel(
             sortType,
             communityId,
             communityName,
-            isSavedOnly
+            isSavedOnly,
         )
     }
 }
