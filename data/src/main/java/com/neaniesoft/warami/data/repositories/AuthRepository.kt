@@ -4,13 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.data.di.DatabaseScope
 import me.tatarka.inject.annotations.Inject
+import retrofit2.HttpException
+import java.io.IOException
 
 @Inject
 @DatabaseScope
 class AuthRepository(
     private val context: Context,
+    private val api: DefaultApi,
 ) {
     companion object {
         private const val AUTH_PREFS_FILENAME = "auth_repository"
@@ -34,4 +38,29 @@ class AuthRepository(
         set(value) {
             prefs.edit().putString(KEY_JWT, value).apply()
         }
+
+    suspend fun login(usernameOrEmail: String, password: String) {
+        val response = try {
+            val body = api.login(usernameOrEmail, password).body()
+            if (body == null) {
+                RemoteResult.Err(IllegalStateException("Response body was null"))
+            } else {
+                if (body.jwt == null) {
+                    RemoteResult.Err(IllegalStateException("JWT was null"))
+                } else {
+                    jwt = body.jwt
+                    RemoteResult.Ok(Unit)
+                }
+            }
+        } catch (e: IOException) {
+            RemoteResult.Err(e)
+        } catch (e: HttpException) {
+            RemoteResult.Err(e)
+        }
+    }
+}
+
+sealed class RemoteResult<T> {
+    data class Ok<T>(val value: T) : RemoteResult<T>()
+    data class Err<T>(val e: Exception) : RemoteResult<T>()
 }
