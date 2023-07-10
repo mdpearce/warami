@@ -18,6 +18,7 @@ compose-destinations = "1.9.42-beta"
 kotlin-inject = "0.6.1"
 appcompat = "1.6.1"
 kotlinter = "3.15.0"
+google-services-plugin = "4.3.15"
 paging = "3.1.1"
 
 [plugins]
@@ -27,6 +28,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sql-delight" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
 
 [libraries]
 android-gradle-library-plugin = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "android-gradle-plugin" }
@@ -72,7 +74,8 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 kotlinter-plugin = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "5.6.2" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version = "1.1.0-alpha06" }
-kotlinter-plugin = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
+google-services-plugin = { module = "com.google.gms:google-services", version.ref = "google-services-plugin" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "32.1.1" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "3.2.0-rc01" }
