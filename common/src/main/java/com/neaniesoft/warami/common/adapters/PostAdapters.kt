@@ -9,13 +9,15 @@ import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex, pageNum: PageNumber): Post {
+fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex, pageNum: PageNumber, insertedAt:ZonedDateTime): Post {
     return Post(
         id = PostId(post.id.intValueExact()),
         sortIndex = sortIndex,
         pageNum = pageNum,
+        insertedAt = insertedAt,
         name = post.name,
         creator = creator.toDomain(),
         community = community.toDomain(),

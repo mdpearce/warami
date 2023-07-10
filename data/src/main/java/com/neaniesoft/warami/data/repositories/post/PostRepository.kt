@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import me.tatarka.inject.annotations.Inject
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
@@ -91,7 +92,8 @@ class PostRepository(
                                 postView.toDomain(
                                     searchParameters,
                                     SortIndex(initialSortIndex + index + 1),
-                                    PageNumber(page)
+                                    PageNumber(page),
+                                    ZonedDateTime.now() // TODO: Use a clock
                                 )
                             }
                     items.forEach { post ->
@@ -189,6 +191,7 @@ class PostRepository(
                     id = id.value.toLong(),
                     sortIndex = sortIndex.value.toLong(),
                     pageNum = pageNum.value.toLong(),
+                    insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     name = name,
                     creatorId = creator.id.value.toLong(),
                     communityId = community.id.value.toLong(),

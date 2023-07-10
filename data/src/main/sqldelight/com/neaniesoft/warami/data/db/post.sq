@@ -2,6 +2,7 @@ CREATE TABLE post (
 	id	INTEGER NOT NULL,
 	sortIndex INTEGER NOT NULL,
 	pageNum INTEGER NOT NULL,
+	insertedAt TEXT NOT NULL,
 	name	TEXT NOT NULL,
 	creatorId	INTEGER NOT NULL,
 	communityId	INTEGER NOT NULL,
@@ -52,6 +53,7 @@ insert:
 INSERT INTO post (
     id,
     sortIndex,
+    insertedAt,
     pageNum,
     name,
     creatorId,
@@ -87,6 +89,7 @@ upsert {
         id = :id,
         sortIndex = :sortIndex,
         pageNum = :pageNum,
+        insertedAt = :insertedAt,
         name = :name,
         creatorId = :creatorId,
         communityId = :communityId,
@@ -120,6 +123,7 @@ upsert {
         id,
         sortIndex,
         pageNum,
+        insertedAt,
         name,
         creatorId,
         communityId,
@@ -151,6 +155,7 @@ upsert {
         :id,
         :sortIndex,
         :pageNum,
+        :insertedAt,
         :name,
         :creatorId,
         :communityId,
@@ -240,5 +245,11 @@ DELETE FROM post WHERE searchParams = ?;
 selectLatestSortIndexForSearchParams:
 SELECT sortIndex FROM post WHERE searchParams = :searchParamsId ORDER BY sortIndex DESC LIMIT 1;
 
+selectLatestInsertTimeForSearchParams:
+SELECT insertedAt FROM post WHERE searchParams = :searchParamsId ORDER BY insertedAt DESC LIMIT 1;
+
 selectPostIdsForSearchParams:
 SELECT id FROM post WHERE searchParams = :searchParamsId ORDER BY id;
+
+selectLatestPageNumForSearchParams:
+SELECT pageNum FROM post WHERE searchParams = :searchParamsId ORDER BY insertedAt DESC LIMIT 1;

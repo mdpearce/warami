@@ -2,6 +2,7 @@ package com.neaniesoft.warami.data.repositories.adapters
 
 import com.neaniesoft.warami.api.models.GetPosts
 import com.neaniesoft.warami.common.extensions.parseLocalDateTime
+import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toBoolean
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.ActorId
@@ -90,6 +91,7 @@ fun SelectBySearchParams.toDomain(
         id = PostId(id.toInt()),
         sortIndex = SortIndex(sortIndex.toInt()),
         pageNum = PageNumber(pageNum.toInt()),
+        insertedAt = insertedAt.parseZonedDateTime(),
         name = name,
         creator = creator,
         community = community,
@@ -127,6 +129,7 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
         id = id.value.toLong(),
         sortIndex = sortIndex.value.toLong(),
         pageNum = pageNum.value.toLong(),
+        insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
         name = name,
         creatorId = creator.id.value.toLong(),
         communityId = community.id.value.toLong(),

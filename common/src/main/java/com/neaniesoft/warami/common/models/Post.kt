@@ -1,11 +1,13 @@
 package com.neaniesoft.warami.common.models
 
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class Post(
     val id: PostId,
     val sortIndex: SortIndex,
     val pageNum: PageNumber,
+    val insertedAt: ZonedDateTime,
     val name: String,
     val creator: Person,
     val community: Community,

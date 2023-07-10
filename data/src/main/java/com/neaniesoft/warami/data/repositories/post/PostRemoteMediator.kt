@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.common.adapters.toDomain
+import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
@@ -15,7 +16,11 @@ import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration.Companion.hours
 
 @OptIn(ExperimentalPagingApi::class)
 class PostRemoteMediator(
@@ -31,14 +36,19 @@ class PostRemoteMediator(
 
     override suspend fun load(loadType: LoadType, state: PagingState<PageNumber, Post>): MediatorResult {
         return try {
+            val latestPageNum = postQueries.transactionWithResult {
+                postQueries.selectLatestPageNumForSearchParams(searchParameters.id).executeAsOneOrNull() ?: 1
+            }
+
             val loadKey: Pair<PageNumber, SortIndex> = when (loadType) {
                 LoadType.REFRESH -> Pair(PageNumber(1), SortIndex(0))
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
-                    Pair(lastItem.pageNum, lastItem.sortIndex)
+                    Pair(PageNumber(latestPageNum.toInt()), lastItem.sortIndex)
                 }
             }
+
 
             val response = api.getPosts(
                 type = searchParameters.listingType?.toApi(),
@@ -60,13 +70,19 @@ class PostRemoteMediator(
                     postQueries.deleteBySearchParams(searchParameters.id)
                 }
                 apiPosts.mapIndexed { index, postView ->
-                    postView.toDomain(searchParameters, SortIndex(loadKey.second.value + 1 + index), loadKey.first)
+                    postView.toDomain(
+                        searchParameters,
+                        SortIndex(loadKey.second.value + 1 + index),
+                        loadKey.first,
+                        ZonedDateTime.now(),
+                    ) // Use a clock for getting now()
                 }.forEach { post ->
                     with(post) {
                         postQueries.upsert(
                             id = id.value.toLong(),
                             sortIndex = sortIndex.value.toLong(),
                             pageNum = pageNum.value.toLong(),
+                            insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME), // TODO: inject this
                             name = name,
                             creatorId = creator.id.value.toLong(),
                             communityId = community.id.value.toLong(),
@@ -104,6 +120,24 @@ class PostRemoteMediator(
             MediatorResult.Error(e)
         } catch (e: HttpException) {
             MediatorResult.Error(e)
+        }
+    }
+
+    override suspend fun initialize(): InitializeAction {
+        val lastUpdated = postQueries.selectLatestInsertTimeForSearchParams(searchParameters.id).executeAsOneOrNull()?.parseZonedDateTime()
+            ?: ZonedDateTime.ofInstant(
+                Instant.EPOCH, ZoneId.systemDefault(),
+            )
+        val cacheTimeout = 1.hours.inWholeMilliseconds
+        return if (Instant.now().toEpochMilli() - lastUpdated.toInstant().toEpochMilli() <= cacheTimeout) {
+            // Cached data is up-to-date, so there is no need to re-fetch
+            // from the network.
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            // Need to refresh cached data from network; returning
+            // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
+            // APPEND and PREPEND from running until REFRESH succeeds.
+            InitializeAction.LAUNCH_INITIAL_REFRESH
         }
     }
 }
