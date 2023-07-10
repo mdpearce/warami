@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.common.adapters
 
 import com.neaniesoft.warami.api.models.PostView
+import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
@@ -10,10 +11,11 @@ import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex): Post {
+fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex, pageNum: PageNumber): Post {
     return Post(
         id = PostId(post.id.intValueExact()),
         sortIndex = sortIndex,
+        pageNum = pageNum,
         name = post.name,
         creator = creator.toDomain(),
         community = community.toDomain(),

@@ -4,6 +4,7 @@ import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.common.adapters.DomainCommunity
 import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.toLong
+import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.common.models.Resource
@@ -90,6 +91,7 @@ class PostRepository(
                                 postView.toDomain(
                                     searchParameters,
                                     SortIndex(initialSortIndex + index + 1),
+                                    PageNumber(page)
                                 )
                             }
                     items.forEach { post ->
@@ -186,6 +188,7 @@ class PostRepository(
                 postQueries.upsert(
                     id = id.value.toLong(),
                     sortIndex = sortIndex.value.toLong(),
+                    pageNum = pageNum.value.toLong(),
                     name = name,
                     creatorId = creator.id.value.toLong(),
                     communityId = community.id.value.toLong(),

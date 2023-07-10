@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 data class Post(
     val id: PostId,
     val sortIndex: SortIndex,
+    val pageNum: PageNumber,
     val name: String,
     val creator: Person,
     val community: Community,
@@ -36,3 +37,6 @@ data class Post(
 
 @JvmInline
 value class SortIndex(val value: Int)
+
+@JvmInline
+value class PageNumber(val value: Int)

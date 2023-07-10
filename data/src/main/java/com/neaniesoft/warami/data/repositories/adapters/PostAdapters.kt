@@ -8,6 +8,7 @@ import com.neaniesoft.warami.common.models.ActorId
 import com.neaniesoft.warami.common.models.Community
 import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.InstanceId
+import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Person
 import com.neaniesoft.warami.common.models.PersonId
 import com.neaniesoft.warami.common.models.Post
@@ -88,6 +89,7 @@ fun SelectBySearchParams.toDomain(
     return Post(
         id = PostId(id.toInt()),
         sortIndex = SortIndex(sortIndex.toInt()),
+        pageNum = PageNumber(pageNum.toInt()),
         name = name,
         creator = creator,
         community = community,
@@ -124,6 +126,7 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
     return DbPost(
         id = id.value.toLong(),
         sortIndex = sortIndex.value.toLong(),
+        pageNum = pageNum.value.toLong(),
         name = name,
         creatorId = creator.id.value.toLong(),
         communityId = community.id.value.toLong(),
