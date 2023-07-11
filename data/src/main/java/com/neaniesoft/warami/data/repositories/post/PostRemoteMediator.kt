@@ -31,7 +31,7 @@ class PostRemoteMediator(
 ) : RemoteMediator<PageNumber, Post>() {
 
     companion object {
-        private const val POSTS_PER_PAGE = 20
+        const val POSTS_PER_PAGE = 20
     }
 
     override suspend fun load(loadType: LoadType, state: PagingState<PageNumber, Post>): MediatorResult {

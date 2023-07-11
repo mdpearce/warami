@@ -42,3 +42,14 @@ value class SortIndex(val value: Int)
 
 @JvmInline
 value class PageNumber(val value: Int)
+
+operator fun PageNumber.plus(other: Int): PageNumber {
+    return PageNumber(value + other)
+}
+
+operator fun PageNumber.minus(other: Int): PageNumber {
+    return PageNumber(value - other)
+}
+ operator fun PageNumber.compareTo(other: Int): Int {
+     return value.compareTo(other)
+ }
