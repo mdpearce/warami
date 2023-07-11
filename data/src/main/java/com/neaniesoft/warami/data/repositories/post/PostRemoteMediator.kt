@@ -66,53 +66,56 @@ class PostRemoteMediator(
             val apiPosts = body.posts
 
             postQueries.transaction {
+                val postIds = postQueries.selectPostIdsForSearchParams(searchParameters.id).executeAsList()
                 if (loadType == LoadType.REFRESH) {
                     postQueries.deleteBySearchParams(searchParameters.id)
                 }
-                apiPosts.mapIndexed { index, postView ->
-                    postView.toDomain(
-                        searchParameters,
-                        SortIndex(loadKey.second.value + 1 + index),
-                        loadKey.first,
-                        ZonedDateTime.now(),
-                    ) // Use a clock for getting now()
-                }.forEach { post ->
-                    with(post) {
-                        postQueries.upsert(
-                            id = id.value.toLong(),
-                            sortIndex = sortIndex.value.toLong(),
-                            pageNum = pageNum.value.toLong(),
-                            insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME), // TODO: inject this
-                            name = name,
-                            creatorId = creator.id.value.toLong(),
-                            communityId = community.id.value.toLong(),
-                            isRemoved = isRemoved.toLong(),
-                            isLocked = isLocked.toLong(),
-                            publishedAt = publishedAt.format(dateTimeFormatter),
-                            isDeleted = isDeleted.toLong(),
-                            isNsfw = isNsfw.toLong(),
-                            apId = apId,
-                            isLocal = isLocal.toLong(),
-                            languageId = languageId.toLong(),
-                            isFeaturedCommunity = isFeaturedCommunity.toLong(),
-                            url = url?.value,
-                            body = this.body,
-                            updatedAt = updatedAt?.format(dateTimeFormatter),
-                            embedTitle = embedTitle,
-                            embedDescription = embedDescription,
-                            thumbnailUrl = thumbnail?.value,
-                            embedVideoUrl = embedVideo?.value,
-                            isCreatorBannedFromCommunity = isCreatorBannedFromCommunity.toLong(),
-                            aggregates = aggregates.id.toLong(),
-                            subscribedType = subscribedTyped.value,
-                            isSaved = isSaved.toLong(),
-                            isRead = isRead.toLong(),
-                            isCreatorBlocked = isCreatorBlocked.toLong(),
-                            myVote = myVote?.toLong(),
-                            searchParams = searchParameters.id,
-                        )
+                apiPosts
+                    .filterNot { postIds.contains(it.post.id.toLong()) } // Dedupe because of braindead Lemmy API
+                    .mapIndexed { index, postView ->
+                        postView.toDomain(
+                            searchParameters,
+                            SortIndex(loadKey.second.value + 1 + index),
+                            loadKey.first,
+                            ZonedDateTime.now(),
+                        ) // Use a clock for getting now()
+                    }.forEach { post ->
+                        with(post) {
+                            postQueries.upsert(
+                                id = id.value.toLong(),
+                                sortIndex = sortIndex.value.toLong(),
+                                pageNum = pageNum.value.toLong(),
+                                insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME), // TODO: inject this
+                                name = name,
+                                creatorId = creator.id.value.toLong(),
+                                communityId = community.id.value.toLong(),
+                                isRemoved = isRemoved.toLong(),
+                                isLocked = isLocked.toLong(),
+                                publishedAt = publishedAt.format(dateTimeFormatter),
+                                isDeleted = isDeleted.toLong(),
+                                isNsfw = isNsfw.toLong(),
+                                apId = apId,
+                                isLocal = isLocal.toLong(),
+                                languageId = languageId.toLong(),
+                                isFeaturedCommunity = isFeaturedCommunity.toLong(),
+                                url = url?.value,
+                                body = this.body,
+                                updatedAt = updatedAt?.format(dateTimeFormatter),
+                                embedTitle = embedTitle,
+                                embedDescription = embedDescription,
+                                thumbnailUrl = thumbnail?.value,
+                                embedVideoUrl = embedVideo?.value,
+                                isCreatorBannedFromCommunity = isCreatorBannedFromCommunity.toLong(),
+                                aggregates = aggregates.id.toLong(),
+                                subscribedType = subscribedTyped.value,
+                                isSaved = isSaved.toLong(),
+                                isRead = isRead.toLong(),
+                                isCreatorBlocked = isCreatorBlocked.toLong(),
+                                myVote = myVote?.toLong(),
+                                searchParams = searchParameters.id,
+                            )
+                        }
                     }
-                }
             }
 
             MediatorResult.Success(endOfPaginationReached = apiPosts.isEmpty())
