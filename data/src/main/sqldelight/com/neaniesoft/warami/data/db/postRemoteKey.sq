@@ -1,0 +1,20 @@
+CREATE TABLE postRemoteKey (
+	searchParamsId TEXT NOT NULL,
+	nextKey INTEGER,
+	PRIMARY KEY(searchParamsId)
+);
+
+CREATE INDEX postRemoteKey_id ON postRemoteKey(
+searchParamsId
+);
+
+insert:
+INSERT OR REPLACE INTO postRemoteKey (
+searchParamsId, nextKey
+) VALUES (:searchParamsId, :nextKey);
+
+remoteKeyBySearchParams:
+SELECT * FROM postRemoteKey WHERE searchParamsId = :searchParamsId LIMIT 1;
+
+deleteBySearchParams:
+DELETE FROM postRemoteKey WHERE searchParamsId = :searchParamsId;

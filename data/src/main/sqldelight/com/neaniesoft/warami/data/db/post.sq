@@ -1,6 +1,7 @@
 CREATE TABLE post (
-	id	INTEGER NOT NULL,
-	sortIndex INTEGER NOT NULL,
+    id INTEGER,
+	postId	INTEGER NOT NULL,
+	insertedAt TEXT NOT NULL,
 	name	TEXT NOT NULL,
 	creatorId	INTEGER NOT NULL,
 	communityId	INTEGER NOT NULL,
@@ -49,8 +50,8 @@ CREATE INDEX post_search_params ON post (
 
 insert:
 INSERT INTO post (
-    id,
-    sortIndex,
+    postId,
+    insertedAt,
     name,
     creatorId,
     communityId,
@@ -80,101 +81,6 @@ INSERT INTO post (
     searchParams
 ) VALUES ?;
 
-upsert {
-    UPDATE post SET
-        id = :id,
-        sortIndex = :sortIndex,
-        name = :name,
-        creatorId = :creatorId,
-        communityId = :communityId,
-        isRemoved = :isRemoved,
-        isLocked = :isLocked,
-        publishedAt = :publishedAt,
-        isDeleted = :isDeleted,
-        isNsfw = :isNsfw,
-        apId = :apId,
-        isLocal = :isLocal,
-        languageId = :languageId,
-        isFeaturedCommunity = :isFeaturedCommunity,
-        url = :url,
-        body = :body,
-        updatedAt = :updatedAt,
-        embedTitle = :embedTitle,
-        embedDescription = :embedDescription,
-        thumbnailUrl = :thumbnailUrl,
-        embedVideoUrl = :embedVideoUrl,
-        isCreatorBannedFromCommunity = :isCreatorBannedFromCommunity,
-        aggregates = :aggregates,
-        subscribedType = :subscribedType,
-        isSaved = :isSaved,
-        isRead = :isRead,
-        isCreatorBlocked = :isCreatorBlocked,
-        myVote = :myVote,
-        searchParams = :searchParams
-    WHERE id = :id;
-
-    INSERT OR IGNORE INTO post(
-        id,
-        sortIndex,
-        name,
-        creatorId,
-        communityId,
-        isRemoved,
-        isLocked,
-        publishedAt,
-        isDeleted,
-        isNsfw,
-        apId,
-        isLocal,
-        languageId,
-        isFeaturedCommunity,
-        url,
-        body,
-        updatedAt,
-        embedTitle,
-        embedDescription,
-        thumbnailUrl,
-        embedVideoUrl,
-        isCreatorBannedFromCommunity,
-        aggregates,
-        subscribedType,
-        isSaved,
-        isRead,
-        isCreatorBlocked,
-        myVote,
-        searchParams
-    ) VALUES (
-        :id,
-        :sortIndex,
-        :name,
-        :creatorId,
-        :communityId,
-        :isRemoved,
-        :isLocked,
-        :publishedAt,
-        :isDeleted,
-        :isNsfw,
-        :apId,
-        :isLocal,
-        :languageId,
-        :isFeaturedCommunity,
-        :url,
-        :body,
-        :updatedAt,
-        :embedTitle,
-        :embedDescription,
-        :thumbnailUrl,
-        :embedVideoUrl,
-        :isCreatorBannedFromCommunity,
-        :aggregates,
-        :subscribedType,
-        :isSaved,
-        :isRead,
-        :isCreatorBlocked,
-        :myVote,
-        :searchParams
-    );
-}
 
 selectBySearchParams:
 SELECT
@@ -226,14 +132,69 @@ INNER JOIN community ON post.communityId = community.id
 INNER JOIN person ON post.creatorId = person.id
 INNER JOIN postAggregate ON post.aggregates = postAggregate.id
 INNER JOIN postSearchParams ON post.searchParams = postSearchParams.id
-WHERE post.searchParams = ?
-ORDER BY post.sortIndex ASC;
+WHERE post.searchParams = ?;
+
+selectPostsOffset:
+SELECT
+    post.*,
+    community.name AS communityName,
+    community.title AS communityTitle,
+    community.isRemoved AS communityIsRemoved,
+    community.published AS communityPublished,
+    community.isDeleted AS communityIsDeleted,
+    community.isNsfw AS communityIsNsfw,
+    community.actorId AS communityActorId,
+    community.isLocal AS communityIsLocal,
+    community.isHidden AS communityIsHidden,
+    community.isPostingRestrictedToMods AS communityIsPostingRestrictedToMods,
+    community.instanceId AS communityInstanceId,
+    community.description AS communityDescription,
+    community.updatedAt AS communityUpdatedAt,
+    community.iconUrl AS communityIconUrl,
+    community.bannerUrl AS communityBannerUrl,
+    person.name AS creatorName,
+    person.isBanned AS creatorIsBanned,
+    person.publishedAt AS creatorPublishedAt,
+    person.actorId AS creatorActorId,
+    person.isLocal AS creatorIsLocal,
+    person.isDeleted AS creatorIsDeleted,
+    person.isAdmin AS creatorIsAdmin,
+    person.isBotAccount AS creatorIsBotAccount,
+    person.instanceId AS creatorInstanceId,
+    person.displayName AS creatorDisplayName,
+    person.avatarUrl AS creatorAvatarUrl,
+    person.updatedAt AS creatorUpdatedAt,
+    person.bio AS creatorBio,
+    person.bannerUrl AS creatorBannerUrl,
+    person.matrixUserId AS creatorMatrixUserId,
+    person.banExpires AS creatorBanExpires,
+    postAggregate.comments AS countsComments,
+    postAggregate.score AS countsScore,
+    postAggregate.upVotes AS countsUpVotes,
+    postAggregate.downVotes AS countsDownVotes,
+    postAggregate.publishedAt AS countsPublishedAt,
+    postAggregate.newestCommentTimeNecro AS countsNewestCommentTimeNecro,
+    postAggregate.newestCommentTime AS countsNewestCommentTime,
+    postAggregate.isFeaturedCommunity AS countsIsFeaturedCommunity,
+    postAggregate.isFeaturedLocal AS countsIsFeaturedLocal,
+    postAggregate.hotRank AS countsHotRank,
+    postAggregate.hotRankActive AS countsHotRankActive
+FROM post
+INNER JOIN community ON post.communityId = community.id
+INNER JOIN person ON post.creatorId = person.id
+INNER JOIN postAggregate ON post.aggregates = postAggregate.id
+INNER JOIN postSearchParams ON post.searchParams = postSearchParams.id
+WHERE post.searchParams = :searchParamsId
+LIMIT :limit OFFSET :offset;
 
 deleteBySearchParams:
 DELETE FROM post WHERE searchParams = ?;
 
-selectLatestSortIndexForSearchParams:
-SELECT sortIndex FROM post WHERE searchParams = :searchParamsId ORDER BY sortIndex DESC LIMIT 1;
+selectLatestInsertTimeForSearchParams:
+SELECT insertedAt FROM post WHERE searchParams = :searchParamsId ORDER BY insertedAt DESC LIMIT 1;
 
 selectPostIdsForSearchParams:
-SELECT id FROM post WHERE searchParams = :searchParamsId ORDER BY id;
+SELECT postId FROM post WHERE searchParams = :searchParamsId ORDER BY postId;
+
+count:
+SELECT count(*) FROM post WHERE searchParams = :searchParamsId;

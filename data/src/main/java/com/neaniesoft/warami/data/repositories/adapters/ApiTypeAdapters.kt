@@ -8,14 +8,6 @@ import com.neaniesoft.warami.data.repositories.DomainSortType
 typealias ApiListingType = ListingType
 typealias DomainListingType = com.neaniesoft.warami.common.models.ListingType
 
-fun ApiListingType.toDomain(): DomainListingType {
-    return when (this) {
-        ListingType.subscribed -> DomainListingType.SUBSCRIBED
-        ListingType.all -> DomainListingType.ALL
-        ListingType.local -> DomainListingType.LOCAL
-    }
-}
-
 fun DomainListingType.toApi(): ApiListingType = when (this) {
     com.neaniesoft.warami.common.models.ListingType.SUBSCRIBED -> ApiListingType.subscribed
     com.neaniesoft.warami.common.models.ListingType.ALL -> ApiListingType.all

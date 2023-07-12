@@ -1,7 +1,7 @@
 package com.neaniesoft.warami.data.repositories.adapters
 
-import com.neaniesoft.warami.api.models.GetPosts
 import com.neaniesoft.warami.common.extensions.parseLocalDateTime
+import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toBoolean
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.ActorId
@@ -14,15 +14,10 @@ import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostAggregates
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
-import com.neaniesoft.warami.common.models.SortIndex
-import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.models.Votes
 import com.neaniesoft.warami.data.db.SelectBySearchParams
-import com.neaniesoft.warami.data.repositories.ApiListingType
-import com.neaniesoft.warami.data.repositories.ApiSortType
-import com.neaniesoft.warami.data.repositories.DomainListingType
 import com.neaniesoft.warami.data.repositories.DomainPost
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -72,7 +67,7 @@ fun SelectBySearchParams.toDomain(
     )
     val counts = PostAggregates(
         id = aggregates.toInt(),
-        postId = PostId(id.toInt()),
+        postId = PostId(postId.toInt()),
         commentCount = countsComments.toInt(),
         score = countsScore.toInt(),
         votes = Votes(up = countsUpVotes.toInt(), down = countsDownVotes.toInt()),
@@ -86,8 +81,8 @@ fun SelectBySearchParams.toDomain(
     )
 
     return Post(
-        id = PostId(id.toInt()),
-        sortIndex = SortIndex(sortIndex.toInt()),
+        postId = PostId(postId.toInt()),
+        insertedAt = insertedAt.parseZonedDateTime(),
         name = name,
         creator = creator,
         community = community,
@@ -122,8 +117,9 @@ typealias DbPost = com.neaniesoft.warami.data.db.Post
 
 fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
     return DbPost(
-        id = id.value.toLong(),
-        sortIndex = sortIndex.value.toLong(),
+        id = 0,
+        postId = postId.value.toLong(),
+        insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
         name = name,
         creatorId = creator.id.value.toLong(),
         communityId = community.id.value.toLong(),
@@ -151,45 +147,5 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
         isCreatorBlocked = isCreatorBlocked.toLong(),
         myVote = myVote?.toLong(),
         searchParams = searchParameters.id,
-    )
-}
-
-fun PostSearchParameters.toApi(): GetPosts {
-    return GetPosts(
-        type = when (listingType) {
-            DomainListingType.SUBSCRIBED -> {
-                ApiListingType.subscribed
-            }
-
-            DomainListingType.ALL -> {
-                ApiListingType.all
-            }
-
-            DomainListingType.LOCAL -> {
-                ApiListingType.local
-            }
-
-            null -> null
-        },
-        sort = when (sortType) {
-            SortType.HOT -> ApiSortType.hot
-            SortType.NEW -> ApiSortType.new
-            SortType.OLD -> ApiSortType.old
-            SortType.ACTIVE -> ApiSortType.active
-            SortType.TOP_DAY -> ApiSortType.topDay
-            SortType.TOP_WEEK -> ApiSortType.topWeek
-            SortType.TOP_MONTH -> ApiSortType.topMonth
-            SortType.TOP_YEAR -> ApiSortType.topYear
-            SortType.TOP_ALL -> ApiSortType.topAll
-            SortType.MOST_COMMENTS -> ApiSortType.mostComments
-            SortType.NEW_COMMENTS -> ApiSortType.newComments
-            SortType.TOP_HOUR -> ApiSortType.topHour
-            SortType.TOP_SIX_HOUR -> ApiSortType.topSixHour
-            SortType.TOP_TWELVE_HOUR -> ApiSortType.topTwelveHour
-            SortType.TOP_THREE_MONTHS -> ApiSortType.topThreeMonths
-            SortType.TOP_SIX_MONTHS -> ApiSortType.topSixMonths
-            SortType.TOP_NINE_MONTHS -> ApiSortType.topNineMonths
-            null -> null
-        },
     )
 }

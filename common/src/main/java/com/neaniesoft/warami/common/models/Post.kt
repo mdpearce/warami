@@ -1,10 +1,11 @@
 package com.neaniesoft.warami.common.models
 
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class Post(
-    val id: PostId,
-    val sortIndex: SortIndex,
+    val postId: PostId,
+    val insertedAt: ZonedDateTime,
     val name: String,
     val creator: Person,
     val community: Community,
@@ -35,4 +36,15 @@ data class Post(
 )
 
 @JvmInline
-value class SortIndex(val value: Int)
+value class PageNumber(val value: Int)
+
+operator fun PageNumber.plus(other: Int): PageNumber {
+    return PageNumber(value + other)
+}
+
+operator fun PageNumber.minus(other: Int): PageNumber {
+    return PageNumber(value - other)
+}
+operator fun PageNumber.compareTo(other: Int): Int {
+    return value.compareTo(other)
+}
