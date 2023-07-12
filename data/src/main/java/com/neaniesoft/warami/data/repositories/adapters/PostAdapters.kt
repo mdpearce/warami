@@ -75,7 +75,7 @@ fun SelectBySearchParams.toDomain(
     )
     val counts = PostAggregates(
         id = aggregates.toInt(),
-        postId = PostId(id.toInt()),
+        postId = PostId(postId.toInt()),
         commentCount = countsComments.toInt(),
         score = countsScore.toInt(),
         votes = Votes(up = countsUpVotes.toInt(), down = countsDownVotes.toInt()),
@@ -89,7 +89,7 @@ fun SelectBySearchParams.toDomain(
     )
 
     return Post(
-        id = PostId(id.toInt()),
+        postId = PostId(postId.toInt()),
         sortIndex = SortIndex(sortIndex.toInt()),
         pageNum = PageNumber(pageNum.toInt()),
         insertedAt = insertedAt.parseZonedDateTime(),
@@ -168,7 +168,7 @@ fun SelectBySearchParamsForPage.toDomain(
     )
     val counts = PostAggregates(
         id = aggregates.toInt(),
-        postId = PostId(id.toInt()),
+        postId = PostId(postId.toInt()),
         commentCount = countsComments.toInt(),
         score = countsScore.toInt(),
         votes = Votes(up = countsUpVotes.toInt(), down = countsDownVotes.toInt()),
@@ -182,7 +182,7 @@ fun SelectBySearchParamsForPage.toDomain(
     )
 
     return Post(
-        id = PostId(id.toInt()),
+        postId= PostId(postId.toInt()),
         sortIndex = SortIndex(sortIndex.toInt()),
         pageNum = PageNumber(pageNum.toInt()),
         insertedAt = insertedAt.parseZonedDateTime(),
@@ -220,7 +220,8 @@ typealias DbPost = com.neaniesoft.warami.data.db.Post
 
 fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
     return DbPost(
-        id = id.value.toLong(),
+        id = 0,
+        postId = postId.value.toLong(),
         sortIndex = sortIndex.value.toLong(),
         pageNum = pageNum.value.toLong(),
         insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),

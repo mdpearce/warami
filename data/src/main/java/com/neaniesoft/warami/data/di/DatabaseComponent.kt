@@ -9,12 +9,15 @@ import com.neaniesoft.warami.data.db.Database
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
+import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.repositories.post.PostRepository
+import com.neaniesoft.warami.data.repositories.post.PostTransactor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
+import java.time.Clock
 import java.time.format.DateTimeFormatter
 
 typealias IODispatcher = CoroutineDispatcher
@@ -29,7 +32,23 @@ abstract class DatabaseComponent(
 
     @Provides
     @DatabaseScope
+    fun provideContext(): Context = apiComponent.context
+
+    @Provides
+    @DatabaseScope
+    fun provideClock(): Clock = Clock.systemDefaultZone()
+
+    @Provides
+    @DatabaseScope
+    fun providePostTransactor(postQueries: PostQueries): PostTransactor = postQueries
+
+    @Provides
+    @DatabaseScope
     fun providePostQueries(db: Database): PostQueries = db.postQueries
+
+    @Provides
+    @DatabaseScope
+    fun providePostRemoteKeyQueries(db: Database): PostRemoteKeyQueries = db.postRemoteKeyQueries
 
     @Provides
     @DatabaseScope

@@ -1,20 +1,29 @@
 package com.neaniesoft.warami.data.repositories.post
 
+import android.util.Log
+import androidx.paging.PagingSource
+import app.cash.sqldelight.paging3.QueryPagingSource
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.common.adapters.DomainCommunity
 import com.neaniesoft.warami.common.adapters.toDomain
+import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
+import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.common.models.Resource
 import com.neaniesoft.warami.common.models.SortIndex
+import com.neaniesoft.warami.common.models.plus
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
+import com.neaniesoft.warami.data.db.PostRemoteKey
+import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
+import com.neaniesoft.warami.data.db.SelectPostsOffset
 import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.adapters.toApi
@@ -22,12 +31,18 @@ import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flow
 import me.tatarka.inject.annotations.Inject
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.CoroutineContext
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
@@ -40,17 +55,124 @@ class PostRepository(
     private val personQueries: PersonQueries,
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
+    private val postRemoteKeyQueries: PostRemoteKeyQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
     private val coroutineDispatcher: IODispatcher = Dispatchers.IO,
+    private val clock: Clock,
 ) {
     companion object {
         private const val POSTS_PER_PAGE = 20
+    }
+
+    private val _invalidate: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val invalidate = _invalidate.asSharedFlow()
+
+    suspend fun invalidate() {
+        _invalidate.emit(true)
     }
 
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)
 
     private fun DomainCommunity.toDb(): DbCommunity = this.toDb(localDateTimeFormatter)
+
+    fun getLatestCachedPageNumber(searchParameters: PostSearchParameters): PageNumber? = postQueries.transactionWithResult {
+        postQueries.selectLatestPageNumForSearchParams(searchParameters.id).executeAsOneOrNull()?.let { PageNumber(it.toInt()) }
+    }
+
+    suspend fun getFreshPosts(
+        searchParameters: PostSearchParameters,
+        page: PageNumber,
+        limit: Int,
+    ): List<Post> {
+        return try {
+            val response = api.getPosts(
+                type = searchParameters.listingType?.toApi(),
+                sort = searchParameters.sortType?.toApi(),
+                page = page.value.toBigDecimal(),
+                limit = limit.toBigDecimal(),
+                communityId = searchParameters.communityId?.value?.toBigDecimal(),
+                communityName = searchParameters.communityName,
+                savedOnly = searchParameters.isSavedOnly,
+            )
+            if (!response.isSuccessful) {
+                throw PostRepositoryException("Unsuccessful response from API when fetching fresh posts: ${response.code()}")
+            }
+            val body = response.body() ?: throw PostRepositoryException("API response was empty while fetching fresh posts")
+            return body.posts.map { postView ->
+                postView.toDomain(searchParameters, page, clock.instant().atZone(ZoneId.of("UTC")))
+            }
+        } catch (e: IOException) {
+            throw PostRepositoryException("IO error communicating with API", e)
+        } catch (e: HttpException) {
+            throw PostRepositoryException("HTTP error communicating with API", e)
+        }
+    }
+
+    fun getCachedPostIds(searchParameters: PostSearchParameters): List<PostId> {
+        return postQueries.transactionWithResult {
+            postQueries.selectPostIdsForSearchParams(searchParameters.id).executeAsList().map { PostId(it.toInt()) }
+        }
+    }
+
+    fun emptyCache(searchParameters: PostSearchParameters) {
+        postQueries.transaction {
+            postQueries.deleteBySearchParams(searchParameters.id)
+        }
+    }
+
+    fun updatePostInCache(post: Post) {
+        Log.d("PostRepository", "Updating post ${post.postId.value} in cache")
+        postQueries.transaction {
+            upsertPost(post)
+        }
+    }
+
+    fun getLatestInsertTime(searchParameters: PostSearchParameters): ZonedDateTime {
+        return postQueries.transactionWithResult {
+            postQueries.selectLatestInsertTimeForSearchParams(searchParameters.id).executeAsOneOrNull()?.parseZonedDateTime()
+                ?: ZonedDateTime.ofInstant(
+                    Instant.EPOCH, ZoneId.of("UTC"),
+                )
+        }
+    }
+
+    fun getCachedPosts(searchParameters: PostSearchParameters, pageNumber: PageNumber): List<Post> {
+        return postQueries.transactionWithResult {
+            postQueries.selectBySearchParamsForPage(searchParameters.id, pageNumber.value.toLong()).executeAsList().map {
+                it.toDomain(localDateTimeFormatter, searchParameters)
+            }
+        }
+    }
+
+    fun getRemoteKey(searchParameters: PostSearchParameters): PostRemoteKey {
+        return postRemoteKeyQueries.transactionWithResult {
+            postRemoteKeyQueries.remoteKeyBySearchParams(searchParameters.id).executeAsOne()
+        }
+    }
+
+    fun clearRemoteKey(searchParameters: PostSearchParameters) {
+        postRemoteKeyQueries.transaction {
+            postRemoteKeyQueries.deleteBySearchParams(searchParameters.id)
+        }
+    }
+
+    fun updateRemoteKey(searchParameters: PostSearchParameters, page: PageNumber) {
+        postRemoteKeyQueries.transaction {
+            postRemoteKeyQueries.insert(searchParameters.id, page.value.toLong())
+        }
+    }
+
+    fun pagingSource(searchParameters: PostSearchParameters): PagingSource<Int, SelectPostsOffset> {
+        return QueryPagingSource(
+            countQuery = postQueries.count(searchParameters.id),
+            transacter = postQueries,
+            context = coroutineDispatcher,
+            queryProvider = { limit, offset ->
+                postQueries.selectPostsOffset(searchParameters.id, limit, offset)
+            }
+        )
+    }
 
     /**
      * Fetch a new page of posts. Posts will be fetched from the API and cached locally before being emitted.
@@ -91,9 +213,8 @@ class PostRepository(
                             .mapIndexed { index, postView ->
                                 postView.toDomain(
                                     searchParameters,
-                                    SortIndex(initialSortIndex + index + 1),
                                     PageNumber(page),
-                                    ZonedDateTime.now() // TODO: Use a clock
+                                    ZonedDateTime.now(), // TODO: Use a clock
                                 )
                             }
                     items.forEach { post ->
@@ -187,40 +308,10 @@ class PostRepository(
             }
 
             with(post) {
-                postQueries.upsert(
-                    id = id.value.toLong(),
-                    sortIndex = sortIndex.value.toLong(),
-                    pageNum = pageNum.value.toLong(),
-                    insertedAt = insertedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
-                    name = name,
-                    creatorId = creator.id.value.toLong(),
-                    communityId = community.id.value.toLong(),
-                    isRemoved = isRemoved.toLong(),
-                    isLocked = isLocked.toLong(),
-                    publishedAt = publishedAt.format(localDateTimeFormatter),
-                    isDeleted = isDeleted.toLong(),
-                    isNsfw = isNsfw.toLong(),
-                    apId = apId,
-                    isLocal = isLocal.toLong(),
-                    languageId = languageId.toLong(),
-                    isFeaturedCommunity = isFeaturedCommunity.toLong(),
-                    url = url?.value,
-                    body = body,
-                    updatedAt = updatedAt?.format(localDateTimeFormatter),
-                    embedTitle = embedTitle,
-                    embedDescription = embedDescription,
-                    thumbnailUrl = thumbnail?.value,
-                    embedVideoUrl = embedVideo?.value,
-                    isCreatorBannedFromCommunity = isCreatorBannedFromCommunity.toLong(),
-                    aggregates = aggregates.id.toLong(),
-                    subscribedType = subscribedTyped.value,
-                    isSaved = isSaved.toLong(),
-                    isRead = isRead.toLong(),
-                    isCreatorBlocked = isCreatorBlocked.toLong(),
-                    myVote = myVote?.toLong(),
-                    searchParams = searchParameters.id,
-                )
+                postQueries.insert(this.toDb(localDateTimeFormatter))
             }
         }
     }
 }
+
+data class PostRepositoryException(override val message: String, override val cause: Throwable? = null) : Exception(message, cause)

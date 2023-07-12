@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 data class Post(
-    val id: PostId,
+    val postId: PostId,
     val sortIndex: SortIndex,
     val pageNum: PageNumber,
     val insertedAt: ZonedDateTime,
@@ -39,6 +39,14 @@ data class Post(
 
 @JvmInline
 value class SortIndex(val value: Int)
+
+operator fun SortIndex.plus(other: Int): SortIndex = SortIndex(value + other)
+
+operator fun SortIndex.plus(other: SortIndex): SortIndex = SortIndex(value + other.value)
+
+operator fun SortIndex.minus(other: Int): SortIndex = SortIndex(value - other)
+
+operator fun SortIndex.minus(other: SortIndex): SortIndex = SortIndex(value - other.value)
 
 @JvmInline
 value class PageNumber(val value: Int)

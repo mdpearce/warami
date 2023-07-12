@@ -12,10 +12,10 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostView.toDomain(searchParameters: PostSearchParameters, sortIndex: SortIndex, pageNum: PageNumber, insertedAt:ZonedDateTime): Post {
+fun PostView.toDomain(searchParameters: PostSearchParameters, pageNum: PageNumber, insertedAt:ZonedDateTime): Post {
     return Post(
-        id = PostId(post.id.intValueExact()),
-        sortIndex = sortIndex,
+        postId = PostId(post.id.intValueExact()),
+        sortIndex = SortIndex(0),
         pageNum = pageNum,
         insertedAt = insertedAt,
         name = post.name,

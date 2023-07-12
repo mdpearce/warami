@@ -24,6 +24,8 @@ dependencies {
 
     implementation(libs.sqldelight.android.driver)
     implementation(libs.sqldelight.coroutines.extensions)
+    implementation(libs.sqldelight.androidx.paging3.extensions)
+
     implementation(libs.androidx.paging.runtime)
     testImplementation(libs.androidx.paging.common)
 }
