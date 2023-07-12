@@ -15,4 +15,6 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     testImplementation(libs.androidx.paging.common)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-config-ktx")
 }

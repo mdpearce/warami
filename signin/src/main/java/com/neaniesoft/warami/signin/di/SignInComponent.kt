@@ -6,6 +6,7 @@ import com.neaniesoft.warami.signin.SignInViewModel
 import me.tatarka.inject.annotations.Component
 
 @Component
+@SignInScope
 abstract class SignInComponent {
     abstract val signInScreen: SignInScreen
 
