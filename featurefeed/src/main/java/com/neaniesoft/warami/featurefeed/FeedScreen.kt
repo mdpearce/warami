@@ -45,13 +45,9 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
     val posts = viewModel.posts.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
 
-    LaunchedEffect(Unit) {
-        viewModel.onRefresh()
-    }
-
     val refreshIndicatorState = rememberPullRefreshState(
         refreshing = posts.loadState.refresh == LoadState.Loading,
-        onRefresh = { viewModel.onRefresh() },
+        onRefresh = { posts.refresh() },
     )
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
