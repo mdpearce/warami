@@ -1,10 +1,8 @@
 package com.neaniesoft.warami.data.repositories.post
 
-import android.util.Log
 import androidx.paging.PagingSource
 import app.cash.sqldelight.paging3.QueryPagingSource
 import com.neaniesoft.warami.api.apis.DefaultApi
-import com.neaniesoft.warami.common.adapters.DomainCommunity
 import com.neaniesoft.warami.common.adapters.toDomain
 import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toLong
@@ -12,9 +10,6 @@ import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
-import com.neaniesoft.warami.common.models.Resource
-import com.neaniesoft.warami.common.models.SortIndex
-import com.neaniesoft.warami.common.models.plus
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.db.PostAggregateQueries
@@ -30,10 +25,6 @@ import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flow
 import me.tatarka.inject.annotations.Inject
 import retrofit2.HttpException
 import java.io.IOException
@@ -42,7 +33,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.coroutines.CoroutineContext
 
 typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
@@ -64,21 +54,8 @@ class PostRepository(
         private const val POSTS_PER_PAGE = 20
     }
 
-    private val _invalidate: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val invalidate = _invalidate.asSharedFlow()
-
-    suspend fun invalidate() {
-        _invalidate.emit(true)
-    }
-
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)
-
-    private fun DomainCommunity.toDb(): DbCommunity = this.toDb(localDateTimeFormatter)
-
-    fun getLatestCachedPageNumber(searchParameters: PostSearchParameters): PageNumber? = postQueries.transactionWithResult {
-        postQueries.selectLatestPageNumForSearchParams(searchParameters.id).executeAsOneOrNull()?.let { PageNumber(it.toInt()) }
-    }
 
     suspend fun getFreshPosts(
         searchParameters: PostSearchParameters,
@@ -100,7 +77,7 @@ class PostRepository(
             }
             val body = response.body() ?: throw PostRepositoryException("API response was empty while fetching fresh posts")
             return body.posts.map { postView ->
-                postView.toDomain(searchParameters, page, clock.instant().atZone(ZoneId.of("UTC")))
+                postView.toDomain(searchParameters, clock.instant().atZone(ZoneId.of("UTC")))
             }
         } catch (e: IOException) {
             throw PostRepositoryException("IO error communicating with API", e)
@@ -122,7 +99,6 @@ class PostRepository(
     }
 
     fun updatePostInCache(post: Post) {
-        Log.d("PostRepository", "Updating post ${post.postId.value} in cache")
         postQueries.transaction {
             upsertPost(post)
         }
@@ -132,16 +108,9 @@ class PostRepository(
         return postQueries.transactionWithResult {
             postQueries.selectLatestInsertTimeForSearchParams(searchParameters.id).executeAsOneOrNull()?.parseZonedDateTime()
                 ?: ZonedDateTime.ofInstant(
-                    Instant.EPOCH, ZoneId.of("UTC"),
+                    Instant.EPOCH,
+                    ZoneId.of("UTC"),
                 )
-        }
-    }
-
-    fun getCachedPosts(searchParameters: PostSearchParameters, pageNumber: PageNumber): List<Post> {
-        return postQueries.transactionWithResult {
-            postQueries.selectBySearchParamsForPage(searchParameters.id, pageNumber.value.toLong()).executeAsList().map {
-                it.toDomain(localDateTimeFormatter, searchParameters)
-            }
         }
     }
 
@@ -170,67 +139,8 @@ class PostRepository(
             context = coroutineDispatcher,
             queryProvider = { limit, offset ->
                 postQueries.selectPostsOffset(searchParameters.id, limit, offset)
-            }
+            },
         )
-    }
-
-    /**
-     * Fetch a new page of posts. Posts will be fetched from the API and cached locally before being emitted.
-     * If [initialSortIndex] is 0, the fetch will be treated as a refresh and all existing records will be
-     * deleted for that search query.
-     */
-    fun fetchItems(
-        page: Int,
-        initialSortIndex: Int,
-        searchParameters: PostSearchParameters,
-    ): Flow<Resource<List<Post>>> = flow {
-        emit(Resource.Loading())
-        try {
-            val response = api.getPosts(
-                type = searchParameters.listingType?.toApi(),
-                sort = searchParameters.sortType?.toApi(),
-                page = page.toBigDecimal(),
-                limit = POSTS_PER_PAGE.toBigDecimal(),
-                communityId = searchParameters.communityId?.value?.toBigDecimal(),
-                communityName = searchParameters.communityName,
-                savedOnly = searchParameters.isSavedOnly,
-            )
-            val body = response.body()
-            if (!response.isSuccessful) {
-                emit(Resource.Error("Unsuccessful response: ${response.code()}"))
-            } else if (body == null) {
-                emit(Resource.Error("Empty body"))
-            } else {
-                val posts = postQueries.transactionWithResult {
-                    if (initialSortIndex == 0) {
-                        postQueries.deleteBySearchParams(searchParameters.id)
-                    }
-                    val existingIdsForSearch =
-                        postQueries.selectPostIdsForSearchParams(searchParameters.id)
-                            .executeAsList()
-                    val items =
-                        body.posts.filterNot { postView -> existingIdsForSearch.contains(postView.post.id.toLong()) }
-                            .mapIndexed { index, postView ->
-                                postView.toDomain(
-                                    searchParameters,
-                                    PageNumber(page),
-                                    ZonedDateTime.now(), // TODO: Use a clock
-                                )
-                            }
-                    items.forEach { post ->
-                        upsertPost(post)
-                    }
-                    postQueries.selectBySearchParams(searchParams = searchParameters.id)
-                        .executeAsList()
-                        .map { it.toDomain(searchParameters) }
-                }
-                emit(Resource.Success(posts))
-            }
-        } catch (e: IOException) {
-            emit(Resource.Error("IOException: ${e.localizedMessage}"))
-        } catch (e: HttpException) {
-            emit(Resource.Error("HttpError: ${e.localizedMessage}"))
-        }
     }
 
     private fun upsertPost(post: Post) {

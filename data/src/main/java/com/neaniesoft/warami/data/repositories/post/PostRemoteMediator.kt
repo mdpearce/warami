@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.data.repositories.post
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -24,7 +23,6 @@ class PostRemoteMediator(
     }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, SelectPostsOffset>): MediatorResult {
-        Log.d("PostRemoteMediator", "load: type: $loadType, state: $state")
         return try {
             val loadKey: Long = when (loadType) {
                 LoadType.REFRESH -> 1

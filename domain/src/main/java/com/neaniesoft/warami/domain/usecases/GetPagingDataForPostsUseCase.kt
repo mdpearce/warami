@@ -9,14 +9,12 @@ import com.neaniesoft.warami.common.models.ActorId
 import com.neaniesoft.warami.common.models.Community
 import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.InstanceId
-import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Person
 import com.neaniesoft.warami.common.models.PersonId
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostAggregates
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
-import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.models.Votes
@@ -49,8 +47,6 @@ class GetPagingDataForPostsUseCase(
 
 private fun SelectPostsOffset.toDomain(searchParams: PostSearchParameters, localDateTimeFormatter: DateTimeFormatter): Post = Post(
     postId = PostId(postId.toInt()),
-    sortIndex = SortIndex(sortIndex.toInt()),
-    pageNum = PageNumber(pageNum.toInt()),
     insertedAt = insertedAt.parseZonedDateTime(),
     name = name,
     creator = Person(

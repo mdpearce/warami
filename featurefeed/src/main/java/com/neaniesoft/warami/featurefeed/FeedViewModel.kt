@@ -18,7 +18,7 @@ import me.tatarka.inject.annotations.Inject
 @FeedScope
 class FeedViewModel(
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
-    private val getPagingData: GetPagingDataForPostsUseCase,
+    getPagingData: GetPagingDataForPostsUseCase,
 ) : ViewModel() {
 
     private val searchParameters = MutableStateFlow(
@@ -29,11 +29,6 @@ class FeedViewModel(
     )
 
     val posts = getPagingData.invoke(searchParameters.value).cachedIn(viewModelScope)
-
-
-    // UI events
-    fun onRefresh() {
-    }
 
     fun onSearchParamsChanged(
         listingType: DomainListingType? = null,

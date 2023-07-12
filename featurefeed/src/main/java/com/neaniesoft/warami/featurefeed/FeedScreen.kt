@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.featurefeed
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,20 +13,15 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.neaniesoft.warami.common.models.Resource
 import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
-import kotlinx.coroutines.flow.filter
 import me.tatarka.inject.annotations.Inject
 
 typealias FeedScreen = @Composable () -> Unit
@@ -57,7 +51,6 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 .fillMaxSize()
                 .pullRefresh(refreshIndicatorState),
         ) {
-            Log.d("FeedScreen", "Post count: ${posts.itemCount}")
             items(count = posts.itemCount) { index ->
                 val post = posts[index]
                 if (post != null) {
@@ -79,7 +72,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 item {
                     CircularProgressIndicator(
                         modifier = Modifier.fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
+                            .wrapContentWidth(Alignment.CenterHorizontally),
                     )
                 }
             }

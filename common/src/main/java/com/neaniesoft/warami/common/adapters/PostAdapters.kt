@@ -1,22 +1,18 @@
 package com.neaniesoft.warami.common.adapters
 
 import com.neaniesoft.warami.api.models.PostView
-import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
-import com.neaniesoft.warami.common.models.SortIndex
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun PostView.toDomain(searchParameters: PostSearchParameters, pageNum: PageNumber, insertedAt:ZonedDateTime): Post {
+fun PostView.toDomain(searchParameters: PostSearchParameters, insertedAt: ZonedDateTime): Post {
     return Post(
         postId = PostId(post.id.intValueExact()),
-        sortIndex = SortIndex(0),
-        pageNum = pageNum,
         insertedAt = insertedAt,
         name = post.name,
         creator = creator.toDomain(),

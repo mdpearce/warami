@@ -9,9 +9,9 @@ enum class SubscribedType(val value: String) {
     companion object {
         fun parse(input: String): SubscribedType {
             return when (input.lowercase()) {
-                "subscribed" -> SubscribedType.SUBSCRIBED
-                "notsubscribed", "not_subscribed" -> SubscribedType.NOT_SUBSCRIBED
-                "pending" -> SubscribedType.PENDING
+                "subscribed" -> SUBSCRIBED
+                "notsubscribed", "not_subscribed" -> NOT_SUBSCRIBED
+                "pending" -> PENDING
                 else -> throw IllegalArgumentException("Unexpected subscribed type value: $input")
             }
         }
