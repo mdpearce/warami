@@ -3,7 +3,12 @@ package com.neaniesoft.warami.data.di
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.neaniesoft.warami.api.di.ApiComponent
+import com.neaniesoft.warami.data.R
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.Database
 import com.neaniesoft.warami.data.db.PersonQueries
@@ -90,4 +95,18 @@ abstract class DatabaseComponent(
     fun provideSqlDriver(context: Context): SqlDriver {
         return AndroidSqliteDriver(Database.Schema, context, "warami.db")
     }
+
+    @DatabaseScope
+    @Provides
+    fun remoteConfigSettings(): FirebaseRemoteConfigSettings = com.google.firebase.remoteconfig.ktx.remoteConfigSettings {
+        minimumFetchIntervalInSeconds = 3600
+    }
+
+    @DatabaseScope
+    @Provides
+    fun provideFirebaseRemoteConfig(settings: FirebaseRemoteConfigSettings): FirebaseRemoteConfig =
+        Firebase.remoteConfig.apply {
+            setDefaultsAsync(R.xml.remote_config_defaults)
+            setConfigSettingsAsync(settings)
+        }
 }

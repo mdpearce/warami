@@ -17,4 +17,5 @@ dependencies {
     testImplementation(libs.androidx.paging.common)
     implementation(platform(libs.firebase.bom))
     implementation("com.google.firebase:firebase-config-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

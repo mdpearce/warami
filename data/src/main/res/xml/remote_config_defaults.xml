@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>lemmyverse_instances_download_url</key>
+    <value>https://data.lemmyverse.net/data/instance.full.json</value>
+  </entry>

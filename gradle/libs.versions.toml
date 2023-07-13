@@ -20,6 +20,9 @@ appcompat = "1.6.1"
 kotlinter = "3.15.0"
 google-services-plugin = "4.3.15"
 paging = "3.1.1"
+datastore = "1.0.0"
+protobufPlugin = "0.9.3"
+protobuf = "3.23.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -29,6 +32,7 @@ ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sql-delight" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 
 [libraries]
 android-gradle-library-plugin = { module = "com.android.library:com.android.library.gradle.plugin", version.ref = "android-gradle-plugin" }
@@ -60,7 +64,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 material = { module = "com.google.android.material:material", version = "1.9.0" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sql-delight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sql-delight" }
-sqldelight-androidx-paging3-extensions = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref="sql-delight" }
+sqldelight-androidx-paging3-extensions = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref = "sql-delight" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version = "0.31.5-beta" }
@@ -79,3 +83,6 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version = "32.1.1"
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "3.2.0-rc01" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
