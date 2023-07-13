@@ -4,3 +4,4 @@
     <key>lemmyverse_instances_download_url</key>
     <value>https://data.lemmyverse.net/data/instance.full.json</value>
   </entry>
+</defaults>
