@@ -17,8 +17,12 @@ import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.repositories.AuthRepository
+import com.neaniesoft.warami.data.repositories.adapters.ZonedDateTimeFromLocalTimeAdapter
+import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import com.neaniesoft.warami.data.repositories.post.PostRepository
 import com.neaniesoft.warami.data.repositories.post.PostTransactor
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.addAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
@@ -36,6 +40,8 @@ abstract class DatabaseComponent(
 
     abstract val postRepository: PostRepository
     abstract val authRepository: AuthRepository
+    abstract val instanceSettingsRepository: InstanceSettingsRepository
+    abstract val zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter
 
     @Provides
     @DatabaseScope
@@ -109,4 +115,13 @@ abstract class DatabaseComponent(
             setDefaultsAsync(R.xml.remote_config_defaults)
             setConfigSettingsAsync(settings)
         }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    @DatabaseScope
+    @Provides
+    fun provideMoshi(zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter): Moshi {
+        return Moshi.Builder()
+            .addAdapter(zonedDateTimeFromLocalTimeAdapter)
+            .build()
+    }
 }

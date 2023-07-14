@@ -7,7 +7,7 @@ import me.tatarka.inject.annotations.Inject
 
 @DomainScope
 @Inject
-class GetInstancesDownloadUrlUseCase(private val remoteConfigRepository: RemoteConfigRepository) {
+class GetInstancesUseCase(private val remoteConfigRepository: RemoteConfigRepository) {
 
     companion object {
         private const val REMOTE_CONFIG_KEY = "lemmyverse_instances_download_url"
