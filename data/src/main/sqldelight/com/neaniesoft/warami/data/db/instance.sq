@@ -11,7 +11,7 @@ CREATE TABLE instance (
 	isFed INTEGER NOT NULL,
 	date TEXT NOT NULL,
 	version TEXT NOT NULL,
-	isOpen TEXT NOT NULL,
+	isOpen INTEGER NOT NULL,
 	iconUrl TEXT,
 	bannerUrl TEXT,
 	languages TEXT NOT NULL,
@@ -21,6 +21,8 @@ CREATE TABLE instance (
 	usageTotalUsers INTEGER NOT NULL,
 	usageActiveHalfYear INTEGER NOT NULL,
 	usageActiveMonth INTEGER NOT NULL,
+	usageLocalPosts INTEGER NOT NULL,
+	usageLocalComments INTEGER NOT NULL,
 	countUsers INTEGER NOT NULL,
 	countPosts INTEGER NOT NULL,
 	countComments INTEGER NOT NULL,
@@ -91,6 +93,8 @@ INSERT INTO instance (
 	usageTotalUsers,
 	usageActiveHalfYear,
 	usageActiveMonth,
+	usageLocalPosts,
+	usageLocalComments,
 	countUsers,
 	countPosts,
 	countComments,
@@ -123,3 +127,6 @@ INSERT INTO instance (
 	blocksIncoming,
 	blocksOutgoing
 ) VALUES ?;
+
+selectAll:
+SELECT * FROM instance;
