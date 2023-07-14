@@ -11,6 +11,7 @@ import com.neaniesoft.warami.api.di.ApiComponent
 import com.neaniesoft.warami.data.R
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.Database
+import com.neaniesoft.warami.data.db.InstanceQueries
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
@@ -80,6 +81,10 @@ abstract class DatabaseComponent(
     @DatabaseScope
     fun providePostSearchParamQueries(db: Database): PostSearchParamsQueries =
         db.postSearchParamsQueries
+
+    @Provides
+    @DatabaseScope
+    fun provideInstanceQueries(db: Database): InstanceQueries = db.instanceQueries
 
     @Provides
     @DatabaseScope
