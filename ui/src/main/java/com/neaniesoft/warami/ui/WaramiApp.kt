@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.neaniesoft.warami.featurefeed.FeaturefeedNavGraph
 import com.neaniesoft.warami.featurefeed.FeedViewModel
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
+import com.neaniesoft.warami.signin.InstanceSelectionViewModel
+import com.neaniesoft.warami.signin.destinations.InstanceSelectionScreenDestination
 import com.neaniesoft.warami.ui.nav.RootNavGraph
 import com.neaniesoft.warami.ui.theme.AppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -17,7 +19,10 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 @Composable
-fun WaramiApp(feedViewModel: () -> FeedViewModel) {
+fun WaramiApp(
+    feedViewModel: () -> FeedViewModel,
+    instanceSelectionViewModel: () -> InstanceSelectionViewModel,
+) {
     AppTheme {
         val navController = rememberNavController()
         Surface(
@@ -32,6 +37,9 @@ fun WaramiApp(feedViewModel: () -> FeedViewModel) {
                 dependenciesContainerBuilder = {
                     dependency(FeedScreenDestination) {
                         feedViewModel
+                    }
+                    dependency(InstanceSelectionScreenDestination) {
+                        instanceSelectionViewModel
                     }
                 },
             ) {

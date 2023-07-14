@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":common"))
 
     implementation(project(":featurefeed"))
+    implementation(project(":signin"))
 }

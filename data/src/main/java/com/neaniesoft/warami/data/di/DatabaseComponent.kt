@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
+import okhttp3.OkHttpClient
 import java.time.Clock
 import java.time.format.DateTimeFormatter
 
@@ -129,4 +130,8 @@ abstract class DatabaseComponent(
             .addAdapter(zonedDateTimeFromLocalTimeAdapter)
             .build()
     }
+
+    @Provides
+    @DatabaseScope
+    fun provideOkHttpClient(): OkHttpClient = apiComponent.provideOkHttpClient(apiComponent.provideOkHttpClientBuilder())
 }

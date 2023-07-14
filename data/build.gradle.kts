@@ -48,9 +48,9 @@ dependencies {
     implementation(libs.protobuf.kotlin.lite)
     implementation(libs.androidx.datastore)
     implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-config-ktx")
+    api("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation(libs.moshi)
+    api(libs.moshi)
     implementation(libs.moshi.adapters)
     ksp(libs.moshi.kotlin.codegen)
 

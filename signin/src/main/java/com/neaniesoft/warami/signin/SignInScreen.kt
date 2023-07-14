@@ -8,7 +8,6 @@ import me.tatarka.inject.annotations.Inject
 typealias SignInScreen = @Composable () -> Unit
 
 @Composable
-@RootNavGraph(start = true)
 @Destination
 @Inject
 fun SignInScreen() {

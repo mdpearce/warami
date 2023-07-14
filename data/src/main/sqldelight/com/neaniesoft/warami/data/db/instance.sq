@@ -130,3 +130,6 @@ INSERT INTO instance (
 
 selectAll:
 SELECT * FROM instance;
+
+deleteAll:
+DELETE FROM instance;
