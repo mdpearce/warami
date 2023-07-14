@@ -9,6 +9,7 @@ import com.neaniesoft.warami.WaramiApplication
 import com.neaniesoft.warami.data.di.DatabaseComponent
 import com.neaniesoft.warami.domain.di.DomainComponent
 import com.neaniesoft.warami.featurefeed.di.FeedComponent
+import com.neaniesoft.warami.signin.di.SignInComponent
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
@@ -17,6 +18,7 @@ import me.tatarka.inject.annotations.Provides
 abstract class AppComponent(
     @Component val databaseComponent: DatabaseComponent,
     @Component val feedComponent: FeedComponent,
+    @Component val signInComponent: SignInComponent,
 ) {
     @AppScope
     @Provides

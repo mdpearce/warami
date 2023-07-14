@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import com.neaniesoft.warami.common.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.Direction
 import me.tatarka.inject.annotations.Inject
 
 typealias InstanceSelectionScreen = @Composable () -> Unit
@@ -14,8 +16,11 @@ typealias InstanceSelectionScreen = @Composable () -> Unit
 @Composable
 @RootNavGraph(start = true)
 @Destination
-@Inject
-fun InstanceSelectionScreen(instanceSelectionViewModel: () -> InstanceSelectionViewModel) {
+fun InstanceSelectionScreen(
+    instanceSelectionViewModel: () -> InstanceSelectionViewModel,
+    navigator: DestinationsNavigator,
+    feedScreenDestination: Direction,
+) {
     val viewModel = viewModel {
         instanceSelectionViewModel()
     }
@@ -24,6 +29,10 @@ fun InstanceSelectionScreen(instanceSelectionViewModel: () -> InstanceSelectionV
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.onInit()
+        //viewModel.onInit()
+        navigator.navigate(
+            direction = feedScreenDestination,
+            onlyIfResumed = true,
+        )
     }
 }

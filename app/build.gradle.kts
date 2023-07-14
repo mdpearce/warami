@@ -61,6 +61,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":featurefeed"))
     implementation(project(":ui"))
+    implementation(project(":signin"))
 
     implementation(libs.kotlin.inject.runtime)
     ksp(libs.kotlin.inject.compiler)

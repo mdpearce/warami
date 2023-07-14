@@ -10,6 +10,7 @@ import com.neaniesoft.warami.featurefeed.FeaturefeedNavGraph
 import com.neaniesoft.warami.featurefeed.FeedViewModel
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
 import com.neaniesoft.warami.signin.InstanceSelectionViewModel
+import com.neaniesoft.warami.signin.SigninNavGraph
 import com.neaniesoft.warami.signin.destinations.InstanceSelectionScreenDestination
 import com.neaniesoft.warami.ui.nav.RootNavGraph
 import com.neaniesoft.warami.ui.theme.AppTheme
@@ -32,7 +33,7 @@ fun WaramiApp(
             DestinationsNavHost(
                 navController = navController,
                 navGraph = RootNavGraph,
-                startRoute = FeaturefeedNavGraph,
+                startRoute = SigninNavGraph,
                 modifier = Modifier.fillMaxSize(),
                 dependenciesContainerBuilder = {
                     dependency(FeedScreenDestination) {
@@ -40,6 +41,12 @@ fun WaramiApp(
                     }
                     dependency(InstanceSelectionScreenDestination) {
                         instanceSelectionViewModel
+                    }
+                    dependency(InstanceSelectionScreenDestination) {
+                        destinationsNavigator
+                    }
+                    dependency(InstanceSelectionScreenDestination) {
+                        FeedScreenDestination
                     }
                 },
             ) {

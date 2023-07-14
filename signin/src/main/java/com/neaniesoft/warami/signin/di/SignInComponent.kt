@@ -14,7 +14,6 @@ abstract class SignInComponent(
     @Component val databaseComponent: DatabaseComponent,
 ) {
     abstract val signInScreen: SignInScreen
-    abstract val instanceSelectionScreen: InstanceSelectionScreen
 
     @get:SignInScope
     abstract val signInViewModelProvider: () -> SignInViewModel
