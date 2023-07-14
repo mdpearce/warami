@@ -95,7 +95,7 @@ internal data class InstanceCounts(
     @Json(name = "users_active_month")
     val usersActiveMonth: Int,
     @Json(name = "users_active_half_year")
-    val userActiveHalfYear: Int,
+    val usersActiveHalfYear: Int,
 )
 
 @JsonClass(generateAdapter = true)
