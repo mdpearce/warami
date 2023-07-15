@@ -43,9 +43,12 @@ class InstanceSelectionViewModel(
 
     init {
         viewModelScope.launch {
-            instanceRepository.instances.collect { instances ->
+            instanceRepository.instances
+                .collect { instances ->
                 _instances.emit(
-                    instances.map {
+                    instances
+                        .sortedByDescending { it.score }
+                        .map {
                         InstanceDisplay(it.name, it.isOpen, it.iconUrl)
                     },
                 )
