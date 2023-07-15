@@ -15,15 +15,15 @@ internal data class Instance(
     @Json(name = "desc")
     val description: String,
     @Json(name = "downvotes")
-    val downVotes: Boolean,
+    val downVotes: Boolean?,
     @Json(name = "nsfw")
-    val hasNsfw: Boolean,
+    val hasNsfw: Boolean?,
     @Json(name = "create_admin")
-    val createAdmin: Boolean,
+    val createAdmin: Boolean?,
     @Json(name = "private")
-    val isPrivate: Boolean,
+    val isPrivate: Boolean?,
     @Json(name = "fed")
-    val isFed: Boolean,
+    val isFed: Boolean?,
     @Json(name = "date")
     val date: ZonedDateTime,
     @Json(name = "version")
@@ -45,7 +45,7 @@ internal data class Instance(
     @Json(name = "score")
     val score: Int,
     @Json(name = "uptime")
-    val uptime: InstanceUptime,
+    val uptime: InstanceUptime?,
     @Json(name = "isSuspicious")
     val isSuspicious: Boolean,
     @Json(name = "metrics")
@@ -56,7 +56,7 @@ internal data class Instance(
 
 @JsonClass(generateAdapter = true)
 internal data class InstanceUsage(
-    @Json(name = "user")
+    @Json(name = "users")
     val users: InstanceUsers,
     @Json(name = "localPosts")
     val localPosts: Int,
@@ -101,23 +101,23 @@ internal data class InstanceCounts(
 @JsonClass(generateAdapter = true)
 internal data class InstanceUptime(
     @Json(name = "domain")
-    val domain: String,
+    val domain: String?,
     @Json(name = "latency")
-    val latency: Int,
+    val latency: Int?,
     @Json(name = "countryname")
-    val countryName: String,
+    val countryName: String?,
     @Json(name = "uptime_alltime")
-    val uptimeAllTime: Double,
+    val uptimeAllTime: Double?,
     @Json(name = "date_created")
-    val dateCreated: ZonedDateTime,
+    val dateCreated: ZonedDateTime?,
     @Json(name = "date_updated")
-    val dateUpdated: ZonedDateTime,
+    val dateUpdated: ZonedDateTime?,
     @Json(name = "date_laststats")
-    val dateLastStats: ZonedDateTime,
+    val dateLastStats: ZonedDateTime?,
     @Json(name = "score")
-    val score: Int,
+    val score: Int?,
     @Json(name = "status")
-    val status: Int,
+    val status: Int?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -135,17 +135,17 @@ internal data class InstanceMetrics(
     @Json(name = "localComments")
     val localComments: Int,
     @Json(name = "averageUsers")
-    val averageUsers: Int,
+    val averageUsers: Double,
     @Json(name = "biggestJump")
     val biggestJump: Int,
     @Json(name = "averagePerMinute")
-    val averagePerMinute: Int,
+    val averagePerMinute: Double,
     @Json(name = "userActivityScore")
     val userActivityScore: Double,
     @Json(name = "activityUserScore")
     val activityUserScore: Double,
     @Json(name = "userActiveMonthScore")
-    val userActiveMonthScore: Int,
+    val userActiveMonthScore: Double,
 )
 
 @JsonClass(generateAdapter = true)
