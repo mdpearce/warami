@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="instance_selection_screen_title">Select an Instance</string>
+    <string name="button_sign_in">Sign In</string>
 </resources>

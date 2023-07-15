@@ -14,13 +14,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.lastOrNull
-import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
-import java.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @Inject
 @SignInScope
@@ -41,18 +36,21 @@ class InstanceSelectionViewModel(
 
     private val selectedInstanceBaseUrl: Flow<UriString> = instanceSettingsRepository.currentInstanceBaseUrl()
 
+    private val _selectedInstanceRow: MutableStateFlow<InstanceDisplay?> = MutableStateFlow(null)
+    val selectedInstanceRow: StateFlow<InstanceDisplay?> = _selectedInstanceRow.asStateFlow()
+
     init {
         viewModelScope.launch {
             instanceRepository.instances
                 .collect { instances ->
-                _instances.emit(
-                    instances
-                        .sortedByDescending { it.score }
-                        .map {
-                        InstanceDisplay(it.name, it.isOpen, it.iconUrl)
-                    },
-                )
-            }
+                    _instances.emit(
+                        instances
+                            .sortedByDescending { it.score }
+                            .map {
+                                InstanceDisplay(it.name, it.isOpen, it.iconUrl)
+                            },
+                    )
+                }
 
             selectedInstanceBaseUrl.collect { url ->
                 if (url.value.isNotEmpty()) {
@@ -66,11 +64,22 @@ class InstanceSelectionViewModel(
         onRefresh()
     }
 
+    fun selectRow(row: InstanceDisplay) {
+        viewModelScope.launch {
+            _selectedInstanceRow.emit(row)
+        }
+    }
+
     fun onRefresh() {
         viewModelScope.launch {
             _isRefreshing.emit(true)
             instanceRepository.fetchAndPopulateInstanceMetadata()
             _isRefreshing.emit(false)
         }
+    }
+
+    fun onSignInPressed(instanceDisplay: InstanceDisplay?) {
+
+
     }
 }
