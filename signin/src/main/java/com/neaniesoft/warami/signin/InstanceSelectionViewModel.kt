@@ -47,7 +47,12 @@ class InstanceSelectionViewModel(
                         instances
                             .sortedByDescending { it.score }
                             .map {
-                                InstanceDisplay(it.name, it.isOpen, it.iconUrl)
+                                InstanceDisplay(
+                                    displayName = it.name,
+                                    baseUrl = it.baseUrl.value,
+                                    apiBaseUrl = it.url,
+                                    it.iconUrl,
+                                )
                             },
                     )
                 }

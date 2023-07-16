@@ -4,6 +4,7 @@ import com.neaniesoft.warami.common.models.UriString
 
 data class InstanceDisplay(
     val displayName: String,
-    val isPublic: Boolean,
+    val baseUrl: String,
+    val apiBaseUrl: UriString,
     val icon: UriString?,
 )

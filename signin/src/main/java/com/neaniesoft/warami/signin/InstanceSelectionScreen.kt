@@ -3,6 +3,7 @@ package com.neaniesoft.warami.signin
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -144,9 +146,24 @@ fun InstanceSelectionScreenContent(
                                     Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Start,
                                 ) {
                                     Text(
+                                        modifier = Modifier.alignByBaseline(),
                                         text = instance.displayName,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = if (instance == selectedRow) {
+                                            MaterialTheme.colorScheme.onSecondaryContainer
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurface
+                                        },
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(start = 16.dp)
+                                            .alignByBaseline(),
+                                        text = instance.baseUrl,
+                                        style = MaterialTheme.typography.labelSmall,
                                         color = if (instance == selectedRow) {
                                             MaterialTheme.colorScheme.onSecondaryContainer
                                         } else {
@@ -172,32 +189,30 @@ fun InstanceSelectionScreenContent(
 @Composable
 fun InstanceSelectionScreenContentEmptyPreview() {
 
-    val selectedElement = InstanceDisplay("Some other instance", true, null)
+    val selectedElement = InstanceDisplay("Some other instance", "foo.bar", UriString("http://foo.bar"), null)
 
     InstanceSelectionScreenContent(
         isRefreshing = true, onRefresh = {},
         instances = listOf(
-            InstanceDisplay("Some instance", true, null),
+            InstanceDisplay("Some instance", "foo.bar", UriString("http://foo.bar"), null),
             selectedElement,
-            InstanceDisplay(
-                "Some owiurjgf instance",
-                true, null,
-            ),
-            InstanceDisplay("Some rg instance", true, null),
-            InstanceDisplay("Some wef finstance", true, null),
-            InstanceDisplay("Some wef instance", true, null),
-            InstanceDisplay("Some wefew instance", true, null),
-            InstanceDisplay("Some wef winstance", true, null),
-            InstanceDisplay("Some wef wefinstance", true, null),
-            InstanceDisplay("Some fwinstance", true, null),
-            InstanceDisplay("Some fggert geinstance", true, null),
-            InstanceDisplay("Sometg etg et instance", true, null),
-            InstanceDisplay("Some instance", true, null),
-            InstanceDisplay("Somehrethr th instance", true, null),
-            InstanceDisplay("Some rth  instance", true, null),
-            InstanceDisplay("Somerthrt hrt h instance", true, null),
-            InstanceDisplay("Some rth rtinstance", true, null),
-            InstanceDisplay("Some   instance", true, null),
+            InstanceDisplay("Some wefefinstance", "foo.bar", UriString("http://foo.bar"), null),
+
+            InstanceDisplay("Some rg instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some wef finstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some wef instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some wefew instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some wef winstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some wef wefinstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some fwinstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some fggert geinstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Sometg etg et instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Somehrethr th instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some rth  instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Somerthrt hrt h instance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some rth rtinstance", "foo.bar", UriString("http://foo.bar"), null),
+            InstanceDisplay("Some   instance", "foo.bar", UriString("http://foo.bar"), null),
         ),
         selectedRow = selectedElement,
         onRowSelected = {},
