@@ -22,6 +22,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +48,9 @@ fun SignInScreen(signInViewModel: () -> SignInViewModel) {
         signInViewModel()
     }
 
+    val state by viewModel.screenState.collectAsState()
 
+    SignInScreenContent(signInScreenState = state, onSignInPressed = { username, password -> viewModel.onLogin(username, password) })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

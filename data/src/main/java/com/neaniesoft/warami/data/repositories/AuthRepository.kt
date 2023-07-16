@@ -2,6 +2,7 @@ package com.neaniesoft.warami.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.neaniesoft.warami.api.di.AuthToken
@@ -49,6 +50,7 @@ class AuthRepository(
     val jwt = _jwt.asStateFlow()
 
     fun onUpdateAuthToken(authToken: AuthToken) {
+        Log.d("AuthRepository", "onUpdateAuthToken: $authToken")
         prefs.edit().putString(KEY_JWT, authToken.value).apply()
     }
 
