@@ -39,10 +39,13 @@ abstract class ApiComponent(
 
     @Provides
     @ApiScope
-    fun provideApiClientFn(context: Context, clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient = { baseUrl ->
-        ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
-            .addAuthorization("AuthKey", ApiKeyAuth(location = "query", "auth", ""))
-
-    }
+    fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String, authToken: AuthToken) -> ApiClient =
+        { baseUrl, authToken ->
+            ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
+                .addAuthorization("AuthKey", ApiKeyAuth(location = "query", "auth", authToken.value))
+        }
 
 }
+
+@JvmInline
+value class AuthToken(val value: String)

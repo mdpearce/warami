@@ -4,25 +4,26 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.neaniesoft.warami.common.RemoteResult
+import com.neaniesoft.warami.api.di.AuthToken
 import com.neaniesoft.warami.data.di.DatabaseScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
-import retrofit2.HttpException
-import java.io.IOException
 
 @Inject
 @DatabaseScope
 class AuthRepository(
-    private val context: Context,
-    private val apiRepository: ApiRepository,
+    context: Context,
 ) {
     companion object {
         private const val AUTH_PREFS_FILENAME = "auth_repository"
         private const val KEY_JWT = "jwt"
     }
 
-    private val api
-        get() = apiRepository.api.value
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val key = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
@@ -34,31 +35,22 @@ class AuthRepository(
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
     )
 
-    var jwt: String?
-        get() {
-            return prefs.getString(KEY_JWT, null)
-        }
-        set(value) {
-            prefs.edit().putString(KEY_JWT, value).apply()
-        }
-
-    suspend fun login(usernameOrEmail: String, password: String): RemoteResult<Unit> {
-        return try {
-            val body = api.login(usernameOrEmail, password).body()
-            if (body == null) {
-                RemoteResult.Err(IllegalStateException("Response body was null"))
-            } else {
-                if (body.jwt == null) {
-                    RemoteResult.Err(IllegalStateException("JWT was null"))
-                } else {
-                    jwt = body.jwt
-                    RemoteResult.Ok(Unit)
+    init {
+        prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == KEY_JWT) {
+                scope.launch {
+                    _jwt.emit(sharedPreferences.getString(KEY_JWT, null))
                 }
             }
-        } catch (e: IOException) {
-            RemoteResult.Err(e)
-        } catch (e: HttpException) {
-            RemoteResult.Err(e)
         }
     }
+
+    private val _jwt: MutableStateFlow<String?> = MutableStateFlow(prefs.getString(KEY_JWT, null))
+    val jwt = _jwt.asStateFlow()
+
+    fun onUpdateAuthToken(authToken: AuthToken) {
+        prefs.edit().putString(KEY_JWT, authToken.value).apply()
+    }
+
+
 }

@@ -8,6 +8,8 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.neaniesoft.warami.api.di.ApiComponent
+import com.neaniesoft.warami.api.di.AuthToken
+import com.neaniesoft.warami.api.infrastructure.ApiClient
 import com.neaniesoft.warami.data.R
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.Database
@@ -19,6 +21,7 @@ import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.AuthRepository
+import com.neaniesoft.warami.data.repositories.SignInRepository
 import com.neaniesoft.warami.data.repositories.adapters.ZonedDateTimeFromLocalTimeAdapter
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import com.neaniesoft.warami.data.repositories.post.PostRepository
@@ -43,9 +46,14 @@ abstract class DatabaseComponent(
 
     abstract val postRepository: PostRepository
     abstract val authRepository: AuthRepository
+    abstract val signInRepository: SignInRepository
     abstract val instanceSettingsRepository: InstanceSettingsRepository
     abstract val zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter
     abstract val apiRepository: ApiRepository
+
+    @Provides
+    @DatabaseScope
+    fun provideApiClientFn(): (String, AuthToken) -> ApiClient = apiComponent.provideApiClientFn(apiComponent.provideOkHttpClientBuilder())
 
     @Provides
     @DatabaseScope
