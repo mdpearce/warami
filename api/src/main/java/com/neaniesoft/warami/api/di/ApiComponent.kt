@@ -1,7 +1,6 @@
 package com.neaniesoft.warami.api.di
 
 import android.content.Context
-import com.neaniesoft.warami.api.R
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.api.auth.ApiKeyAuth
 import com.neaniesoft.warami.api.infrastructure.ApiClient
@@ -40,9 +39,10 @@ abstract class ApiComponent(
 
     @Provides
     @ApiScope
-    fun provideApiClient(context: Context, clientBuilder: OkHttpClient.Builder): ApiClient {
-        val baseUrl = context.getString(R.string.warami_base_url)
-        return ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
+    fun provideApiClientFn(context: Context, clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient = { baseUrl ->
+        ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
             .addAuthorization("AuthKey", ApiKeyAuth(location = "query", "auth", ""))
+
     }
+
 }

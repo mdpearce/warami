@@ -2,12 +2,10 @@ package com.neaniesoft.warami.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.repositories.instance.InstanceRepository
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import com.neaniesoft.warami.signin.destinations.SignInScreenDestination
 import com.ramcosta.composedestinations.spec.Direction
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -34,8 +32,6 @@ class InstanceSelectionViewModel(
     private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
     val navigation: SharedFlow<Direction?> = _navigation.asSharedFlow()
 
-    private val selectedInstanceBaseUrl: Flow<UriString> = instanceSettingsRepository.currentInstanceBaseUrl()
-
     private val _selectedInstanceRow: MutableStateFlow<InstanceDisplay?> = MutableStateFlow(null)
     val selectedInstanceRow: StateFlow<InstanceDisplay?> = _selectedInstanceRow.asStateFlow()
 
@@ -56,12 +52,6 @@ class InstanceSelectionViewModel(
                             },
                     )
                 }
-
-            selectedInstanceBaseUrl.collect { url ->
-                if (url.value.isNotEmpty()) {
-                    _navigation.emit(signinDestination)
-                }
-            }
         }
     }
 
@@ -84,7 +74,11 @@ class InstanceSelectionViewModel(
     }
 
     fun onSignInPressed(instanceDisplay: InstanceDisplay?) {
-
-
+        if (instanceDisplay != null) {
+            viewModelScope.launch {
+                instanceSettingsRepository.setInstance(instanceDisplay.displayName, instanceDisplay.apiBaseUrl)
+                _navigation.emit(signinDestination)
+            }
+        }
     }
 }

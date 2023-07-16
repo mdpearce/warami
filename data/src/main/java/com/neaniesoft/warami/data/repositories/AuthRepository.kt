@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.data.di.DatabaseScope
 import me.tatarka.inject.annotations.Inject
 import retrofit2.HttpException
@@ -14,12 +13,15 @@ import java.io.IOException
 @DatabaseScope
 class AuthRepository(
     private val context: Context,
-    private val api: DefaultApi,
+    private val apiRepository: ApiRepository,
 ) {
     companion object {
         private const val AUTH_PREFS_FILENAME = "auth_repository"
         private const val KEY_JWT = "jwt"
     }
+
+    private val api
+        get() = apiRepository.api.value
 
     private val key = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 

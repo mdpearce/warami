@@ -17,6 +17,7 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
+import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.AuthRepository
 import com.neaniesoft.warami.data.repositories.adapters.ZonedDateTimeFromLocalTimeAdapter
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
@@ -44,6 +45,7 @@ abstract class DatabaseComponent(
     abstract val authRepository: AuthRepository
     abstract val instanceSettingsRepository: InstanceSettingsRepository
     abstract val zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter
+    abstract val apiRepository: ApiRepository
 
     @Provides
     @DatabaseScope
