@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -96,7 +97,7 @@ fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (
                 .fillMaxSize(),
         ) {
 
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
                 TextField(
                     value = username,
                     onValueChange = { username = it },
@@ -130,13 +131,15 @@ fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (
                         // TODO hide the spinner or whatever it ends up being
                     }
                 }
+                
+                Spacer(Modifier.weight(1f))
 
                 if (showSnackbar) {
                     Snackbar(
                         modifier = Modifier.padding(8.dp),
                         action = {
                             TextButton(onClick = { showSnackbar = false }) {
-                                Text(stringResource(id = R.string.error_dismiss))
+                                Text(color = MaterialTheme.colorScheme.onError, text = stringResource(id = R.string.error_dismiss))
                             }
                         },
                     ) {
@@ -157,5 +160,13 @@ fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (
 fun SignInScreenPreview() {
     Surface(Modifier.fillMaxSize()) {
         SignInScreenContent(signInScreenState = SignInScreenState.Idle, onSignInPressed = { _, _ -> })
+    }
+}
+
+@Preview
+@Composable
+fun SignInScreenErrorPreview() {
+    Surface(Modifier.fillMaxSize()) {
+        SignInScreenContent(signInScreenState = SignInScreenState.Error(IllegalStateException("Could not find the thing")), onSignInPressed = { _, _ -> })
     }
 }
