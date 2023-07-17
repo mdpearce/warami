@@ -17,14 +17,24 @@ class SignInViewModel(
     private val _screenState: MutableStateFlow<SignInScreenState> = MutableStateFlow(SignInScreenState.Idle)
     val screenState = _screenState.asStateFlow()
 
+    fun onDismissError() {
+        viewModelScope.launch {
+            if (screenState.value is SignInScreenState.Error) {
+                _screenState.emit(SignInScreenState.Idle)
+            }
+        }
+    }
+
     fun onLogin(username: String, password: String) {
         viewModelScope.launch {
             _screenState.emit(SignInScreenState.SigningIn)
 
             when (val result = signIn(username, password)) {
                 is RemoteResult.Ok -> {
+                    // Handle logged in
                     _screenState.emit(SignInScreenState.Idle)
-                } // Handle logged in
+                }
+
                 is RemoteResult.Err -> {
                     _screenState.emit(SignInScreenState.Error(result.e))
                 }
@@ -36,6 +46,6 @@ class SignInViewModel(
 
 sealed class SignInScreenState {
     object Idle : SignInScreenState()
-    object SigningIn : SignInScreenState()
+    object SigningIn: SignInScreenState()
     data class Error(val e: Exception) : SignInScreenState()
 }

@@ -13,7 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -22,14 +22,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -51,17 +52,23 @@ fun SignInScreen(signInViewModel: () -> SignInViewModel) {
 
     val state by viewModel.screenState.collectAsState()
 
-    SignInScreenContent(signInScreenState = state, onSignInPressed = { username, password -> viewModel.onLogin(username, password) })
+    SignInScreenContent(
+        signInScreenState = state,
+        onSignInPressed = { username, password -> viewModel.onLogin(username, password) },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (username: String, password: String) -> Unit) {
+fun SignInScreenContent(
+    signInScreenState: SignInScreenState,
+    onSignInPressed: (username: String, password: String) -> Unit,
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var showSnackbar by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     var snackbarText by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -97,7 +104,11 @@ fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (
                 .fillMaxSize(),
         ) {
 
-            Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+            ) {
                 TextField(
                     value = username,
                     onValueChange = { username = it },
@@ -115,39 +126,17 @@ fun SignInScreenContent(signInScreenState: SignInScreenState, onSignInPressed: (
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     modifier = Modifier.fillMaxWidth(),
                 )
+            }
 
-
-                when (signInScreenState) {
-                    is SignInScreenState.Error -> {
-                        snackbarText = signInScreenState.e.message ?: "Unknown error"
-                        showSnackbar = true
-                    }
-
-                    is SignInScreenState.SigningIn -> {
-                        // TODO show spinner or summit
-                    }
-
-                    is SignInScreenState.Idle -> {
-                        // TODO hide the spinner or whatever it ends up being
-                    }
+            if (signInScreenState is SignInScreenState.Error) {
+                val errorMessage = signInScreenState.e.message ?: stringResource(id = R.string.unknown_error)
+                LaunchedEffect(key1 = Unit) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Indefinite,
+                    )
                 }
-                
-                Spacer(Modifier.weight(1f))
-
-                if (showSnackbar) {
-                    Snackbar(
-                        modifier = Modifier.padding(8.dp),
-                        action = {
-                            TextButton(onClick = { showSnackbar = false }) {
-                                Text(color = MaterialTheme.colorScheme.onError, text = stringResource(id = R.string.error_dismiss))
-                            }
-                        },
-                    ) {
-                        Text(snackbarText)
-                    }
-                }
-
-
             }
 
         }
@@ -167,6 +156,9 @@ fun SignInScreenPreview() {
 @Composable
 fun SignInScreenErrorPreview() {
     Surface(Modifier.fillMaxSize()) {
-        SignInScreenContent(signInScreenState = SignInScreenState.Error(IllegalStateException("Could not find the thing")), onSignInPressed = { _, _ -> })
+        SignInScreenContent(
+            signInScreenState = SignInScreenState.Error(IllegalStateException("Could not find the thing")),
+            onSignInPressed = { _, _ -> },
+        )
     }
 }

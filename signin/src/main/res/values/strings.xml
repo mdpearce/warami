@@ -6,4 +6,5 @@
     <string name="password_text_field_hint">Password</string>
     <string name="button_sign_in">Sign In</string>
     <string name="error_dismiss">Dismiss</string>
+    <string name="unknown_error">An unknown error has occurred</string>
 </resources>
