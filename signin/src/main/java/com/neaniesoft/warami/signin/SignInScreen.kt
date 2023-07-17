@@ -34,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.common.viewModel
+import com.neaniesoft.warami.data.instanceSettings
 import com.ramcosta.composedestinations.annotation.Destination
 import me.tatarka.inject.annotations.Inject
 
@@ -51,8 +53,10 @@ fun SignInScreen(signInViewModel: () -> SignInViewModel) {
     }
 
     val state by viewModel.screenState.collectAsState()
+    val instanceName by viewModel.instanceDisplayName.collectAsState()
 
     SignInScreenContent(
+        instanceName = instanceName,
         signInScreenState = state,
         onSignInPressed = { username, password -> viewModel.onLogin(username, password) },
     )
@@ -61,6 +65,7 @@ fun SignInScreen(signInViewModel: () -> SignInViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreenContent(
+    instanceName: String,
     signInScreenState: SignInScreenState,
     onSignInPressed: (username: String, password: String) -> Unit,
 ) {
@@ -103,12 +108,18 @@ fun SignInScreenContent(
                 .padding(padding)
                 .fillMaxSize(),
         ) {
-
             Column(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize(),
             ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.signing_in_to, instanceName),
+                    textAlign = TextAlign.End,
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 TextField(
                     value = username,
                     onValueChange = { username = it },
@@ -148,7 +159,7 @@ fun SignInScreenContent(
 @Composable
 fun SignInScreenPreview() {
     Surface(Modifier.fillMaxSize()) {
-        SignInScreenContent(signInScreenState = SignInScreenState.Idle, onSignInPressed = { _, _ -> })
+        SignInScreenContent(instanceName = "Some instance", signInScreenState = SignInScreenState.Idle, onSignInPressed = { _, _ -> })
     }
 }
 
@@ -157,6 +168,7 @@ fun SignInScreenPreview() {
 fun SignInScreenErrorPreview() {
     Surface(Modifier.fillMaxSize()) {
         SignInScreenContent(
+            instanceName = "Some instance",
             signInScreenState = SignInScreenState.Error(IllegalStateException("Could not find the thing")),
             onSignInPressed = { _, _ -> },
         )

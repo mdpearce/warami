@@ -3,6 +3,7 @@ package com.neaniesoft.warami.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.common.RemoteResult
+import com.neaniesoft.warami.domain.usecases.GetCurrentInstanceDisplayNameUseCase
 import com.neaniesoft.warami.domain.usecases.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,9 +14,21 @@ import me.tatarka.inject.annotations.Inject
 @SignInScope
 class SignInViewModel(
     private val signIn: LoginUseCase,
+    private val getCurrentInstanceDisplayName: GetCurrentInstanceDisplayNameUseCase,
 ) : ViewModel() {
     private val _screenState: MutableStateFlow<SignInScreenState> = MutableStateFlow(SignInScreenState.Idle)
     val screenState = _screenState.asStateFlow()
+
+    private val _instanceDisplayName: MutableStateFlow<String> = MutableStateFlow("")
+    val instanceDisplayName = _instanceDisplayName.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getCurrentInstanceDisplayName().collect { displayName ->
+                _instanceDisplayName.emit(displayName)
+            }
+        }
+    }
 
     fun onDismissError() {
         viewModelScope.launch {
@@ -46,6 +59,6 @@ class SignInViewModel(
 
 sealed class SignInScreenState {
     object Idle : SignInScreenState()
-    object SigningIn: SignInScreenState()
+    object SigningIn : SignInScreenState()
     data class Error(val e: Exception) : SignInScreenState()
 }
