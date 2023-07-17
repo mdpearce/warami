@@ -16,6 +16,7 @@ import com.neaniesoft.warami.featurefeed.di.create
 import com.neaniesoft.warami.signin.di.SignInComponent
 import com.neaniesoft.warami.signin.di.create
 import com.neaniesoft.warami.ui.WaramiApp
+import com.neaniesoft.warami.ui.nav.WaramiNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 ),
             ),
             signInComponent = SignInComponent::class.create(
-                databaseComponent, domainComponent,
+                databaseComponent, domainComponent, WaramiNavigator,
             ),
         )
     }

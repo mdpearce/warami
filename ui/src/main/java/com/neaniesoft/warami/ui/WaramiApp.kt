@@ -38,17 +38,14 @@ fun WaramiApp(
                 startRoute = SigninNavGraph,
                 modifier = Modifier.fillMaxSize(),
                 dependenciesContainerBuilder = {
+                    dependency {
+                        destinationsNavigator
+                    }
                     dependency(FeedScreenDestination) {
                         feedViewModel
                     }
                     dependency(InstanceSelectionScreenDestination) {
                         instanceSelectionViewModel
-                    }
-                    dependency(InstanceSelectionScreenDestination) {
-                        destinationsNavigator
-                    }
-                    dependency(InstanceSelectionScreenDestination) {
-                        FeedScreenDestination
                     }
                     dependency(SignInScreenDestination) {
                         signInViewModel

@@ -1,8 +1,8 @@
 package com.neaniesoft.warami.signin.di
 
+import com.neaniesoft.warami.common.navigation.SignInNavigator
 import com.neaniesoft.warami.data.di.DatabaseComponent
 import com.neaniesoft.warami.domain.di.DomainComponent
-import com.neaniesoft.warami.domain.usecases.LoginUseCase
 import com.neaniesoft.warami.signin.InstanceSelectionViewModel
 import com.neaniesoft.warami.signin.SignInScope
 import com.neaniesoft.warami.signin.SignInScreen
@@ -16,9 +16,8 @@ import me.tatarka.inject.annotations.Provides
 abstract class SignInComponent(
     @Component val databaseComponent: DatabaseComponent,
     @Component val domainComponent: DomainComponent,
+    @get:Provides @get:SignInScope val signInNavigator: SignInNavigator,
 ) {
-    abstract val signInScreen: SignInScreen
-
     @get:SignInScope
     abstract val signInViewModelProvider: () -> SignInViewModel
 

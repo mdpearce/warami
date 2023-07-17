@@ -41,7 +41,7 @@ class InstanceSelectionViewModel(
                 .collect { instances ->
                     _instances.emit(
                         instances
-                            .sortedByDescending { it.score }
+                            .sortedByDescending { it.usage.users.activeMonth }
                             .map {
                                 InstanceDisplay(
                                     displayName = it.name,

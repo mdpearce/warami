@@ -38,22 +38,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.common.viewModel
-import com.neaniesoft.warami.data.instanceSettings
 import com.ramcosta.composedestinations.annotation.Destination
-import me.tatarka.inject.annotations.Inject
-
-typealias SignInScreen = @Composable () -> Unit
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
-@Inject
-fun SignInScreen(signInViewModel: () -> SignInViewModel) {
+fun SignInScreen(
+    signInViewModel: () -> SignInViewModel,
+    destinationsNavigator: DestinationsNavigator,
+) {
     val viewModel = viewModel {
         signInViewModel()
     }
 
     val state by viewModel.screenState.collectAsState()
     val instanceName by viewModel.instanceDisplayName.collectAsState()
+    val navigation by viewModel.navigation.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = navigation) {
+        navigation?.let { direction ->
+            destinationsNavigator.navigate(direction)
+        }
+    }
 
     SignInScreenContent(
         instanceName = instanceName,
@@ -117,7 +123,7 @@ fun SignInScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.signing_in_to, instanceName),
                     textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
