@@ -2,8 +2,10 @@ package com.neaniesoft.warami.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.repositories.instance.InstanceRepository
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
+import com.neaniesoft.warami.domain.usecases.ConstructInstanceBaseUrlUseCase
 import com.neaniesoft.warami.signin.destinations.SignInScreenDestination
 import com.ramcosta.composedestinations.spec.Direction
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +23,7 @@ class InstanceSelectionViewModel(
     private val instanceRepository: InstanceRepository,
     private val instanceSettingsRepository: InstanceSettingsRepository,
     private val signinDestination: SignInScreenDestination,
+    private val constructInstanceBaseUrl: ConstructInstanceBaseUrlUseCase,
 ) : ViewModel() {
 
     private val _instances: MutableStateFlow<List<InstanceDisplay>> = MutableStateFlow(emptyList())
@@ -34,6 +37,9 @@ class InstanceSelectionViewModel(
 
     private val _selectedInstanceRow: MutableStateFlow<InstanceDisplay?> = MutableStateFlow(null)
     val selectedInstanceRow: StateFlow<InstanceDisplay?> = _selectedInstanceRow.asStateFlow()
+
+    private val _manualInstanceUrl: MutableStateFlow<String> = MutableStateFlow("")
+    val manualInstanceUrl = _manualInstanceUrl.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -55,6 +61,13 @@ class InstanceSelectionViewModel(
         }
     }
 
+    fun onManualInstanceEdited(value: String) {
+        viewModelScope.launch {
+            _selectedInstanceRow.emit(null)
+            _manualInstanceUrl.emit(value)
+        }
+    }
+
     fun onInit() {
         onRefresh()
     }
@@ -62,6 +75,7 @@ class InstanceSelectionViewModel(
     fun selectRow(row: InstanceDisplay) {
         viewModelScope.launch {
             _selectedInstanceRow.emit(row)
+            _manualInstanceUrl.emit("")
         }
     }
 
@@ -73,12 +87,17 @@ class InstanceSelectionViewModel(
         }
     }
 
-    fun onSignInPressed(instanceDisplay: InstanceDisplay?) {
-        if (instanceDisplay != null) {
-            viewModelScope.launch {
+    fun onSignInPressed(instanceDisplay: InstanceDisplay?, manualInstanceUrl: String) {
+        viewModelScope.launch {
+            if (manualInstanceUrl.isNotEmpty()) {
+                val apiUrl = constructInstanceBaseUrl(manualInstanceUrl)
+                instanceSettingsRepository.setInstance(manualInstanceUrl, apiUrl)
+                _navigation.emit(signinDestination)
+            } else if (instanceDisplay != null) {
                 instanceSettingsRepository.setInstance(instanceDisplay.displayName, instanceDisplay.apiBaseUrl)
                 _navigation.emit(signinDestination)
             }
+
         }
     }
 }

@@ -5,11 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -23,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +35,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,6 +66,7 @@ fun InstanceSelectionScreen(
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val navigation by viewModel.navigation.collectAsState(initial = null)
     val selectedRow by viewModel.selectedInstanceRow.collectAsState()
+    val manualInstanceUrl by viewModel.manualInstanceUrl.collectAsState()
 
     LaunchedEffect(key1 = navigation) {
         navigation?.let { navigator.navigate(it) }
@@ -75,6 +83,8 @@ fun InstanceSelectionScreen(
         selectedRow,
         viewModel::selectRow,
         viewModel::onSignInPressed,
+        viewModel::onManualInstanceEdited,
+        manualInstanceUrl,
     )
 }
 
@@ -86,9 +96,17 @@ fun InstanceSelectionScreenContent(
     onRefresh: () -> Unit,
     selectedRow: InstanceDisplay? = null,
     onRowSelected: (InstanceDisplay) -> Unit,
-    onSignInPressed: (InstanceDisplay?) -> Unit,
+    onSignInPressed: (InstanceDisplay?, String) -> Unit,
+    onManualInstanceEdited: (String) -> Unit,
+    manualInstanceUrl: String,
 ) {
     val pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = onRefresh)
+
+    val focusRequester = remember {
+        FocusRequester()
+    }
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -106,7 +124,10 @@ fun InstanceSelectionScreenContent(
         bottomBar = {
             BottomAppBar() {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                    TextButton(onClick = { onSignInPressed(selectedRow) }, enabled = selectedRow != null) {
+                    TextButton(
+                        onClick = { onSignInPressed(selectedRow, manualInstanceUrl) },
+                        enabled = (selectedRow != null || manualInstanceUrl.isNotEmpty()),
+                    ) {
                         Text(stringResource(id = R.string.button_sign_in))
                     }
                 }
@@ -119,68 +140,90 @@ fun InstanceSelectionScreenContent(
                 .padding(it),
             contentAlignment = Alignment.TopCenter,
         ) {
-            if (instances.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.SpaceBetween) {
+                if (instances.isNotEmpty()) {
+                    Surface(
+                        modifier = Modifier
+                            .padding(24.dp)
+                            .weight(0.1f),
+                        shape = MaterialTheme.shapes.medium, elevation = 4.dp,
+                    ) {
 
-                Surface(modifier = Modifier.padding(24.dp), shape = MaterialTheme.shapes.medium, elevation = 4.dp) {
-
-                    LazyColumn {
-                        items(instances.size) { index ->
-                            val instance = instances[index]
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple(bounded = true),
-                                        onClick = { onRowSelected(instance) },
-                                    )
-                                    .background(
-                                        if (instance == selectedRow) {
-                                            MaterialTheme.colorScheme.secondaryContainer
-                                        } else {
-                                            Color.Transparent
-                                        },
-                                    ),
-                            ) {
-                                Row(
-                                    Modifier
+                        LazyColumn {
+                            items(instances.size) { index ->
+                                val instance = instances[index]
+                                Box(
+                                    modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(16.dp),
-                                    horizontalArrangement = Arrangement.Start,
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = rememberRipple(bounded = true),
+                                            onClick = {
+                                                focusManager.clearFocus()
+                                                onRowSelected(instance)
+                                            },
+                                        )
+                                        .background(
+                                            if (instance == selectedRow) {
+                                                MaterialTheme.colorScheme.secondaryContainer
+                                            } else {
+                                                Color.Transparent
+                                            },
+                                        ),
                                 ) {
-                                    Text(
-                                        modifier = Modifier.alignByBaseline(),
-                                        text = instance.displayName,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = if (instance == selectedRow) {
-                                            MaterialTheme.colorScheme.onSecondaryContainer
-                                        } else {
-                                            MaterialTheme.colorScheme.onSurface
-                                        },
-                                    )
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(start = 16.dp)
-                                            .alignByBaseline(),
-                                        text = instance.baseUrl,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = if (instance == selectedRow) {
-                                            MaterialTheme.colorScheme.onSecondaryContainer
-                                        } else {
-                                            MaterialTheme.colorScheme.onSurface
-                                        },
-                                    )
+                                    Row(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        horizontalArrangement = Arrangement.Start,
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.alignByBaseline(),
+                                            text = instance.displayName,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = if (instance == selectedRow) {
+                                                MaterialTheme.colorScheme.onSecondaryContainer
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurface
+                                            },
+                                        )
+                                        Text(
+                                            modifier = Modifier
+                                                .padding(start = 16.dp)
+                                                .alignByBaseline(),
+                                            text = instance.baseUrl,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = if (instance == selectedRow) {
+                                                MaterialTheme.colorScheme.onSecondaryContainer
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurface
+                                            },
+                                        )
+                                    }
                                 }
+                                Divider()
                             }
-                            Divider()
                         }
                     }
                 }
+
+                TextField(
+                    value = manualInstanceUrl,
+                    onValueChange = {
+                        onManualInstanceEdited(it)
+                    },
+                    label = { Text(text = stringResource(id = R.string.enter_instance_url)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .wrapContentHeight()
+                        .focusRequester(focusRequester),
+                    prefix = { Text(text = stringResource(id = R.string.instance_prefix)) },
+                    singleLine = true, keyboardActions = KeyboardActions(),
+                )
             }
 
             PullRefreshIndicator(refreshing = isRefreshing, state = pullRefreshState)
-
-
         }
     }
 }
@@ -216,6 +259,8 @@ fun InstanceSelectionScreenContentEmptyPreview() {
         ),
         selectedRow = selectedElement,
         onRowSelected = {},
-        onSignInPressed = {},
+        onSignInPressed = { _, _ -> },
+        onManualInstanceEdited = {},
+        manualInstanceUrl = "",
     )
 }

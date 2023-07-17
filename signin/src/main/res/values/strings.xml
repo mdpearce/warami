@@ -8,4 +8,6 @@
     <string name="error_dismiss">Dismiss</string>
     <string name="unknown_error">An unknown error has occurred</string>
     <string name="signing_in_to">Signing in to %1$s</string>
+    <string name="enter_instance_url">Instance URL</string>
+    <string name="instance_prefix">https://</string>
 </resources>
