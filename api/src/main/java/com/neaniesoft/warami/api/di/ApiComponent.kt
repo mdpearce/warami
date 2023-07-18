@@ -40,7 +40,7 @@ abstract class ApiComponent(
     @ApiScope
     fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient =
         { baseUrl ->
-            ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
+            ApiClient(baseUrl = "${baseUrl.trimEnd('/')}/api/v3", okHttpClientBuilder = clientBuilder)
         }
 
 }
