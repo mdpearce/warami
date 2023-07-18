@@ -211,7 +211,6 @@ class InstanceRepository(
             ),
         )
     }
-
 }
 
 internal typealias ApiInstance = Instance

@@ -10,7 +10,7 @@ import java.io.IOException
 
 @DatabaseScope
 @Inject
-class SignInRepository(private val apiRepository: ApiRepository, private val authRepository: AuthRepository) {
+class AccountRepository(private val apiRepository: ApiRepository, private val authRepository: AuthRepository) {
     suspend fun login(usernameOrEmail: String, password: String): RemoteResult<Unit> {
         val api = apiRepository.api.value
 
@@ -32,5 +32,10 @@ class SignInRepository(private val apiRepository: ApiRepository, private val aut
         } catch (e: HttpException) {
             RemoteResult.Err(e)
         }
+    }
+
+    fun isLoggedIn(): Boolean {
+        val jwt = authRepository.jwt.value
+        return !jwt.isNullOrEmpty()
     }
 }

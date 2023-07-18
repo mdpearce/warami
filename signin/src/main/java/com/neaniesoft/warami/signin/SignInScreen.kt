@@ -155,10 +155,8 @@ fun SignInScreenContent(
                     )
                 }
             }
-
         }
     }
-
 }
 
 @Preview

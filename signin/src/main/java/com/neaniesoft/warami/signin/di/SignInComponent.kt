@@ -5,7 +5,6 @@ import com.neaniesoft.warami.data.di.DatabaseComponent
 import com.neaniesoft.warami.domain.di.DomainComponent
 import com.neaniesoft.warami.signin.InstanceSelectionViewModel
 import com.neaniesoft.warami.signin.SignInScope
-import com.neaniesoft.warami.signin.SignInScreen
 import com.neaniesoft.warami.signin.SignInViewModel
 import com.neaniesoft.warami.signin.destinations.SignInScreenDestination
 import me.tatarka.inject.annotations.Component

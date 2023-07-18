@@ -146,9 +146,9 @@ fun InstanceSelectionScreenContent(
                         modifier = Modifier
                             .padding(24.dp)
                             .weight(0.1f),
-                        shape = MaterialTheme.shapes.medium, elevation = 4.dp,
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = 4.dp,
                     ) {
-
                         LazyColumn {
                             items(instances.size) { index ->
                                 val instance = instances[index]
@@ -219,7 +219,8 @@ fun InstanceSelectionScreenContent(
                         .wrapContentHeight()
                         .focusRequester(focusRequester),
                     prefix = { Text(text = stringResource(id = R.string.instance_prefix)) },
-                    singleLine = true, keyboardActions = KeyboardActions(),
+                    singleLine = true,
+                    keyboardActions = KeyboardActions(),
                 )
             }
 
@@ -231,11 +232,11 @@ fun InstanceSelectionScreenContent(
 @Preview
 @Composable
 fun InstanceSelectionScreenContentEmptyPreview() {
-
     val selectedElement = InstanceDisplay("Some other instance", "foo.bar", UriString("http://foo.bar"), null)
 
     InstanceSelectionScreenContent(
-        isRefreshing = true, onRefresh = {},
+        isRefreshing = true,
+        onRefresh = {},
         instances = listOf(
             InstanceDisplay("Some instance", "foo.bar", UriString("http://foo.bar"), null),
             selectedElement,

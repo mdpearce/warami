@@ -36,7 +36,7 @@ class RemoteConfigRepository(private val remoteConfig: FirebaseRemoteConfig) {
 
     fun getDouble(key: String): Double = remoteConfig.getDouble(key)
 
-    fun getLong(key:String): Long = remoteConfig.getLong(key)
+    fun getLong(key: String): Long = remoteConfig.getLong(key)
 
-    fun getString(key:String): String = remoteConfig.getString(key)
+    fun getString(key: String): String = remoteConfig.getString(key)
 }

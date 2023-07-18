@@ -18,5 +18,4 @@ object InstanceSettingsSerializer : androidx.datastore.core.Serializer<InstanceS
     }
 
     override suspend fun writeTo(t: InstanceSettings, output: OutputStream) = t.writeTo(output)
-
 }

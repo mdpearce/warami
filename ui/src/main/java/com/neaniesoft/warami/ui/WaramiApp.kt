@@ -10,9 +10,9 @@ import com.neaniesoft.warami.featurefeed.FeedViewModel
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
 import com.neaniesoft.warami.signin.InstanceSelectionViewModel
 import com.neaniesoft.warami.signin.SignInViewModel
-import com.neaniesoft.warami.signin.SigninNavGraph
 import com.neaniesoft.warami.signin.destinations.InstanceSelectionScreenDestination
 import com.neaniesoft.warami.signin.destinations.SignInScreenDestination
+import com.neaniesoft.warami.ui.destinations.HomeScreenDestination
 import com.neaniesoft.warami.ui.nav.RootNavGraph
 import com.neaniesoft.warami.ui.theme.AppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -25,6 +25,7 @@ fun WaramiApp(
     feedViewModel: () -> FeedViewModel,
     instanceSelectionViewModel: () -> InstanceSelectionViewModel,
     signInViewModel: () -> SignInViewModel,
+    homeViewModel: () -> HomeViewModel,
 ) {
     AppTheme {
         val navController = rememberNavController()
@@ -35,7 +36,7 @@ fun WaramiApp(
             DestinationsNavHost(
                 navController = navController,
                 navGraph = RootNavGraph,
-                startRoute = SigninNavGraph,
+                startRoute = UiNavGraph,
                 modifier = Modifier.fillMaxSize(),
                 dependenciesContainerBuilder = {
                     dependency {
@@ -49,6 +50,9 @@ fun WaramiApp(
                     }
                     dependency(SignInScreenDestination) {
                         signInViewModel
+                    }
+                    dependency(HomeScreenDestination) {
+                        homeViewModel
                     }
                 },
             ) {

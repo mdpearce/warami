@@ -2,7 +2,6 @@ package com.neaniesoft.warami.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.repositories.instance.InstanceRepository
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import com.neaniesoft.warami.domain.usecases.ConstructInstanceBaseUrlUseCase
@@ -97,7 +96,6 @@ class InstanceSelectionViewModel(
                 instanceSettingsRepository.setInstance(instanceDisplay.displayName, instanceDisplay.apiBaseUrl)
                 _navigation.emit(signinDestination)
             }
-
         }
     }
 }

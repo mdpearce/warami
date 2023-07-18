@@ -53,6 +53,4 @@ class AuthRepository(
         Log.d("AuthRepository", "onUpdateAuthToken: $authToken")
         prefs.edit().putString(KEY_JWT, authToken.value).apply()
     }
-
-
 }

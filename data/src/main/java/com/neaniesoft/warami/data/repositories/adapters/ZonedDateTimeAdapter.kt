@@ -46,5 +46,4 @@ class ZonedDateTimeFromLocalTimeAdapter : JsonAdapter<ZonedDateTime>() {
             writer.value(jsonDate)
         }
     }
-
 }

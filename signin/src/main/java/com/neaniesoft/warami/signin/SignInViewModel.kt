@@ -38,7 +38,6 @@ class SignInViewModel(
         }
     }
 
-
     fun onLogin(username: String, password: String) {
         viewModelScope.launch {
             _screenState.emit(SignInScreenState.SigningIn)
@@ -56,7 +55,6 @@ class SignInViewModel(
             }
         }
     }
-
 }
 
 sealed class SignInScreenState {

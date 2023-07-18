@@ -16,6 +16,8 @@ import com.neaniesoft.warami.featurefeed.di.create
 import com.neaniesoft.warami.signin.di.SignInComponent
 import com.neaniesoft.warami.signin.di.create
 import com.neaniesoft.warami.ui.WaramiApp
+import com.neaniesoft.warami.ui.di.UiComponent
+import com.neaniesoft.warami.ui.di.create
 import com.neaniesoft.warami.ui.nav.WaramiNavigator
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
                 appComponent.feedComponent.feedViewModelProvider,
                 appComponent.signInComponent.instanceSelectionViewModelProvider,
                 appComponent.signInComponent.signInViewModelProvider,
+                appComponent.uiComponent.homeViewModelProvider,
             )
         }
     }
@@ -37,17 +40,15 @@ class MainActivity : ComponentActivity() {
         val apiComponent = ApiComponent::class.create(WaramiApplication.getInstance())
         val databaseComponent = DatabaseComponent::class.create(apiComponent)
         val domainComponent = DomainComponent::class.create(databaseComponent)
+        val feedComponent = FeedComponent::class.create(domainComponent)
+        val signInComponent = SignInComponent::class.create(databaseComponent, domainComponent, WaramiNavigator)
+        val uiComponent = UiComponent::class.create(feedComponent, signInComponent, WaramiNavigator)
 
         return AppComponent::class.create(
             databaseComponent = databaseComponent,
-            feedComponent = FeedComponent::class.create(
-                DomainComponent::class.create(
-                    dataComponent = databaseComponent,
-                ),
-            ),
-            signInComponent = SignInComponent::class.create(
-                databaseComponent, domainComponent, WaramiNavigator,
-            ),
+            feedComponent = feedComponent,
+            signInComponent = signInComponent,
+            uiComponent = uiComponent,
         )
     }
 }
