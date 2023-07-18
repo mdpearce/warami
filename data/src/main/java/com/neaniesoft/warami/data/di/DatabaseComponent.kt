@@ -53,7 +53,7 @@ abstract class DatabaseComponent(
 
     @Provides
     @DatabaseScope
-    fun provideApiClientFn(): (String, AuthToken) -> ApiClient = apiComponent.provideApiClientFn(apiComponent.provideOkHttpClientBuilder())
+    fun provideApiClientFn(): (String) -> ApiClient = apiComponent.provideApiClientFn(apiComponent.provideOkHttpClientBuilder())
 
     @Provides
     @DatabaseScope

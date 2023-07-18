@@ -2,7 +2,6 @@ package com.neaniesoft.warami.api.di
 
 import android.content.Context
 import com.neaniesoft.warami.api.apis.DefaultApi
-import com.neaniesoft.warami.api.auth.ApiKeyAuth
 import com.neaniesoft.warami.api.infrastructure.ApiClient
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
@@ -39,10 +38,9 @@ abstract class ApiComponent(
 
     @Provides
     @ApiScope
-    fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String, authToken: AuthToken) -> ApiClient =
-        { baseUrl, authToken ->
+    fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient =
+        { baseUrl ->
             ApiClient(baseUrl = baseUrl, okHttpClientBuilder = clientBuilder)
-                .addAuthorization("AuthKey", ApiKeyAuth(location = "query", "auth", authToken.value))
         }
 
 }

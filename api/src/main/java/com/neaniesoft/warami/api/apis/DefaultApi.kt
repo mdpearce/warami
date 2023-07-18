@@ -6,20 +6,47 @@ import retrofit2.Response
 import okhttp3.RequestBody
 import com.squareup.moshi.Json
 
+import com.neaniesoft.warami.api.models.AddAdmin
 import com.neaniesoft.warami.api.models.AddAdminResponse
+import com.neaniesoft.warami.api.models.AddModToCommunity
 import com.neaniesoft.warami.api.models.AddModToCommunityResponse
+import com.neaniesoft.warami.api.models.ApproveRegistrationApplication
+import com.neaniesoft.warami.api.models.BanFromCommunity
 import com.neaniesoft.warami.api.models.BanFromCommunityResponse
+import com.neaniesoft.warami.api.models.BanPerson
 import com.neaniesoft.warami.api.models.BanPersonResponse
 import com.neaniesoft.warami.api.models.BannedPersonsResponse
+import com.neaniesoft.warami.api.models.BlockCommunity
 import com.neaniesoft.warami.api.models.BlockCommunityResponse
+import com.neaniesoft.warami.api.models.BlockPerson
 import com.neaniesoft.warami.api.models.BlockPersonResponse
+import com.neaniesoft.warami.api.models.ChangePassword
 import com.neaniesoft.warami.api.models.CommentReplyResponse
 import com.neaniesoft.warami.api.models.CommentReportResponse
 import com.neaniesoft.warami.api.models.CommentResponse
 import com.neaniesoft.warami.api.models.CommentSortType
 import com.neaniesoft.warami.api.models.CommunityResponse
+import com.neaniesoft.warami.api.models.CreateCommentLike
+import com.neaniesoft.warami.api.models.CreateCommentReport
+import com.neaniesoft.warami.api.models.CreatePostLike
+import com.neaniesoft.warami.api.models.CreatePostReport
+import com.neaniesoft.warami.api.models.CreatePrivateMessageReport
 import com.neaniesoft.warami.api.models.CustomEmojiResponse
+import com.neaniesoft.warami.api.models.DeleteAccount
+import com.neaniesoft.warami.api.models.DeleteComment
+import com.neaniesoft.warami.api.models.DeleteCommunity
+import com.neaniesoft.warami.api.models.DeleteCustomEmoji
 import com.neaniesoft.warami.api.models.DeleteCustomEmojiResponse
+import com.neaniesoft.warami.api.models.DeletePost
+import com.neaniesoft.warami.api.models.DeletePrivateMessage
+import com.neaniesoft.warami.api.models.DistinguishComment
+import com.neaniesoft.warami.api.models.EditCommunity
+import com.neaniesoft.warami.api.models.EditCustomEmoji
+import com.neaniesoft.warami.api.models.EditPost
+import com.neaniesoft.warami.api.models.EditPrivateMessage
+import com.neaniesoft.warami.api.models.EditSite
+import com.neaniesoft.warami.api.models.FeaturePost
+import com.neaniesoft.warami.api.models.FollowCommunity
 import com.neaniesoft.warami.api.models.GetCaptchaResponse
 import com.neaniesoft.warami.api.models.GetCommentsResponse
 import com.neaniesoft.warami.api.models.GetCommunityResponse
@@ -34,30 +61,53 @@ import com.neaniesoft.warami.api.models.GetSiteMetadataResponse
 import com.neaniesoft.warami.api.models.GetSiteResponse
 import com.neaniesoft.warami.api.models.GetUnreadCountResponse
 import com.neaniesoft.warami.api.models.GetUnreadRegistrationApplicationCountResponse
+import com.neaniesoft.warami.api.models.LeaveAdmin
 import com.neaniesoft.warami.api.models.ListCommentReportsResponse
 import com.neaniesoft.warami.api.models.ListCommunitiesResponse
 import com.neaniesoft.warami.api.models.ListPostReportsResponse
 import com.neaniesoft.warami.api.models.ListPrivateMessageReportsResponse
 import com.neaniesoft.warami.api.models.ListRegistrationApplicationsResponse
 import com.neaniesoft.warami.api.models.ListingType
+import com.neaniesoft.warami.api.models.LockPost
+import com.neaniesoft.warami.api.models.Login
 import com.neaniesoft.warami.api.models.LoginResponse
+import com.neaniesoft.warami.api.models.MarkAllAsRead
+import com.neaniesoft.warami.api.models.MarkCommentReplyAsRead
+import com.neaniesoft.warami.api.models.MarkPersonMentionAsRead
+import com.neaniesoft.warami.api.models.MarkPostAsRead
+import com.neaniesoft.warami.api.models.MarkPrivateMessageAsRead
 import com.neaniesoft.warami.api.models.ModlogActionType
+import com.neaniesoft.warami.api.models.PasswordChangeAfterReset
+import com.neaniesoft.warami.api.models.PasswordReset
 import com.neaniesoft.warami.api.models.PersonMentionResponse
-import com.neaniesoft.warami.api.models.PostFeatureType
 import com.neaniesoft.warami.api.models.PostReportResponse
 import com.neaniesoft.warami.api.models.PostResponse
 import com.neaniesoft.warami.api.models.PrivateMessageReportResponse
 import com.neaniesoft.warami.api.models.PrivateMessageResponse
 import com.neaniesoft.warami.api.models.PrivateMessagesResponse
+import com.neaniesoft.warami.api.models.PurgeComment
+import com.neaniesoft.warami.api.models.PurgeCommunity
 import com.neaniesoft.warami.api.models.PurgeItemResponse
+import com.neaniesoft.warami.api.models.PurgePerson
+import com.neaniesoft.warami.api.models.PurgePost
+import com.neaniesoft.warami.api.models.Register
 import com.neaniesoft.warami.api.models.RegistrationApplicationResponse
-import com.neaniesoft.warami.api.models.RegistrationMode
+import com.neaniesoft.warami.api.models.RemoveComment
+import com.neaniesoft.warami.api.models.RemoveCommunity
+import com.neaniesoft.warami.api.models.RemovePost
+import com.neaniesoft.warami.api.models.ResolveCommentReport
 import com.neaniesoft.warami.api.models.ResolveObjectResponse
+import com.neaniesoft.warami.api.models.ResolvePostReport
+import com.neaniesoft.warami.api.models.ResolvePrivateMessageReport
+import com.neaniesoft.warami.api.models.SaveComment
+import com.neaniesoft.warami.api.models.SavePost
+import com.neaniesoft.warami.api.models.SaveUserSettings
 import com.neaniesoft.warami.api.models.SearchResponse
 import com.neaniesoft.warami.api.models.SearchType
 import com.neaniesoft.warami.api.models.SiteResponse
 import com.neaniesoft.warami.api.models.SortType
-import java.math.BigDecimal
+import com.neaniesoft.warami.api.models.TransferCommunity
+import com.neaniesoft.warami.api.models.VerifyEmail
 
 interface DefaultApi {
     /**
@@ -66,12 +116,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param personId 
-     * @param added 
+     * @param addAdmin  (optional)
      * @return [AddAdminResponse]
      */
     @POST("admin/add")
-    suspend fun addAdmin(@Query("person_id") personId: java.math.BigDecimal, @Query("added") added: Boolean): Response<AddAdminResponse>
+    suspend fun addAdmin(@Body addAdmin: AddAdmin? = null): Response<AddAdminResponse>
 
     /**
      * Add a moderator to your community.
@@ -79,13 +128,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param personId 
-     * @param added 
+     * @param addModToCommunity  (optional)
      * @return [AddModToCommunityResponse]
      */
     @POST("community/mod")
-    suspend fun addModToCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("person_id") personId: java.math.BigDecimal, @Query("added") added: Boolean): Response<AddModToCommunityResponse>
+    suspend fun addModToCommunity(@Body addModToCommunity: AddModToCommunity? = null): Response<AddModToCommunityResponse>
 
     /**
      * Approve a registration application
@@ -93,13 +140,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param id 
-     * @param approve 
-     * @param denyReason  (optional)
+     * @param approveRegistrationApplication  (optional)
      * @return [RegistrationApplicationResponse]
      */
     @PUT("admin/registration_application/approve")
-    suspend fun approveRegistrationApplication(@Query("id") id: java.math.BigDecimal, @Query("approve") approve: Boolean, @Query("deny_reason") denyReason: String? = null): Response<RegistrationApplicationResponse>
+    suspend fun approveRegistrationApplication(@Body approveRegistrationApplication: ApproveRegistrationApplication? = null): Response<RegistrationApplicationResponse>
 
     /**
      * Ban a user from a community.
@@ -107,16 +152,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param personId 
-     * @param ban 
-     * @param removeData  (optional)
-     * @param reason  (optional)
-     * @param expires  (optional)
+     * @param banFromCommunity  (optional)
      * @return [BanFromCommunityResponse]
      */
     @POST("community/ban_user")
-    suspend fun banFromCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("person_id") personId: java.math.BigDecimal, @Query("ban") ban: Boolean, @Query("remove_data") removeData: Boolean? = null, @Query("reason") reason: String? = null, @Query("expires") expires: java.math.BigDecimal? = null): Response<BanFromCommunityResponse>
+    suspend fun banFromCommunity(@Body banFromCommunity: BanFromCommunity? = null): Response<BanFromCommunityResponse>
 
     /**
      * Ban a person from your site.
@@ -124,15 +164,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param personId 
-     * @param ban 
-     * @param removeData  (optional)
-     * @param reason  (optional)
-     * @param expires  (optional)
+     * @param banPerson  (optional)
      * @return [BanPersonResponse]
      */
     @POST("user/ban")
-    suspend fun banPerson(@Query("person_id") personId: java.math.BigDecimal, @Query("ban") ban: Boolean, @Query("remove_data") removeData: Boolean? = null, @Query("reason") reason: String? = null, @Query("expires") expires: java.math.BigDecimal? = null): Response<BanPersonResponse>
+    suspend fun banPerson(@Body banPerson: BanPerson? = null): Response<BanPersonResponse>
 
     /**
      * Block a community.
@@ -140,12 +176,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param block 
+     * @param blockCommunity  (optional)
      * @return [BlockCommunityResponse]
      */
     @POST("community/block")
-    suspend fun blockCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("block") block: Boolean): Response<BlockCommunityResponse>
+    suspend fun blockCommunity(@Body blockCommunity: BlockCommunity? = null): Response<BlockCommunityResponse>
 
     /**
      * Block a person.
@@ -153,12 +188,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param personId 
-     * @param block 
+     * @param blockPerson  (optional)
      * @return [BlockPersonResponse]
      */
     @POST("user/block")
-    suspend fun blockPerson(@Query("person_id") personId: java.math.BigDecimal, @Query("block") block: Boolean): Response<BlockPersonResponse>
+    suspend fun blockPerson(@Body blockPerson: BlockPerson? = null): Response<BlockPersonResponse>
 
     /**
      * Change your user password.
@@ -166,13 +200,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param newPassword 
-     * @param newPasswordVerify 
-     * @param oldPassword 
+     * @param changePassword  (optional)
      * @return [LoginResponse]
      */
     @PUT("user/change_password")
-    suspend fun changePassword(@Query("new_password") newPassword: String, @Query("new_password_verify") newPasswordVerify: String, @Query("old_password") oldPassword: String): Response<LoginResponse>
+    suspend fun changePassword(@Body changePassword: ChangePassword? = null): Response<LoginResponse>
 
     /**
      * Report a comment.
@@ -180,12 +212,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param reason 
+     * @param createCommentReport  (optional)
      * @return [CommentReportResponse]
      */
     @POST("comment/report")
-    suspend fun createCommentReport(@Query("comment_id") commentId: java.math.BigDecimal, @Query("reason") reason: String): Response<CommentReportResponse>
+    suspend fun createCommentReport(@Body createCommentReport: CreateCommentReport? = null): Response<CommentReportResponse>
 
     /**
      * Report a post.
@@ -193,12 +224,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param reason 
+     * @param createPostReport  (optional)
      * @return [PostReportResponse]
      */
     @POST("post/report")
-    suspend fun createPostReport(@Query("post_id") postId: java.math.BigDecimal, @Query("reason") reason: String): Response<PostReportResponse>
+    suspend fun createPostReport(@Body createPostReport: CreatePostReport? = null): Response<PostReportResponse>
 
     /**
      * Create a report for a private message.
@@ -206,12 +236,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param privateMessageId 
-     * @param reason 
+     * @param createPrivateMessageReport  (optional)
      * @return [PrivateMessageReportResponse]
      */
     @POST("private_message/report")
-    suspend fun createPrivateMessageReport(@Query("private_message_id") privateMessageId: java.math.BigDecimal, @Query("reason") reason: String): Response<PrivateMessageReportResponse>
+    suspend fun createPrivateMessageReport(@Body createPrivateMessageReport: CreatePrivateMessageReport? = null): Response<PrivateMessageReportResponse>
 
     /**
      * Delete your account.
@@ -219,11 +248,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param password 
+     * @param deleteAccount  (optional)
      * @return [kotlin.Any]
      */
     @POST("user/delete_account")
-    suspend fun deleteAccount(@Query("password") password: String): Response<Any>
+    suspend fun deleteAccount(@Body deleteAccount: DeleteAccount? = null): Response<kotlin.Any>
 
     /**
      * Delete a comment.
@@ -231,12 +260,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param deleted 
+     * @param deleteComment  (optional)
      * @return [CommentResponse]
      */
     @POST("comment/delete")
-    suspend fun deleteComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("deleted") deleted: Boolean): Response<CommentResponse>
+    suspend fun deleteComment(@Body deleteComment: DeleteComment? = null): Response<CommentResponse>
 
     /**
      * Delete a community.
@@ -244,12 +272,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param deleted 
+     * @param deleteCommunity  (optional)
      * @return [CommunityResponse]
      */
     @POST("community/delete")
-    suspend fun deleteCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("deleted") deleted: Boolean): Response<CommunityResponse>
+    suspend fun deleteCommunity(@Body deleteCommunity: DeleteCommunity? = null): Response<CommunityResponse>
 
     /**
      * Delete a custom emoji
@@ -257,11 +284,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param id 
+     * @param deleteCustomEmoji  (optional)
      * @return [DeleteCustomEmojiResponse]
      */
     @POST("custom_emoji/delete")
-    suspend fun deleteCustomEmoji(@Query("id") id: java.math.BigDecimal): Response<DeleteCustomEmojiResponse>
+    suspend fun deleteCustomEmoji(@Body deleteCustomEmoji: DeleteCustomEmoji? = null): Response<DeleteCustomEmojiResponse>
 
     /**
      * Delete a post.
@@ -269,12 +296,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param deleted 
+     * @param deletePost  (optional)
      * @return [PostResponse]
      */
     @POST("post/delete")
-    suspend fun deletePost(@Query("post_id") postId: java.math.BigDecimal, @Query("deleted") deleted: Boolean): Response<PostResponse>
+    suspend fun deletePost(@Body deletePost: DeletePost? = null): Response<PostResponse>
 
     /**
      * Delete a private message.
@@ -282,12 +308,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param privateMessageId 
-     * @param deleted 
+     * @param deletePrivateMessage  (optional)
      * @return [PrivateMessageResponse]
      */
     @POST("private_message/delete")
-    suspend fun deletePrivateMessage(@Query("private_message_id") privateMessageId: java.math.BigDecimal, @Query("deleted") deleted: Boolean): Response<PrivateMessageResponse>
+    suspend fun deletePrivateMessage(@Body deletePrivateMessage: DeletePrivateMessage? = null): Response<PrivateMessageResponse>
 
     /**
      * Distinguishes a comment (speak as moderator)
@@ -295,12 +320,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param distinguished 
+     * @param distinguishComment  (optional)
      * @return [CommentResponse]
      */
     @POST("comment/distinguish")
-    suspend fun distinguishComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("distinguished") distinguished: Boolean): Response<CommentResponse>
+    suspend fun distinguishComment(@Body distinguishComment: DistinguishComment? = null): Response<CommentResponse>
 
     /**
      * Edit a community.
@@ -308,18 +332,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param title  (optional)
-     * @param description  (optional)
-     * @param icon  (optional)
-     * @param banner  (optional)
-     * @param nsfw  (optional)
-     * @param postingRestrictedToMods  (optional)
-     * @param discussionLanguages  (optional)
+     * @param editCommunity  (optional)
      * @return [CommunityResponse]
      */
     @PUT("community")
-    suspend fun editCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("title") title: String? = null, @Query("description") description: String? = null, @Query("icon") icon: String? = null, @Query("banner") banner: String? = null, @Query("nsfw") nsfw: Boolean? = null, @Query("posting_restricted_to_mods") postingRestrictedToMods: Boolean? = null, @Query("discussion_languages") discussionLanguages: List<BigDecimal>? = null): Response<CommunityResponse>
+    suspend fun editCommunity(@Body editCommunity: EditCommunity? = null): Response<CommunityResponse>
 
     /**
      * Edit an existing custom emoji
@@ -327,15 +344,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param id 
-     * @param category 
-     * @param imageUrl 
-     * @param altText 
-     * @param keywords 
+     * @param editCustomEmoji  (optional)
      * @return [CustomEmojiResponse]
      */
     @PUT("custom_emoji")
-    suspend fun editCustomEmoji(@Query("id") id: java.math.BigDecimal, @Query("category") category: String, @Query("image_url") imageUrl: String, @Query("alt_text") altText: String, @Query("keywords") keywords: List<String>): Response<CustomEmojiResponse>
+    suspend fun editCustomEmoji(@Body editCustomEmoji: EditCustomEmoji? = null): Response<CustomEmojiResponse>
 
     /**
      * Edit a post.
@@ -343,16 +356,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param name  (optional)
-     * @param url  (optional)
-     * @param body  (optional)
-     * @param nsfw  (optional)
-     * @param languageId  (optional)
+     * @param editPost  (optional)
      * @return [PostResponse]
      */
     @PUT("post")
-    suspend fun editPost(@Query("post_id") postId: java.math.BigDecimal, @Query("name") name: String? = null, @Query("url") url: String? = null, @Query("body") body: String? = null, @Query("nsfw") nsfw: Boolean? = null, @Query("language_id") languageId: java.math.BigDecimal? = null): Response<PostResponse>
+    suspend fun editPost(@Body editPost: EditPost? = null): Response<PostResponse>
 
     /**
      * Edit a private message.
@@ -360,12 +368,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param privateMessageId 
-     * @param content 
+     * @param editPrivateMessage  (optional)
      * @return [PrivateMessageResponse]
      */
     @PUT("private_message")
-    suspend fun editPrivateMessage(@Query("private_message_id") privateMessageId: java.math.BigDecimal, @Query("content") content: String): Response<PrivateMessageResponse>
+    suspend fun editPrivateMessage(@Body editPrivateMessage: EditPrivateMessage? = null): Response<PrivateMessageResponse>
 
     /**
      * Edit your site.
@@ -373,50 +380,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param name  (optional)
-     * @param sidebar  (optional)
-     * @param description  (optional)
-     * @param icon  (optional)
-     * @param banner  (optional)
-     * @param enableDownvotes  (optional)
-     * @param enableNsfw  (optional)
-     * @param communityCreationAdminOnly  (optional)
-     * @param requireEmailVerification  (optional)
-     * @param applicationQuestion  (optional)
-     * @param privateInstance  (optional)
-     * @param defaultTheme  (optional)
-     * @param defaultPostListingType  (optional)
-     * @param legalInformation  (optional)
-     * @param applicationEmailAdmins  (optional)
-     * @param hideModlogModNames  (optional)
-     * @param discussionLanguages  (optional)
-     * @param slurFilterRegex  (optional)
-     * @param actorNameMaxLength  (optional)
-     * @param rateLimitMessage  (optional)
-     * @param rateLimitMessagePerSecond  (optional)
-     * @param rateLimitPost  (optional)
-     * @param rateLimitPostPerSecond  (optional)
-     * @param rateLimitRegister  (optional)
-     * @param rateLimitRegisterPerSecond  (optional)
-     * @param rateLimitImage  (optional)
-     * @param rateLimitImagePerSecond  (optional)
-     * @param rateLimitComment  (optional)
-     * @param rateLimitCommentPerSecond  (optional)
-     * @param rateLimitSearch  (optional)
-     * @param rateLimitSearchPerSecond  (optional)
-     * @param federationEnabled  (optional)
-     * @param federationDebug  (optional)
-     * @param captchaEnabled  (optional)
-     * @param captchaDifficulty  (optional)
-     * @param allowedInstances  (optional)
-     * @param blockedInstances  (optional)
-     * @param taglines  (optional)
-     * @param registrationMode  (optional)
-     * @param reportsEmailAdmins  (optional)
+     * @param editSite  (optional)
      * @return [SiteResponse]
      */
     @PUT("site")
-    suspend fun editSite(@Query("name") name: String? = null, @Query("sidebar") sidebar: String? = null, @Query("description") description: String? = null, @Query("icon") icon: String? = null, @Query("banner") banner: String? = null, @Query("enable_downvotes") enableDownvotes: Boolean? = null, @Query("enable_nsfw") enableNsfw: Boolean? = null, @Query("community_creation_admin_only") communityCreationAdminOnly: Boolean? = null, @Query("require_email_verification") requireEmailVerification: Boolean? = null, @Query("application_question") applicationQuestion: String? = null, @Query("private_instance") privateInstance: Boolean? = null, @Query("default_theme") defaultTheme: String? = null, @Query("default_post_listing_type") defaultPostListingType: ListingType? = null, @Query("legal_information") legalInformation: String? = null, @Query("application_email_admins") applicationEmailAdmins: Boolean? = null, @Query("hide_modlog_mod_names") hideModlogModNames: Boolean? = null, @Query("discussion_languages") discussionLanguages: List<BigDecimal>? = null, @Query("slur_filter_regex") slurFilterRegex: String? = null, @Query("actor_name_max_length") actorNameMaxLength: java.math.BigDecimal? = null, @Query("rate_limit_message") rateLimitMessage: java.math.BigDecimal? = null, @Query("rate_limit_message_per_second") rateLimitMessagePerSecond: java.math.BigDecimal? = null, @Query("rate_limit_post") rateLimitPost: java.math.BigDecimal? = null, @Query("rate_limit_post_per_second") rateLimitPostPerSecond: java.math.BigDecimal? = null, @Query("rate_limit_register") rateLimitRegister: java.math.BigDecimal? = null, @Query("rate_limit_register_per_second") rateLimitRegisterPerSecond: java.math.BigDecimal? = null, @Query("rate_limit_image") rateLimitImage: java.math.BigDecimal? = null, @Query("rate_limit_image_per_second") rateLimitImagePerSecond: java.math.BigDecimal? = null, @Query("rate_limit_comment") rateLimitComment: java.math.BigDecimal? = null, @Query("rate_limit_comment_per_second") rateLimitCommentPerSecond: java.math.BigDecimal? = null, @Query("rate_limit_search") rateLimitSearch: java.math.BigDecimal? = null, @Query("rate_limit_search_per_second") rateLimitSearchPerSecond: java.math.BigDecimal? = null, @Query("federation_enabled") federationEnabled: Boolean? = null, @Query("federation_debug") federationDebug: Boolean? = null, @Query("captcha_enabled") captchaEnabled: Boolean? = null, @Query("captcha_difficulty") captchaDifficulty: String? = null, @Query("allowed_instances") allowedInstances: List<String>? = null, @Query("blocked_instances") blockedInstances: List<String>? = null, @Query("taglines") taglines: List<String>? = null, @Query("registration_mode") registrationMode: RegistrationMode? = null, @Query("reports_email_admins") reportsEmailAdmins: Boolean? = null): Response<SiteResponse>
+    suspend fun editSite(@Body editSite: EditSite? = null): Response<SiteResponse>
 
     /**
      * A moderator can feature a community post ( IE stick it to the top of a community ).
@@ -424,13 +392,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param featured 
-     * @param featureType 
+     * @param featurePost  (optional)
      * @return [PostResponse]
      */
     @POST("post/feature")
-    suspend fun featurePost(@Query("post_id") postId: java.math.BigDecimal, @Query("featured") featured: Boolean, @Query("feature_type") featureType: PostFeatureType): Response<PostResponse>
+    suspend fun featurePost(@Body featurePost: FeaturePost? = null): Response<PostResponse>
 
     /**
      * Follow / subscribe to a community.
@@ -438,12 +404,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param follow 
+     * @param followCommunity  (optional)
      * @return [CommunityResponse]
      */
     @POST("community/follow")
-    suspend fun followCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("follow") follow: Boolean): Response<CommunityResponse>
+    suspend fun followCommunity(@Body followCommunity: FollowCommunity? = null): Response<CommunityResponse>
 
     /**
      * Get a list of banned users
@@ -451,10 +416,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @return [BannedPersonsResponse]
      */
     @GET("user/banned")
-    suspend fun getBannedPersons(): Response<BannedPersonsResponse>
+    suspend fun getBannedPersons(@Query("auth") auth: kotlin.String): Response<BannedPersonsResponse>
 
     /**
      * Fetch a Captcha.
@@ -462,10 +428,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth  (optional)
      * @return [GetCaptchaResponse]
      */
     @GET("user/get_captcha")
-    suspend fun getCaptcha(): Response<GetCaptchaResponse>
+    suspend fun getCaptcha(@Query("auth") auth: kotlin.String? = null): Response<GetCaptchaResponse>
 
     /**
      * Get / fetch comment.
@@ -474,10 +441,11 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param id 
+     * @param auth  (optional)
      * @return [CommentResponse]
      */
     @GET("comment")
-    suspend fun getComment(@Query("id") id: java.math.BigDecimal): Response<CommentResponse>
+    suspend fun getComment(@Query("id") id: java.math.BigDecimal, @Query("auth") auth: kotlin.String? = null): Response<CommentResponse>
 
     /**
      * Get / fetch comments.
@@ -495,10 +463,11 @@ interface DefaultApi {
      * @param postId  (optional)
      * @param parentId  (optional)
      * @param savedOnly  (optional)
+     * @param auth  (optional)
      * @return [GetCommentsResponse]
      */
     @GET("comment/list")
-    suspend fun getComments(@Query("type_") type: ListingType? = null, @Query("sort") sort: CommentSortType? = null, @Query("max_depth") maxDepth: java.math.BigDecimal? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: String? = null, @Query("post_id") postId: java.math.BigDecimal? = null, @Query("parent_id") parentId: java.math.BigDecimal? = null, @Query("saved_only") savedOnly: Boolean? = null): Response<GetCommentsResponse>
+    suspend fun getComments(@Query("type_") type: ListingType? = null, @Query("sort") sort: CommentSortType? = null, @Query("max_depth") maxDepth: java.math.BigDecimal? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: kotlin.String? = null, @Query("post_id") postId: java.math.BigDecimal? = null, @Query("parent_id") parentId: java.math.BigDecimal? = null, @Query("saved_only") savedOnly: kotlin.Boolean? = null, @Query("auth") auth: kotlin.String? = null): Response<GetCommentsResponse>
 
     /**
      * Fetch federated instances.
@@ -506,10 +475,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth  (optional)
      * @return [GetFederatedInstancesResponse]
      */
     @GET("federated_instances")
-    suspend fun getFederatedInstances(): Response<GetFederatedInstancesResponse>
+    suspend fun getFederatedInstances(@Query("auth") auth: kotlin.String? = null): Response<GetFederatedInstancesResponse>
 
     /**
      * Get the modlog.
@@ -523,10 +493,11 @@ interface DefaultApi {
      * @param limit  (optional)
      * @param type  (optional)
      * @param otherPersonId  (optional)
+     * @param auth  (optional)
      * @return [GetModlogResponse]
      */
     @GET("modlog")
-    suspend fun getModlog(@Query("mod_person_id") modPersonId: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("type_") type: ModlogActionType? = null, @Query("other_person_id") otherPersonId: java.math.BigDecimal? = null): Response<GetModlogResponse>
+    suspend fun getModlog(@Query("mod_person_id") modPersonId: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("type_") type: ModlogActionType? = null, @Query("other_person_id") otherPersonId: java.math.BigDecimal? = null, @Query("auth") auth: kotlin.String? = null): Response<GetModlogResponse>
 
     /**
      * Get the details for a person.
@@ -541,10 +512,11 @@ interface DefaultApi {
      * @param limit  (optional)
      * @param communityId  (optional)
      * @param savedOnly  (optional)
+     * @param auth  (optional)
      * @return [GetPersonDetailsResponse]
      */
     @GET("user")
-    suspend fun getPersonDetails(@Query("person_id") personId: java.math.BigDecimal? = null, @Query("username") username: String? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("saved_only") savedOnly: Boolean? = null): Response<GetPersonDetailsResponse>
+    suspend fun getPersonDetails(@Query("person_id") personId: java.math.BigDecimal? = null, @Query("username") username: kotlin.String? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("saved_only") savedOnly: kotlin.Boolean? = null, @Query("auth") auth: kotlin.String? = null): Response<GetPersonDetailsResponse>
 
     /**
      * Get mentions for your user.
@@ -552,6 +524,7 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param sort  (optional)
      * @param page  (optional)
      * @param limit  (optional)
@@ -559,7 +532,7 @@ interface DefaultApi {
      * @return [GetPersonMentionsResponse]
      */
     @GET("user/mention")
-    suspend fun getPersonMentions(@Query("sort") sort: CommentSortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unread_only") unreadOnly: Boolean? = null): Response<GetPersonMentionsResponse>
+    suspend fun getPersonMentions(@Query("auth") auth: kotlin.String, @Query("sort") sort: CommentSortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unread_only") unreadOnly: kotlin.Boolean? = null): Response<GetPersonMentionsResponse>
 
     /**
      * Get / fetch posts, with various filters.
@@ -574,10 +547,11 @@ interface DefaultApi {
      * @param communityId  (optional)
      * @param communityName  (optional)
      * @param savedOnly  (optional)
+     * @param auth  (optional)
      * @return [GetPostsResponse]
      */
     @GET("post/list")
-    suspend fun getPosts(@Query("type_") type: ListingType? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: String? = null, @Query("saved_only") savedOnly: Boolean? = null): Response<GetPostsResponse>
+    suspend fun getPosts(@Query("type_") type: ListingType? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: kotlin.String? = null, @Query("saved_only") savedOnly: kotlin.Boolean? = null, @Query("auth") auth: kotlin.String? = null): Response<GetPostsResponse>
 
     /**
      * Get / fetch private messages.
@@ -585,13 +559,14 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param unreadOnly  (optional)
      * @param page  (optional)
      * @param limit  (optional)
      * @return [PrivateMessagesResponse]
      */
     @GET("private_message/list")
-    suspend fun getPrivateMessages(@Query("unread_only") unreadOnly: Boolean? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<PrivateMessagesResponse>
+    suspend fun getPrivateMessages(@Query("auth") auth: kotlin.String, @Query("unread_only") unreadOnly: kotlin.Boolean? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<PrivateMessagesResponse>
 
     /**
      * Get comment replies.
@@ -599,6 +574,7 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param sort  (optional)
      * @param page  (optional)
      * @param limit  (optional)
@@ -606,7 +582,7 @@ interface DefaultApi {
      * @return [GetRepliesResponse]
      */
     @GET("user/replies")
-    suspend fun getReplies(@Query("sort") sort: CommentSortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unread_only") unreadOnly: Boolean? = null): Response<GetRepliesResponse>
+    suspend fun getReplies(@Query("auth") auth: kotlin.String, @Query("sort") sort: CommentSortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unread_only") unreadOnly: kotlin.Boolean? = null): Response<GetRepliesResponse>
 
     /**
      * Get counts for your reports
@@ -614,11 +590,12 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param communityId  (optional)
      * @return [GetReportCountResponse]
      */
     @GET("user/report_count")
-    suspend fun getReportCount(@Query("community_id") communityId: java.math.BigDecimal? = null): Response<GetReportCountResponse>
+    suspend fun getReportCount(@Query("auth") auth: kotlin.String, @Query("community_id") communityId: java.math.BigDecimal? = null): Response<GetReportCountResponse>
 
     /**
      * Fetch metadata for any given site.
@@ -630,7 +607,7 @@ interface DefaultApi {
      * @return [GetSiteMetadataResponse]
      */
     @GET("post/site_metadata")
-    suspend fun getSiteMetadata(@Query("url") url: String): Response<GetSiteMetadataResponse>
+    suspend fun getSiteMetadata(@Query("url") url: kotlin.String): Response<GetSiteMetadataResponse>
 
     /**
      * Get your unread counts
@@ -638,10 +615,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @return [GetUnreadCountResponse]
      */
     @GET("user/unread_count")
-    suspend fun getUnreadCount(): Response<GetUnreadCountResponse>
+    suspend fun getUnreadCount(@Query("auth") auth: kotlin.String): Response<GetUnreadCountResponse>
 
     /**
      * Get the unread registration applications count.
@@ -649,10 +627,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @return [GetUnreadRegistrationApplicationCountResponse]
      */
     @GET("admin/registration_application/count")
-    suspend fun getUnreadRegistrationApplicationCount(): Response<GetUnreadRegistrationApplicationCountResponse>
+    suspend fun getUnreadRegistrationApplicationCount(@Query("auth") auth: kotlin.String): Response<GetUnreadRegistrationApplicationCountResponse>
 
     /**
      * Leave the Site admins.
@@ -660,10 +639,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param leaveAdmin  (optional)
      * @return [GetSiteResponse]
      */
     @POST("user/leave_admin")
-    suspend fun leaveAdmin(): Response<GetSiteResponse>
+    suspend fun leaveAdmin(@Body leaveAdmin: LeaveAdmin? = null): Response<GetSiteResponse>
 
     /**
      * Like / vote on a comment.
@@ -671,12 +651,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param score 
+     * @param createCommentLike  (optional)
      * @return [CommentResponse]
      */
     @POST("comment/like")
-    suspend fun likeComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("score") score: java.math.BigDecimal): Response<CommentResponse>
+    suspend fun likeComment(@Body createCommentLike: CreateCommentLike? = null): Response<CommentResponse>
 
     /**
      * Like / vote on a post.
@@ -684,12 +663,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param score 
+     * @param createPostLike  (optional)
      * @return [PostResponse]
      */
     @POST("post/like")
-    suspend fun likePost(@Query("post_id") postId: java.math.BigDecimal, @Query("score") score: java.math.BigDecimal): Response<PostResponse>
+    suspend fun likePost(@Body createPostLike: CreatePostLike? = null): Response<PostResponse>
 
     /**
      * List comment reports.
@@ -697,6 +675,7 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param page  (optional)
      * @param limit  (optional)
      * @param unresolvedOnly  (optional)
@@ -704,7 +683,7 @@ interface DefaultApi {
      * @return [ListCommentReportsResponse]
      */
     @GET("comment/report/list")
-    suspend fun listCommentReports(@Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: Boolean? = null, @Query("community_id") communityId: java.math.BigDecimal? = null): Response<ListCommentReportsResponse>
+    suspend fun listCommentReports(@Query("auth") auth: kotlin.String, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: kotlin.Boolean? = null, @Query("community_id") communityId: java.math.BigDecimal? = null): Response<ListCommentReportsResponse>
 
     /**
      * List communities, with various filters.
@@ -716,10 +695,11 @@ interface DefaultApi {
      * @param sort  (optional)
      * @param page  (optional)
      * @param limit  (optional)
+     * @param auth  (optional)
      * @return [ListCommunitiesResponse]
      */
     @GET("community/list")
-    suspend fun listCommunities(@Query("type_") type: ListingType? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<ListCommunitiesResponse>
+    suspend fun listCommunities(@Query("type_") type: ListingType? = null, @Query("sort") sort: SortType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("auth") auth: kotlin.String? = null): Response<ListCommunitiesResponse>
 
     /**
      * List post reports.
@@ -727,6 +707,7 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param page  (optional)
      * @param limit  (optional)
      * @param unresolvedOnly  (optional)
@@ -734,7 +715,7 @@ interface DefaultApi {
      * @return [ListPostReportsResponse]
      */
     @GET("post/report/list")
-    suspend fun listPostReports(@Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: Boolean? = null, @Query("community_id") communityId: java.math.BigDecimal? = null): Response<ListPostReportsResponse>
+    suspend fun listPostReports(@Query("auth") auth: kotlin.String, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: kotlin.Boolean? = null, @Query("community_id") communityId: java.math.BigDecimal? = null): Response<ListPostReportsResponse>
 
     /**
      * List private message reports.
@@ -742,13 +723,14 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param page  (optional)
      * @param limit  (optional)
      * @param unresolvedOnly  (optional)
      * @return [ListPrivateMessageReportsResponse]
      */
     @GET("private_message/report/list")
-    suspend fun listPrivateMessageReports(@Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: Boolean? = null): Response<ListPrivateMessageReportsResponse>
+    suspend fun listPrivateMessageReports(@Query("auth") auth: kotlin.String, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("unresolved_only") unresolvedOnly: kotlin.Boolean? = null): Response<ListPrivateMessageReportsResponse>
 
     /**
      * List the registration applications.
@@ -756,13 +738,14 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param auth 
      * @param unreadOnly  (optional)
      * @param page  (optional)
      * @param limit  (optional)
      * @return [ListRegistrationApplicationsResponse]
      */
     @GET("admin/registration_application/list")
-    suspend fun listRegistrationApplications(@Query("unread_only") unreadOnly: Boolean? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<ListRegistrationApplicationsResponse>
+    suspend fun listRegistrationApplications(@Query("auth") auth: kotlin.String, @Query("unread_only") unreadOnly: kotlin.Boolean? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<ListRegistrationApplicationsResponse>
 
     /**
      * A moderator can lock a post ( IE disable new comments ).
@@ -770,12 +753,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param locked 
+     * @param lockPost  (optional)
      * @return [PostResponse]
      */
     @POST("post/lock")
-    suspend fun lockPost(@Query("post_id") postId: java.math.BigDecimal, @Query("locked") locked: Boolean): Response<PostResponse>
+    suspend fun lockPost(@Body lockPost: LockPost? = null): Response<PostResponse>
 
     /**
      * Log into lemmy.
@@ -783,13 +765,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param usernameOrEmail 
-     * @param password 
-     * @param totp2faToken  (optional)
+     * @param login  (optional)
      * @return [LoginResponse]
      */
     @POST("user/login")
-    suspend fun login(@Query("username_or_email") usernameOrEmail: String, @Query("password") password: String, @Query("totp_2fa_token") totp2faToken: String? = null): Response<LoginResponse>
+    suspend fun login(@Body login: Login? = null): Response<LoginResponse>
 
     /**
      * Mark all replies as read.
@@ -797,10 +777,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
+     * @param markAllAsRead  (optional)
      * @return [GetRepliesResponse]
      */
     @POST("user/mark_all_as_read")
-    suspend fun markAllAsRead(): Response<GetRepliesResponse>
+    suspend fun markAllAsRead(@Body markAllAsRead: MarkAllAsRead? = null): Response<GetRepliesResponse>
 
     /**
      * Mark a comment as read.
@@ -808,12 +789,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentReplyId 
-     * @param read 
+     * @param markCommentReplyAsRead  (optional)
      * @return [CommentReplyResponse]
      */
     @POST("comment/mark_as_read")
-    suspend fun markCommentReplyAsRead(@Query("comment_reply_id") commentReplyId: java.math.BigDecimal, @Query("read") read: Boolean): Response<CommentReplyResponse>
+    suspend fun markCommentReplyAsRead(@Body markCommentReplyAsRead: MarkCommentReplyAsRead? = null): Response<CommentReplyResponse>
 
     /**
      * Mark a person mention as read.
@@ -821,12 +801,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param personMentionId 
-     * @param read 
+     * @param markPersonMentionAsRead  (optional)
      * @return [PersonMentionResponse]
      */
     @POST("user/mention/mark_as_read")
-    suspend fun markPersonMentionAsRead(@Query("person_mention_id") personMentionId: java.math.BigDecimal, @Query("read") read: Boolean): Response<PersonMentionResponse>
+    suspend fun markPersonMentionAsRead(@Body markPersonMentionAsRead: MarkPersonMentionAsRead? = null): Response<PersonMentionResponse>
 
     /**
      * Mark a post as read.
@@ -834,12 +813,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param read 
+     * @param markPostAsRead  (optional)
      * @return [PostResponse]
      */
     @POST("post/mark_as_read")
-    suspend fun markPostAsRead(@Query("post_id") postId: java.math.BigDecimal, @Query("read") read: Boolean): Response<PostResponse>
+    suspend fun markPostAsRead(@Body markPostAsRead: MarkPostAsRead? = null): Response<PostResponse>
 
     /**
      * Mark a private message as read.
@@ -847,12 +825,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param privateMessageId 
-     * @param read 
+     * @param markPrivateMessageAsRead  (optional)
      * @return [PrivateMessageResponse]
      */
     @POST("private_message/mark_as_read")
-    suspend fun markPrivateMessageAsRead(@Query("private_message_id") privateMessageId: java.math.BigDecimal, @Query("read") read: Boolean): Response<PrivateMessageResponse>
+    suspend fun markPrivateMessageAsRead(@Body markPrivateMessageAsRead: MarkPrivateMessageAsRead? = null): Response<PrivateMessageResponse>
 
     /**
      * Change your password from an email / token based reset.
@@ -860,13 +837,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param token 
-     * @param password 
-     * @param passwordVerify 
+     * @param passwordChangeAfterReset  (optional)
      * @return [LoginResponse]
      */
     @POST("user/password_change")
-    suspend fun passwordChangeAfterReset(@Query("token") token: String, @Query("password") password: String, @Query("password_verify") passwordVerify: String): Response<LoginResponse>
+    suspend fun passwordChangeAfterReset(@Body passwordChangeAfterReset: PasswordChangeAfterReset? = null): Response<LoginResponse>
 
     /**
      * Reset your password.
@@ -874,11 +849,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param email 
+     * @param passwordReset  (optional)
      * @return [kotlin.Any]
      */
     @POST("user/password_reset")
-    suspend fun passwordReset(@Query("email") email: String): Response<Any>
+    suspend fun passwordReset(@Body passwordReset: PasswordReset? = null): Response<kotlin.Any>
 
     /**
      * Purge / Delete a comment from the database.
@@ -886,12 +861,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param reason  (optional)
+     * @param purgeComment  (optional)
      * @return [PurgeItemResponse]
      */
     @POST("admin/purge/comment")
-    suspend fun purgeComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("reason") reason: String? = null): Response<PurgeItemResponse>
+    suspend fun purgeComment(@Body purgeComment: PurgeComment? = null): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a community from the database.
@@ -899,12 +873,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param reason  (optional)
+     * @param purgeCommunity  (optional)
      * @return [PurgeItemResponse]
      */
     @POST("admin/purge/community")
-    suspend fun purgeCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("reason") reason: String? = null): Response<PurgeItemResponse>
+    suspend fun purgeCommunity(@Body purgeCommunity: PurgeCommunity? = null): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a person from the database.
@@ -912,12 +885,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param personId 
-     * @param reason  (optional)
+     * @param purgePerson  (optional)
      * @return [PurgeItemResponse]
      */
     @POST("admin/purge/person")
-    suspend fun purgePerson(@Query("person_id") personId: java.math.BigDecimal, @Query("reason") reason: String? = null): Response<PurgeItemResponse>
+    suspend fun purgePerson(@Body purgePerson: PurgePerson? = null): Response<PurgeItemResponse>
 
     /**
      * Purge / Delete a post from the database.
@@ -925,12 +897,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param reason  (optional)
+     * @param purgePost  (optional)
      * @return [PurgeItemResponse]
      */
     @POST("admin/purge/post")
-    suspend fun purgePost(@Query("post_id") postId: java.math.BigDecimal, @Query("reason") reason: String? = null): Response<PurgeItemResponse>
+    suspend fun purgePost(@Body purgePost: PurgePost? = null): Response<PurgeItemResponse>
 
     /**
      * Register a new user.
@@ -938,19 +909,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param username 
-     * @param password 
-     * @param passwordVerify 
-     * @param showNsfw 
-     * @param email  (optional)
-     * @param captchaUuid  (optional)
-     * @param captchaAnswer  (optional)
-     * @param honeypot  (optional)
-     * @param answer  (optional)
+     * @param register  (optional)
      * @return [LoginResponse]
      */
     @POST("user/register")
-    suspend fun register(@Query("username") username: String, @Query("password") password: String, @Query("password_verify") passwordVerify: String, @Query("show_nsfw") showNsfw: Boolean, @Query("email") email: String? = null, @Query("captcha_uuid") captchaUuid: String? = null, @Query("captcha_answer") captchaAnswer: String? = null, @Query("honeypot") honeypot: String? = null, @Query("answer") answer: String? = null): Response<LoginResponse>
+    suspend fun register(@Body register: Register? = null): Response<LoginResponse>
 
     /**
      * A moderator remove for a comment.
@@ -958,13 +921,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param removed 
-     * @param reason  (optional)
+     * @param removeComment  (optional)
      * @return [CommentResponse]
      */
     @POST("comment/remove")
-    suspend fun removeComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("removed") removed: Boolean, @Query("reason") reason: String? = null): Response<CommentResponse>
+    suspend fun removeComment(@Body removeComment: RemoveComment? = null): Response<CommentResponse>
 
     /**
      * A moderator remove for a community.
@@ -972,14 +933,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param removed 
-     * @param reason  (optional)
-     * @param expires  (optional)
+     * @param removeCommunity  (optional)
      * @return [CommunityResponse]
      */
     @POST("community/remove")
-    suspend fun removeCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("removed") removed: Boolean, @Query("reason") reason: String? = null, @Query("expires") expires: java.math.BigDecimal? = null): Response<CommunityResponse>
+    suspend fun removeCommunity(@Body removeCommunity: RemoveCommunity? = null): Response<CommunityResponse>
 
     /**
      * A moderator remove for a post.
@@ -987,13 +945,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param removed 
-     * @param reason  (optional)
+     * @param removePost  (optional)
      * @return [PostResponse]
      */
     @POST("post/remove")
-    suspend fun removePost(@Query("post_id") postId: java.math.BigDecimal, @Query("removed") removed: Boolean, @Query("reason") reason: String? = null): Response<PostResponse>
+    suspend fun removePost(@Body removePost: RemovePost? = null): Response<PostResponse>
 
     /**
      * Resolve a comment report. Only a mod can do this.
@@ -1001,12 +957,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param reportId 
-     * @param resolved 
+     * @param resolveCommentReport  (optional)
      * @return [CommentReportResponse]
      */
     @PUT("comment/report/resolve")
-    suspend fun resolveCommentReport(@Query("report_id") reportId: java.math.BigDecimal, @Query("resolved") resolved: Boolean): Response<CommentReportResponse>
+    suspend fun resolveCommentReport(@Body resolveCommentReport: ResolveCommentReport? = null): Response<CommentReportResponse>
 
     /**
      * Fetch a non-local / federated object.
@@ -1015,10 +970,11 @@ interface DefaultApi {
      *  - 200: OK
      *
      * @param q 
+     * @param auth 
      * @return [ResolveObjectResponse]
      */
     @GET("resolve_object")
-    suspend fun resolveObject(@Query("q") q: String): Response<ResolveObjectResponse>
+    suspend fun resolveObject(@Query("q") q: kotlin.String, @Query("auth") auth: kotlin.String): Response<ResolveObjectResponse>
 
     /**
      * Resolve a post report. Only a mod can do this.
@@ -1026,12 +982,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param reportId 
-     * @param resolved 
+     * @param resolvePostReport  (optional)
      * @return [PostReportResponse]
      */
     @PUT("post/report/resolve")
-    suspend fun resolvePostReport(@Query("report_id") reportId: java.math.BigDecimal, @Query("resolved") resolved: Boolean): Response<PostReportResponse>
+    suspend fun resolvePostReport(@Body resolvePostReport: ResolvePostReport? = null): Response<PostReportResponse>
 
     /**
      * Resolve a report for a private message.
@@ -1039,12 +994,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param reportId 
-     * @param resolved 
+     * @param resolvePrivateMessageReport  (optional)
      * @return [PrivateMessageReportResponse]
      */
     @PUT("private_message/report/resolve")
-    suspend fun resolvePrivateMessageReport(@Query("report_id") reportId: java.math.BigDecimal, @Query("resolved") resolved: Boolean): Response<PrivateMessageReportResponse>
+    suspend fun resolvePrivateMessageReport(@Body resolvePrivateMessageReport: ResolvePrivateMessageReport? = null): Response<PrivateMessageReportResponse>
 
     /**
      * Save a comment.
@@ -1052,12 +1006,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param commentId 
-     * @param save 
+     * @param saveComment  (optional)
      * @return [CommentResponse]
      */
     @PUT("comment/save")
-    suspend fun saveComment(@Query("comment_id") commentId: java.math.BigDecimal, @Query("save") save: Boolean): Response<CommentResponse>
+    suspend fun saveComment(@Body saveComment: SaveComment? = null): Response<CommentResponse>
 
     /**
      * Save a post.
@@ -1065,12 +1018,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param postId 
-     * @param save 
+     * @param savePost  (optional)
      * @return [PostResponse]
      */
     @PUT("post/save")
-    suspend fun savePost(@Query("post_id") postId: java.math.BigDecimal, @Query("save") save: Boolean): Response<PostResponse>
+    suspend fun savePost(@Body savePost: SavePost? = null): Response<PostResponse>
 
     /**
      * Save your user settings.
@@ -1078,30 +1030,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param showNsfw  (optional)
-     * @param showScores  (optional)
-     * @param theme  (optional)
-     * @param defaultSortType  (optional)
-     * @param defaultListingType  (optional)
-     * @param interfaceLanguage  (optional)
-     * @param avatar  (optional)
-     * @param banner  (optional)
-     * @param displayName  (optional)
-     * @param email  (optional)
-     * @param bio  (optional)
-     * @param matrixUserId  (optional)
-     * @param showAvatars  (optional)
-     * @param sendNotificationsToEmail  (optional)
-     * @param botAccount  (optional)
-     * @param showBotAccounts  (optional)
-     * @param showReadPosts  (optional)
-     * @param showNewPostNotifs  (optional)
-     * @param discussionLanguages  (optional)
-     * @param generateTotp2fa  (optional)
+     * @param saveUserSettings  (optional)
      * @return [LoginResponse]
      */
     @PUT("user/save_user_settings")
-    suspend fun saveUserSettings(@Query("show_nsfw") showNsfw: Boolean? = null, @Query("show_scores") showScores: Boolean? = null, @Query("theme") theme: String? = null, @Query("default_sort_type") defaultSortType: SortType? = null, @Query("default_listing_type") defaultListingType: ListingType? = null, @Query("interface_language") interfaceLanguage: String? = null, @Query("avatar") avatar: String? = null, @Query("banner") banner: String? = null, @Query("display_name") displayName: String? = null, @Query("email") email: String? = null, @Query("bio") bio: String? = null, @Query("matrix_user_id") matrixUserId: String? = null, @Query("show_avatars") showAvatars: Boolean? = null, @Query("send_notifications_to_email") sendNotificationsToEmail: Boolean? = null, @Query("bot_account") botAccount: Boolean? = null, @Query("show_bot_accounts") showBotAccounts: Boolean? = null, @Query("show_read_posts") showReadPosts: Boolean? = null, @Query("show_new_post_notifs") showNewPostNotifs: Boolean? = null, @Query("discussion_languages") discussionLanguages: List<BigDecimal>? = null, @Query("generate_totp_2fa") generateTotp2fa: Boolean? = null): Response<LoginResponse>
+    suspend fun saveUserSettings(@Body saveUserSettings: SaveUserSettings? = null): Response<LoginResponse>
 
     /**
      * Search lemmy.
@@ -1118,10 +1051,11 @@ interface DefaultApi {
      * @param listingType  (optional)
      * @param page  (optional)
      * @param limit  (optional)
+     * @param auth  (optional)
      * @return [SearchResponse]
      */
     @GET("search")
-    suspend fun search(@Query("q") q: String, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: String? = null, @Query("creator_id") creatorId: java.math.BigDecimal? = null, @Query("type_") type: SearchType? = null, @Query("sort") sort: SortType? = null, @Query("listing_type") listingType: ListingType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null): Response<SearchResponse>
+    suspend fun search(@Query("q") q: kotlin.String, @Query("community_id") communityId: java.math.BigDecimal? = null, @Query("community_name") communityName: kotlin.String? = null, @Query("creator_id") creatorId: java.math.BigDecimal? = null, @Query("type_") type: SearchType? = null, @Query("sort") sort: SortType? = null, @Query("listing_type") listingType: ListingType? = null, @Query("page") page: java.math.BigDecimal? = null, @Query("limit") limit: java.math.BigDecimal? = null, @Query("auth") auth: kotlin.String? = null): Response<SearchResponse>
 
     /**
      * Transfer your community to an existing moderator.
@@ -1129,12 +1063,11 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param communityId 
-     * @param personId 
+     * @param transferCommunity  (optional)
      * @return [GetCommunityResponse]
      */
     @POST("community/transfer")
-    suspend fun transferCommunity(@Query("community_id") communityId: java.math.BigDecimal, @Query("person_id") personId: java.math.BigDecimal): Response<GetCommunityResponse>
+    suspend fun transferCommunity(@Body transferCommunity: TransferCommunity? = null): Response<GetCommunityResponse>
 
     /**
      * Verify your email
@@ -1142,10 +1075,10 @@ interface DefaultApi {
      * Responses:
      *  - 200: OK
      *
-     * @param token 
+     * @param verifyEmail  (optional)
      * @return [kotlin.Any]
      */
     @POST("user/verify_email")
-    suspend fun verifyEmail(@Query("token") token: String): Response<Any>
+    suspend fun verifyEmail(@Body verifyEmail: VerifyEmail? = null): Response<kotlin.Any>
 
 }

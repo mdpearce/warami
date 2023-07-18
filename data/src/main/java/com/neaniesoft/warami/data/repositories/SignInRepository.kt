@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.data.repositories
 
 import com.neaniesoft.warami.api.di.AuthToken
+import com.neaniesoft.warami.api.models.Login
 import com.neaniesoft.warami.common.RemoteResult
 import com.neaniesoft.warami.data.di.DatabaseScope
 import me.tatarka.inject.annotations.Inject
@@ -14,7 +15,7 @@ class SignInRepository(private val apiRepository: ApiRepository, private val aut
         val api = apiRepository.api.value
 
         return try {
-            val body = api.login(usernameOrEmail, password).body()
+            val body = api.login(Login(usernameOrEmail, password)).body()
             if (body == null) {
                 RemoteResult.Err(IllegalStateException("Response body was null"))
             } else {

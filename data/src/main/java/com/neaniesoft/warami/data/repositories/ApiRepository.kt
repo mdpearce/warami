@@ -19,7 +19,7 @@ import me.tatarka.inject.annotations.Inject
 @DatabaseScope
 @Inject
 class ApiRepository(
-    private val apiClientFn: (baseUrl: String, authToken: AuthToken) -> ApiClient,
+    private val apiClientFn: (baseUrl: String) -> ApiClient,
     private val instanceSettingsRepository: InstanceSettingsRepository,
     private val authRepository: AuthRepository,
 ) {
@@ -27,7 +27,7 @@ class ApiRepository(
     private val scope = CoroutineScope(Dispatchers.Default)
 
     private val _api: MutableStateFlow<DefaultApi> =
-        MutableStateFlow(apiClientFn("http://localhost/", AuthToken("")).createService(DefaultApi::class.java))
+        MutableStateFlow(apiClientFn("http://localhost/").createService(DefaultApi::class.java))
     val api = _api.asStateFlow()
 
     init {
@@ -53,7 +53,6 @@ class ApiRepository(
         _api.emit(
             apiClientFn(
                 baseUrl.value,
-                authToken ?: AuthToken(""),
             ).createService(DefaultApi::class.java),
         )
     }
