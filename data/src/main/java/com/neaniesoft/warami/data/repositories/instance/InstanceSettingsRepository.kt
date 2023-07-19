@@ -7,6 +7,8 @@ import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.InstanceSettings
 import com.neaniesoft.warami.data.di.DatabaseScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
@@ -17,7 +19,7 @@ class InstanceSettingsRepository(context: Context) {
 
     fun currentInstanceName(): Flow<String> = dataStore.data.map { it.instanceName }
 
-    fun currentInstanceBaseUrl(): Flow<UriString> = dataStore.data.map { UriString(it.instanceBaseUrl) }
+    fun currentInstanceBaseUrl(): Flow<UriString> = dataStore.data.map { UriString(it.instanceBaseUrl) }.filterNot { it == UriString("") }
 
     suspend fun setInstance(name: String, baseUrl: UriString) {
         dataStore.updateData { currentInstanceSettings ->

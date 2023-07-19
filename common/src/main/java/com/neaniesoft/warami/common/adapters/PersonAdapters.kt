@@ -5,6 +5,7 @@ import com.neaniesoft.warami.common.models.InstanceId
 import com.neaniesoft.warami.common.models.PersonId
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 fun ApiPerson.toDomain(): DomainPerson {
@@ -12,7 +13,7 @@ fun ApiPerson.toDomain(): DomainPerson {
         id = PersonId(id.intValueExact()),
         name = name,
         isBanned = banned,
-        publishedAt = LocalDateTime.parse(published, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+        publishedAt = LocalDateTime.parse(published, DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")),
         actorId = ActorId(actorId),
         isLocal = local,
         isDeleted = deleted,
@@ -21,7 +22,7 @@ fun ApiPerson.toDomain(): DomainPerson {
         instanceId = InstanceId(instanceId.intValueExact()),
         displayName = displayName,
         avatarUrl = avatar?.let { UriString(it) },
-        updatedAt = updated?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) },
+        updatedAt = updated?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")) },
         bio = bio,
         bannerUrl = banner?.let { UriString(it) },
         matrixUserId = matrixUserId,
@@ -29,7 +30,7 @@ fun ApiPerson.toDomain(): DomainPerson {
             LocalDateTime.parse(
                 it,
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-            )
+            ).atZone(ZoneId.of("UTC"))
         },
     )
 }

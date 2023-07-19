@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.common.models
 
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 data class Post(
@@ -11,7 +10,7 @@ data class Post(
     val community: Community,
     val isRemoved: Boolean,
     val isLocked: Boolean,
-    val publishedAt: LocalDateTime,
+    val publishedAt: ZonedDateTime,
     val isDeleted: Boolean,
     val isNsfw: Boolean,
     val apId: String,
@@ -20,7 +19,7 @@ data class Post(
     val isFeaturedCommunity: Boolean,
     val url: UriString?,
     val body: String?,
-    val updatedAt: LocalDateTime?,
+    val updatedAt: ZonedDateTime?,
     val embedTitle: String?,
     val embedDescription: String?,
     val thumbnail: UriString?,
@@ -45,6 +44,7 @@ operator fun PageNumber.plus(other: Int): PageNumber {
 operator fun PageNumber.minus(other: Int): PageNumber {
     return PageNumber(value - other)
 }
+
 operator fun PageNumber.compareTo(other: Int): Int {
     return value.compareTo(other)
 }

@@ -154,7 +154,7 @@ class PostRepository(
                     name = name,
                     title = title,
                     isRemoved = isRemoved.toLong(),
-                    published = publishedAt.format(localDateTimeFormatter),
+                    published = publishedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     isDeleted = isDeleted.toLong(),
                     isNsfw = isNsfw.toLong(),
                     actorId = actorId.value,
@@ -163,7 +163,7 @@ class PostRepository(
                     isPostingRestrictedToMods = isPostingRestrictedToMods.toLong(),
                     instanceId = instanceId.value.toLong(),
                     description = description,
-                    updatedAt = updatedAt?.format(localDateTimeFormatter),
+                    updatedAt = updatedAt?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     iconUrl = icon?.value,
                     bannerUrl = banner?.value,
                     id = id.value.toLong(),
@@ -174,7 +174,7 @@ class PostRepository(
                 personQueries.upsert(
                     name = name,
                     isBanned = isBanned.toLong(),
-                    publishedAt = publishedAt.format(localDateTimeFormatter),
+                    publishedAt = publishedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     actorId = actorId.value,
                     isLocal = isLocal.toLong(),
                     isDeleted = isDeleted.toLong(),
@@ -182,11 +182,11 @@ class PostRepository(
                     instanceId = instanceId.value.toLong(),
                     displayName = displayName,
                     avatarUrl = avatarUrl?.value,
-                    updatedAt = updatedAt?.format(localDateTimeFormatter),
+                    updatedAt = updatedAt?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     bio = bio,
                     bannerUrl = bannerUrl?.value,
                     matrixUserId = matrixUserId,
-                    banExpires = banExpiresAt?.format(localDateTimeFormatter),
+                    banExpires = banExpiresAt?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     id = id.value.toLong(),
                     isBotAccount = isBotAccount.toLong(),
                 )
@@ -199,9 +199,9 @@ class PostRepository(
                     score = score.toLong(),
                     upVotes = votes.up.toLong(),
                     downVotes = votes.down.toLong(),
-                    publishedAt = publishedAt.format(localDateTimeFormatter),
-                    newestCommentTimeNecro = newestCommentTimeNecro.format(localDateTimeFormatter),
-                    newestCommentTime = newestComment.format(localDateTimeFormatter),
+                    publishedAt = publishedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                    newestCommentTimeNecro = newestCommentTimeNecro.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                    newestCommentTime = newestComment.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                     isFeaturedCommunity = isFeaturedCommunity.toLong(),
                     isFeaturedLocal = isFeaturedLocal.toLong(),
                     hotRank = hotRank.toLong(),
@@ -222,7 +222,7 @@ class PostRepository(
             }
 
             with(post) {
-                postQueries.insert(this.toDb(localDateTimeFormatter))
+                postQueries.insert(this.toDb())
             }
         }
     }
