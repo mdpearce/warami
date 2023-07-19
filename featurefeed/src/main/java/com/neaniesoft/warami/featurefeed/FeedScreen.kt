@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -13,16 +12,20 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.neaniesoft.warami.common.extensions.formatPeriod
 import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import me.tatarka.inject.annotations.Inject
+import java.time.ZoneId
 
 typealias FeedScreen = @Composable () -> Unit
 
@@ -44,6 +47,8 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
         onRefresh = { posts.refresh() },
     )
 
+    val currentTime by viewModel.currentTime.collectAsState()
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             state = listState,
@@ -57,7 +62,12 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                     PostCard(
                         communityName = post.community.name,
                         creatorName = post.creator.name,
-                        postedTime = "12h",
+                        postedTime = post.publishedAt.formatPeriod(
+                            resources = LocalContext.current.resources,
+                            comparison = currentTime.atZone(
+                                ZoneId.systemDefault(),
+                            ),
+                        ),
                         communityThumbnailUri = post.community.icon,
                         postTitle = post.name,
                         postThumbnailUri = post.thumbnail,
@@ -71,7 +81,8 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
             if (posts.loadState.append == LoadState.Loading) {
                 item {
                     CircularProgressIndicator(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .wrapContentWidth(Alignment.CenterHorizontally),
                     )
                 }

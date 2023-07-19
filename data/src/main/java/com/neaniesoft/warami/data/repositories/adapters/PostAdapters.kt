@@ -33,7 +33,7 @@ fun SelectBySearchParams.toDomain(
         name = communityName,
         title = communityTitle,
         isRemoved = communityIsRemoved.toBoolean(),
-        publishedAt = communityPublished.parseLocalDateTime(),
+        publishedAt = communityPublished.parseZonedDateTime(),
         isDeleted = communityIsDeleted.toBoolean(),
         isNsfw = communityIsNsfw.toBoolean(),
         actorId = ActorId(communityActorId),
@@ -42,7 +42,7 @@ fun SelectBySearchParams.toDomain(
         isPostingRestrictedToMods = communityIsPostingRestrictedToMods.toBoolean(),
         instanceId = InstanceId(communityInstanceId.toInt()),
         description = communityDescription,
-        updatedAt = communityUpdatedAt?.parseLocalDateTime(),
+        updatedAt = communityUpdatedAt?.parseZonedDateTime(),
         icon = communityIconUrl?.let { UriString(it) },
         banner = communityBannerUrl?.let { UriString(it) },
     )
@@ -50,7 +50,7 @@ fun SelectBySearchParams.toDomain(
         id = PersonId(creatorId.toInt()),
         name = creatorName,
         isBanned = creatorIsBanned.toBoolean(),
-        publishedAt = creatorPublishedAt.parseLocalDateTime(),
+        publishedAt = creatorPublishedAt.parseZonedDateTime(),
         actorId = ActorId(creatorActorId),
         isLocal = creatorIsLocal.toBoolean(),
         isDeleted = creatorIsDeleted.toBoolean(),
@@ -59,11 +59,11 @@ fun SelectBySearchParams.toDomain(
         instanceId = InstanceId(creatorInstanceId.toInt()),
         displayName = creatorDisplayName,
         avatarUrl = creatorAvatarUrl?.let { UriString(it) },
-        updatedAt = creatorUpdatedAt?.parseLocalDateTime(),
+        updatedAt = creatorUpdatedAt?.parseZonedDateTime(),
         bio = creatorBio,
         bannerUrl = creatorBannerUrl?.let { UriString(it) },
         matrixUserId = creatorMatrixUserId,
-        banExpiresAt = creatorBanExpires?.parseLocalDateTime(),
+        banExpiresAt = creatorBanExpires?.parseZonedDateTime(),
     )
     val counts = PostAggregates(
         id = aggregates.toInt(),
@@ -71,9 +71,9 @@ fun SelectBySearchParams.toDomain(
         commentCount = countsComments.toInt(),
         score = countsScore.toInt(),
         votes = Votes(up = countsUpVotes.toInt(), down = countsDownVotes.toInt()),
-        publishedAt = countsPublishedAt.parseLocalDateTime(),
-        newestCommentTimeNecro = countsNewestCommentTime.parseLocalDateTime(),
-        newestComment = countsNewestCommentTime.parseLocalDateTime(),
+        publishedAt = countsPublishedAt.parseZonedDateTime(),
+        newestCommentTimeNecro = countsNewestCommentTime.parseZonedDateTime(),
+        newestComment = countsNewestCommentTime.parseZonedDateTime(),
         isFeaturedCommunity = countsIsFeaturedCommunity.toBoolean(),
         isFeaturedLocal = countsIsFeaturedLocal.toBoolean(),
         hotRank = countsHotRank.toInt(),
@@ -88,7 +88,7 @@ fun SelectBySearchParams.toDomain(
         community = community,
         isRemoved = isRemoved.toBoolean(),
         isLocked = isLocked.toBoolean(),
-        publishedAt = publishedAt.parseLocalDateTime(),
+        publishedAt = publishedAt.parseZonedDateTime(),
         isDeleted = isDeleted.toBoolean(),
         isNsfw = isNsfw.toBoolean(),
         apId = apId,
@@ -97,7 +97,7 @@ fun SelectBySearchParams.toDomain(
         isFeaturedCommunity = isFeaturedCommunity.toBoolean(),
         url = url?.let { UriString(it) },
         body = body,
-        updatedAt = updatedAt?.parseLocalDateTime(),
+        updatedAt = updatedAt?.parseZonedDateTime(),
         embedTitle = embedTitle,
         embedDescription = embedDescription,
         thumbnail = thumbnailUrl?.let { UriString(it) },
@@ -115,7 +115,7 @@ fun SelectBySearchParams.toDomain(
 
 typealias DbPost = com.neaniesoft.warami.data.db.Post
 
-fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
+fun DomainPost.toDb(): DbPost {
     return DbPost(
         id = 0,
         postId = postId.value.toLong(),
@@ -125,7 +125,7 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
         communityId = community.id.value.toLong(),
         isRemoved = isRemoved.toLong(),
         isLocked = isLocked.toLong(),
-        publishedAt = publishedAt.format(formatter),
+        publishedAt = publishedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
         isDeleted = isDeleted.toLong(),
         isNsfw = isNsfw.toLong(),
         apId = apId,
@@ -134,7 +134,7 @@ fun DomainPost.toDb(formatter: DateTimeFormatter): DbPost {
         isFeaturedCommunity = isFeaturedCommunity.toLong(),
         url = url?.value,
         body = body,
-        updatedAt = updatedAt?.format(formatter),
+        updatedAt = updatedAt?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
         embedTitle = embedTitle,
         embedDescription = embedDescription,
         thumbnailUrl = thumbnail?.value,

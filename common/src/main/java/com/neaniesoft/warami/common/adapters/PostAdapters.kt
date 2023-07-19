@@ -7,6 +7,7 @@ import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -19,7 +20,7 @@ fun PostView.toDomain(searchParameters: PostSearchParameters, insertedAt: ZonedD
         community = community.toDomain(),
         isRemoved = post.removed,
         isLocked = post.locked,
-        publishedAt = LocalDateTime.parse(post.published, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+        publishedAt = LocalDateTime.parse(post.published, DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")),
         isDeleted = post.deleted,
         isNsfw = post.nsfw,
         apId = post.apId,
@@ -32,7 +33,7 @@ fun PostView.toDomain(searchParameters: PostSearchParameters, insertedAt: ZonedD
             LocalDateTime.parse(
                 it,
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-            )
+            ).atZone(ZoneId.of("UTC"))
         },
         embedTitle = post.embedTitle,
         embedDescription = post.embedDescription,

@@ -12,13 +12,20 @@ import com.neaniesoft.warami.domain.usecases.BuildPostSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetPagingDataForPostsUseCase
 import com.neaniesoft.warami.featurefeed.di.FeedScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
+import java.time.Clock
+import java.time.Instant
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Inject
 @FeedScope
 class FeedViewModel(
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
     getPagingData: GetPagingDataForPostsUseCase,
+    private val clock: Clock,
 ) : ViewModel() {
 
     private val searchParameters = MutableStateFlow(
@@ -29,6 +36,15 @@ class FeedViewModel(
     )
 
     val posts = getPagingData.invoke(searchParameters.value).cachedIn(viewModelScope)
+
+    private val _currentTime: MutableStateFlow<Instant> = MutableStateFlow(clock.instant())
+    val currentTime = _currentTime.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            initializeClock()
+        }
+    }
 
     fun onSearchParamsChanged(
         listingType: DomainListingType? = null,
@@ -44,5 +60,9 @@ class FeedViewModel(
             communityName,
             isSavedOnly,
         )
+    }
+
+    private suspend fun initializeClock() {
+        _currentTime.emit(clock.instant())
     }
 }

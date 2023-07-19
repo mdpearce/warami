@@ -6,6 +6,7 @@ import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.InstanceId
 import com.neaniesoft.warami.common.models.UriString
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 typealias ApiCommunity = Community
@@ -16,7 +17,7 @@ fun ApiCommunity.toDomain(): DomainCommunity = DomainCommunity(
     name = name,
     title = title,
     isRemoved = removed,
-    publishedAt = LocalDateTime.parse(published, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+    publishedAt = LocalDateTime.parse(published, DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")),
     isDeleted = deleted,
     isNsfw = nsfw,
     actorId = ActorId(actorId),
@@ -25,7 +26,7 @@ fun ApiCommunity.toDomain(): DomainCommunity = DomainCommunity(
     isPostingRestrictedToMods = postingRestrictedToMods,
     instanceId = InstanceId(instanceId.intValueExact()),
     description = description,
-    updatedAt = updated?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) },
+    updatedAt = updated?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")) },
     icon = icon?.let { UriString(it) },
     banner = banner?.let { UriString(it) },
 )

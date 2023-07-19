@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.common.models
 
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class PostAggregates(
     val id: Int,
@@ -8,9 +9,9 @@ data class PostAggregates(
     val commentCount: Int,
     val score: Int,
     val votes: Votes,
-    val publishedAt: LocalDateTime,
-    val newestCommentTimeNecro: LocalDateTime,
-    val newestComment: LocalDateTime,
+    val publishedAt: ZonedDateTime,
+    val newestCommentTimeNecro: ZonedDateTime,
+    val newestComment: ZonedDateTime,
     val isFeaturedCommunity: Boolean,
     val isFeaturedLocal: Boolean,
     val hotRank: Int,
