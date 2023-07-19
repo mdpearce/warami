@@ -21,6 +21,7 @@ import com.neaniesoft.warami.data.db.SelectBySearchParams
 import com.neaniesoft.warami.data.db.SelectPostsOffset
 import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.di.IODispatcher
+import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
@@ -39,7 +40,7 @@ typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 @Inject
 @DatabaseScope
 class PostRepository(
-    private val api: DefaultApi,
+    private val apiRepository: ApiRepository,
     private val postQueries: PostQueries,
     private val communityQueries: CommunityQueries,
     private val personQueries: PersonQueries,
@@ -53,6 +54,9 @@ class PostRepository(
     companion object {
         private const val POSTS_PER_PAGE = 20
     }
+
+    private val api: DefaultApi
+        get() = apiRepository.api.value
 
     private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
         this.toDomain(localDateTimeFormatter, searchParameters)

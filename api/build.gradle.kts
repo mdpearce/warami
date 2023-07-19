@@ -13,7 +13,7 @@ android {
         resValue(
             "string",
             "warami_base_url",
-            localProperties["com.neaniesoft.warami.api.baseUrl"] as String
+            localProperties["com.neaniesoft.warami.api.baseUrl"] as String,
         )
     }
 }
@@ -24,7 +24,7 @@ dependencies {
     api(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.retrofit.converter.scalars)
-    implementation(libs.okhttp)
+    api(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     ksp(libs.moshi.kotlin.codegen)
 }

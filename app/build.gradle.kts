@@ -5,6 +5,7 @@ plugins {
     kotlin("android")
     id("com.google.devtools.ksp")
     id("org.jmailen.kotlinter")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -60,6 +61,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":featurefeed"))
     implementation(project(":ui"))
+    implementation(project(":signin"))
 
     implementation(libs.kotlin.inject.runtime)
     ksp(libs.kotlin.inject.compiler)
@@ -73,6 +75,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation(libs.material)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-config-ktx")
+    implementation(libs.androidx.datastore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

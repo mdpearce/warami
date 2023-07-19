@@ -1,0 +1,135 @@
+CREATE TABLE instance (
+	id	INTEGER,
+	baseUrl TEXT NOT NULL,
+	url TEXT NOT NULL,
+	name TEXT NOT NULL,
+	description TEXT NOT NULL,
+	downVotes INTEGER,
+	hasNsfw INTEGER,
+	createAdmin INTEGER,
+	isPrivate INTEGER,
+	isFed INTEGER,
+	date TEXT NOT NULL,
+	version TEXT NOT NULL,
+	isOpen INTEGER NOT NULL,
+	iconUrl TEXT,
+	bannerUrl TEXT,
+	languages TEXT NOT NULL,
+	time INTEGER NOT NULL,
+	score INTEGER NOT NULL,
+	isSuspicious INTEGER NOT NULL,
+	usageTotalUsers INTEGER NOT NULL,
+	usageActiveHalfYear INTEGER NOT NULL,
+	usageActiveMonth INTEGER NOT NULL,
+	usageLocalPosts INTEGER NOT NULL,
+	usageLocalComments INTEGER NOT NULL,
+	countUsers INTEGER NOT NULL,
+	countPosts INTEGER NOT NULL,
+	countComments INTEGER NOT NULL,
+	countCommunities INTEGER NOT NULL,
+	countUsersActiveDay INTEGER NOT NULL,
+	countUsersActiveWeek INTEGER NOT NULL,
+	countUsersActiveMonth INTEGER NOT NULL,
+	countUsersActiveHalfYear INTEGER NOT NULL,
+	uptimeDomain TEXT,
+	uptimeLatency INTEGER,
+	uptimeCountryName TEXT,
+	uptimeAllTime REAL,
+	uptimeDateCreated TEXT,
+	uptimeDateUpdated TEXT,
+	uptimeDateLastStats TEXT,
+	uptimeScore INTEGER,
+	uptimeStatus INTEGER,
+	metricsUsersTotal INTEGER NOT NULL,
+	metricsUsersMonth INTEGER NOT NULL,
+	metricsUsersWeek INTEGER NOT NULL,
+	metricsTotalActivity INTEGER NOT NULL,
+	metricsLocalPosts INTEGER NOT NULL,
+	metricsLocalComments INTEGER NOT NULL ,
+	metricsAverageUsers REAL NOT NULL ,
+	metricsBiggestJump INTEGER NOT NULL,
+	metricsAveragePerMinute REAL NOT NULL ,
+	metricsUserActivityScore REAL NOT NULL,
+	metricsActivityUserScore REAL NOT NULL,
+	metricsUserActiveMonthScore REAL NOT NULL,
+	blocksIncoming INTEGER NOT NULL,
+	blocksOutgoing INTEGER NOT NULL,
+
+	PRIMARY KEY(id)
+);
+
+CREATE INDEX instance_id ON instance (
+	id
+);
+
+CREATE INDEX instance_name ON instance (
+	name
+);
+
+CREATE INDEX instance_score ON instance (
+	score
+);
+
+insert:
+INSERT INTO instance (
+	baseUrl,
+	url,
+	name,
+	description,
+	downVotes,
+	hasNsfw,
+	createAdmin,
+	isPrivate,
+	isFed,
+	date,
+	version,
+	isOpen,
+	iconUrl,
+	bannerUrl,
+	languages,
+	time,
+	score,
+	isSuspicious,
+	usageTotalUsers,
+	usageActiveHalfYear,
+	usageActiveMonth,
+	usageLocalPosts,
+	usageLocalComments,
+	countUsers,
+	countPosts,
+	countComments,
+	countCommunities,
+	countUsersActiveDay,
+	countUsersActiveWeek,
+	countUsersActiveMonth,
+	countUsersActiveHalfYear,
+	uptimeDomain,
+	uptimeLatency,
+	uptimeCountryName,
+	uptimeAllTime,
+	uptimeDateCreated,
+	uptimeDateUpdated,
+	uptimeDateLastStats,
+	uptimeScore,
+	uptimeStatus,
+	metricsUsersTotal,
+	metricsUsersMonth,
+	metricsUsersWeek,
+	metricsTotalActivity,
+	metricsLocalPosts,
+	metricsLocalComments,
+	metricsAverageUsers,
+	metricsBiggestJump,
+	metricsAveragePerMinute,
+	metricsUserActivityScore,
+	metricsActivityUserScore,
+	metricsUserActiveMonthScore,
+	blocksIncoming,
+	blocksOutgoing
+) VALUES ?;
+
+selectAll:
+SELECT * FROM instance;
+
+deleteAll:
+DELETE FROM instance;

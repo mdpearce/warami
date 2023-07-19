@@ -13,7 +13,12 @@ import com.neaniesoft.warami.domain.di.DomainComponent
 import com.neaniesoft.warami.domain.di.create
 import com.neaniesoft.warami.featurefeed.di.FeedComponent
 import com.neaniesoft.warami.featurefeed.di.create
+import com.neaniesoft.warami.signin.di.SignInComponent
+import com.neaniesoft.warami.signin.di.create
 import com.neaniesoft.warami.ui.WaramiApp
+import com.neaniesoft.warami.ui.di.UiComponent
+import com.neaniesoft.warami.ui.di.create
+import com.neaniesoft.warami.ui.nav.WaramiNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,21 +27,28 @@ class MainActivity : ComponentActivity() {
         val appComponent = buildAppComponent()
 
         setContent {
-            WaramiApp(appComponent.feedComponent.feedViewModelProvider)
+            WaramiApp(
+                appComponent.feedComponent.feedViewModelProvider,
+                appComponent.signInComponent.instanceSelectionViewModelProvider,
+                appComponent.signInComponent.signInViewModelProvider,
+                appComponent.uiComponent.homeViewModelProvider,
+            )
         }
     }
 
     private fun buildAppComponent(): AppComponent {
         val apiComponent = ApiComponent::class.create(WaramiApplication.getInstance())
         val databaseComponent = DatabaseComponent::class.create(apiComponent)
+        val domainComponent = DomainComponent::class.create(databaseComponent)
+        val feedComponent = FeedComponent::class.create(domainComponent)
+        val signInComponent = SignInComponent::class.create(databaseComponent, domainComponent, WaramiNavigator)
+        val uiComponent = UiComponent::class.create(feedComponent, signInComponent, WaramiNavigator)
 
         return AppComponent::class.create(
             databaseComponent = databaseComponent,
-            feedComponent = FeedComponent::class.create(
-                DomainComponent::class.create(
-                    dataComponent = databaseComponent,
-                ),
-            ),
+            feedComponent = feedComponent,
+            signInComponent = signInComponent,
+            uiComponent = uiComponent,
         )
     }
 }

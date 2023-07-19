@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="instance_selection_screen_title">Select an Instance</string>
+    <string name="sign_in_screen_title">Sign In</string>
+    <string name="username_text_field_hint">Username or Email</string>
+    <string name="password_text_field_hint">Password</string>
+    <string name="button_sign_in">Sign In</string>
+    <string name="error_dismiss">Dismiss</string>
+    <string name="unknown_error">An unknown error has occurred</string>
+    <string name="signing_in_to">Signing in to %1$s</string>
+    <string name="enter_instance_url">Instance URL</string>
+    <string name="instance_prefix">https://</string>
+</resources>

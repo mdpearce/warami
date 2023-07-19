@@ -105,7 +105,7 @@ fun PostHeaderRow(
                     .build(),
                 contentDescription = stringResource(id = R.string.content_description_community_icon),
                 placeholder = painterResource(id = R.drawable.baseline_circle_24),
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.size(24.dp),
             )
         }
@@ -148,12 +148,12 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?)
 fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
     if (thumbnailUrl != null) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).crossfade(true).build(),
+            model = ImageRequest.Builder(LocalContext.current).crossfade(true).data(thumbnailUrl.value).build(),
             contentDescription = stringResource(
                 id = R.string.content_description_post_thumbnail,
             ),
             placeholder = painterResource(id = R.drawable.placeholder),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(72.dp)
                 .clip(MaterialTheme.shapes.medium),

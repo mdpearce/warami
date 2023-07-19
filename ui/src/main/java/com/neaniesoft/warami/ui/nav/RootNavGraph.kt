@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.ui.nav
 
 import com.neaniesoft.warami.featurefeed.FeaturefeedNavGraph
+import com.neaniesoft.warami.signin.SigninNavGraph
 import com.neaniesoft.warami.ui.UiNavGraph
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.NavGraphSpec
@@ -13,5 +14,6 @@ object RootNavGraph : NavGraphSpec {
     override val nestedNavGraphs: List<NavGraphSpec> = listOf(
         UiNavGraph,
         FeaturefeedNavGraph,
+        SigninNavGraph,
     )
 }

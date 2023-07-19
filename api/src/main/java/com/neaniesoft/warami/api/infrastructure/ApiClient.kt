@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.api.infrastructure
 
-import com.neaniesoft.warami.api.auth.ApiKeyAuth
 
 import okhttp3.Call
 import okhttp3.Interceptor
@@ -49,21 +48,6 @@ class ApiClient(
 
     init {
         normalizeBaseUrl()
-    }
-
-    constructor(
-        baseUrl: String = defaultBasePath,
-        okHttpClientBuilder: OkHttpClient.Builder? = null,
-        serializerBuilder: Moshi.Builder = Serializer.moshiBuilder,
-        authNames: Array<String>
-    ) : this(baseUrl, okHttpClientBuilder, serializerBuilder) {
-        authNames.forEach { authName ->
-            val auth = when (authName) {
-                "AuthKey" -> ApiKeyAuth("query", "auth")
-                else -> throw RuntimeException("auth name $authName not found in available auth names")
-            }
-            addAuthorization(authName, auth)
-        }
     }
 
     /**
