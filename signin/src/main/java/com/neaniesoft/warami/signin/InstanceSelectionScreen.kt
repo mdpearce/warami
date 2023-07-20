@@ -165,9 +165,9 @@ fun InstanceSelectionScreenContent(
                                         )
                                         .background(
                                             if (instance == selectedRow) {
-                                                MaterialTheme.colorScheme.secondaryContainer
+                                                MaterialTheme.colorScheme.primaryContainer
                                             } else {
-                                                Color.Transparent
+                                                MaterialTheme.colorScheme.surface
                                             },
                                         ),
                                 ) {
@@ -182,7 +182,7 @@ fun InstanceSelectionScreenContent(
                                             text = instance.displayName,
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = if (instance == selectedRow) {
-                                                MaterialTheme.colorScheme.onSecondaryContainer
+                                                MaterialTheme.colorScheme.onPrimaryContainer
                                             } else {
                                                 MaterialTheme.colorScheme.onSurface
                                             },
