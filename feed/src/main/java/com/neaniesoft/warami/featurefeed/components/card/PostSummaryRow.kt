@@ -15,10 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.featurefeed.R
-import com.neaniesoft.warami.featurefeed.components.icons.rememberArrowDownward
-import com.neaniesoft.warami.featurefeed.components.icons.rememberArrowUpward
-import com.neaniesoft.warami.featurefeed.components.icons.rememberBookmark
-import com.neaniesoft.warami.featurefeed.components.icons.rememberModeComment
+import com.neaniesoft.warami.featurefeed.components.icons.PostIcons
 
 @Composable
 fun PostSummaryRow(commentCount: Int, score: Int) {
@@ -28,7 +25,7 @@ fun PostSummaryRow(commentCount: Int, score: Int) {
         modifier = Modifier.padding(16.dp),
     ) {
         Icon(
-            rememberModeComment(),
+            PostIcons.rememberModeComment(),
             contentDescription = stringResource(id = R.string.content_description_comments_icon),
             modifier = Modifier.size(24.dp),
         )
@@ -43,7 +40,7 @@ fun PostSummaryRow(commentCount: Int, score: Int) {
                 .padding(16.dp),
         )
         Icon(
-            rememberArrowUpward(),
+            PostIcons.rememberArrowUpward(),
             contentDescription = stringResource(id = R.string.content_description_upvote_icon),
             modifier = Modifier.size(24.dp),
         )
@@ -53,13 +50,13 @@ fun PostSummaryRow(commentCount: Int, score: Int) {
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
         )
         Icon(
-            rememberArrowDownward(),
+            PostIcons.rememberArrowDownward(),
             contentDescription = stringResource(R.string.content_description_down_vote_icon),
             modifier = Modifier.size(24.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Icon(
-            rememberBookmark(),
+            PostIcons.rememberBookmark(),
             contentDescription = stringResource(R.string.content_description_save_icon),
             modifier = Modifier
                 .size(24.dp),
