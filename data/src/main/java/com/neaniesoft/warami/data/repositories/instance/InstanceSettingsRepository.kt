@@ -7,7 +7,6 @@ import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.InstanceSettings
 import com.neaniesoft.warami.data.di.DatabaseScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
