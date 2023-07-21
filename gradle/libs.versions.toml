@@ -86,3 +86,4 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version =
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+compose-markdown = { module = "com.github.jeziellago:compose-markdown", version = "0.3.4" }

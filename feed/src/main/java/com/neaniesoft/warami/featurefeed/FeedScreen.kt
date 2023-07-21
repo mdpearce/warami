@@ -21,7 +21,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
 import com.neaniesoft.warami.common.viewModel
-import com.neaniesoft.warami.featurefeed.components.PostCard
+import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import me.tatarka.inject.annotations.Inject
@@ -74,6 +74,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                         postUri = post.url,
                         commentCount = post.aggregates.commentCount,
                         score = post.aggregates.score,
+                        embeddedText = post.body,
                     )
                 }
             }

@@ -144,9 +144,10 @@ fun InstanceSelectionScreenContent(
                     modifier = Modifier
                         .padding(24.dp)
                         .weight(0.1f),
-                    shape = MaterialTheme.shapes.medium, border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+                    shape = MaterialTheme.shapes.medium,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
 
-                    ) {
+                ) {
                     LazyColumn {
                         items(instances.size) { index ->
                             val instance = instances[index]
@@ -207,7 +208,6 @@ fun InstanceSelectionScreenContent(
                 }
             }
 
-
             TextField(
                 value = manualInstanceUrl,
                 onValueChange = {
@@ -236,10 +236,8 @@ fun InstanceSelectionScreenContent(
         }
 
         PullRefreshIndicator(refreshing = isRefreshing, state = pullRefreshState)
-
     }
 }
-
 
 @Preview
 @Composable
