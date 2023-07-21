@@ -76,6 +76,8 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                         commentCount = post.aggregates.commentCount,
                         score = post.aggregates.score,
                         embeddedText = post.body,
+                        isFeaturedInCommunity = post.aggregates.isFeaturedCommunity,
+                        isFeaturedInLocal = post.aggregates.isFeaturedLocal
                     )
                 }
             }

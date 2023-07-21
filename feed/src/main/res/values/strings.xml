@@ -9,4 +9,6 @@
     <string name="content_description_upvote_icon">Upvote Icon</string>
     <string name="content_description_down_vote_icon">Down Vote Icon</string>
     <string name="content_description_save_icon">Save Icon</string>
+    <string name="content_description_featured_community">Post is featured in community</string>
+    <string name="content_description_featured_local">Post is featured in local instance</string>
 </resources>

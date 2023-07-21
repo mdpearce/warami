@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -63,11 +64,13 @@ fun PostHeaderRow(
         }
         Text(
             text = communityName,
-            modifier = Modifier.padding(start = 8.dp),
+            modifier = Modifier.padding(start = 8.dp).weight(1.0f),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(0.1f))
         if (creatorAvatarUrl != null) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -99,7 +102,7 @@ fun PreviewPostHeaderRow() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             PostHeaderRow(
-                communityName = "Sample community",
+                communityName = "Sample community with an extremely long name to wrap on 2 lines",
                 creatorName = "John Doe",
                 creatorAvatarUrl = null,
                 postedTime = "12 hours",

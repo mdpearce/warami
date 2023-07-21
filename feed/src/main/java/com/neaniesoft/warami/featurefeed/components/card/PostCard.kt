@@ -28,6 +28,8 @@ fun PostCard(
     commentCount: Int,
     score: Int,
     embeddedText: String?,
+    isFeaturedInCommunity: Boolean,
+    isFeaturedInLocal: Boolean,
 ) {
     Card(
         onClick = {},
@@ -48,6 +50,8 @@ fun PostCard(
                     postTitle = postTitle,
                     thumbnailUrl = postThumbnailUri,
                     url = postUri,
+                    isFeaturedCommunity = isFeaturedInCommunity,
+                    isFeaturedLocal = isFeaturedInLocal,
                 )
 
                 if (!embeddedText.isNullOrEmpty()) {
@@ -76,6 +80,8 @@ fun PreviewPostCard() {
             376,
             2436,
             "Lorem ipsum foobar uhwef eakjf kje fksb kjf sieufh kswerjhgfiuwhrg wesn foje foih rdiu",
+            true,
+            true,
         )
     }
 }
