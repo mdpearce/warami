@@ -19,6 +19,7 @@ import com.neaniesoft.warami.common.models.UriString
 fun PostCard(
     communityName: String,
     creatorName: String,
+    creatorAvatar: UriString?,
     postedTime: String,
     communityThumbnailUri: UriString?,
     postTitle: String,
@@ -38,6 +39,7 @@ fun PostCard(
                 PostHeaderRow(
                     communityName = communityName,
                     creatorName = creatorName,
+                    creatorAvatarUrl = creatorAvatar,
                     postedTime = postedTime,
                     thumbnailUrl = communityThumbnailUri?.value,
                 )
@@ -65,6 +67,7 @@ fun PreviewPostCard() {
         PostCard(
             "communityName",
             "creatorName",
+            null,
             "12h",
             null,
             "Title of the post.",
