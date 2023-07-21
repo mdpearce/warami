@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 appComponent.signInComponent.instanceSelectionViewModelProvider,
                 appComponent.signInComponent.signInViewModelProvider,
                 appComponent.uiComponent.homeViewModelProvider,
+                appComponent.feedComponent.commentsViewModelProvider,
             )
         }
     }
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
         val apiComponent = ApiComponent::class.create(WaramiApplication.getInstance())
         val databaseComponent = DatabaseComponent::class.create(apiComponent)
         val domainComponent = DomainComponent::class.create(databaseComponent)
-        val feedComponent = FeedComponent::class.create(domainComponent)
+        val feedComponent = FeedComponent::class.create(domainComponent, WaramiNavigator)
         val signInComponent = SignInComponent::class.create(databaseComponent, domainComponent, WaramiNavigator)
         val uiComponent = UiComponent::class.create(feedComponent, signInComponent, WaramiNavigator)
 
