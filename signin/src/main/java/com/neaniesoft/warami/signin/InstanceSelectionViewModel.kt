@@ -62,7 +62,6 @@ class InstanceSelectionViewModel(
 
     fun onManualInstanceEdited(value: String) {
         viewModelScope.launch {
-            _selectedInstanceRow.emit(null)
             _manualInstanceUrl.emit(value)
         }
     }
@@ -71,10 +70,9 @@ class InstanceSelectionViewModel(
         onRefresh()
     }
 
-    fun selectRow(row: InstanceDisplay) {
+    fun selectRow(row: InstanceDisplay?) {
         viewModelScope.launch {
             _selectedInstanceRow.emit(row)
-            _manualInstanceUrl.emit("")
         }
     }
 

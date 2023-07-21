@@ -1,7 +1,8 @@
 package com.neaniesoft.warami.signin
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.ripple.rememberRipple
@@ -24,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -32,14 +34,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.common.models.UriString
@@ -50,7 +52,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 typealias InstanceSelectionScreen = @Composable () -> Unit
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @RootNavGraph(start = true)
 @Destination
@@ -95,17 +96,13 @@ fun InstanceSelectionScreenContent(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     selectedRow: InstanceDisplay? = null,
-    onRowSelected: (InstanceDisplay) -> Unit,
+    onRowSelected: (InstanceDisplay?) -> Unit,
     onSignInPressed: (InstanceDisplay?, String) -> Unit,
     onManualInstanceEdited: (String) -> Unit,
     manualInstanceUrl: String,
 ) {
     val pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = onRefresh)
-
-    val focusRequester = remember {
-        FocusRequester()
-    }
-    val focusManager = LocalFocusManager.current
+    var hideKeyboard by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -122,7 +119,7 @@ fun InstanceSelectionScreenContent(
             )
         },
         bottomBar = {
-            BottomAppBar() {
+            BottomAppBar {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
                     TextButton(
                         onClick = { onSignInPressed(selectedRow, manualInstanceUrl) },
@@ -134,100 +131,115 @@ fun InstanceSelectionScreenContent(
             }
         },
     ) { it ->
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            contentAlignment = Alignment.TopCenter,
+                .padding(it)
+                .clickable { hideKeyboard = true },
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column(verticalArrangement = Arrangement.SpaceBetween) {
-                if (instances.isNotEmpty()) {
-                    Surface(
-                        modifier = Modifier
-                            .padding(24.dp)
-                            .weight(0.1f),
-                        shape = MaterialTheme.shapes.medium,
-                        elevation = 4.dp,
+            val focusManager = LocalFocusManager.current
+
+            if (instances.isNotEmpty()) {
+                Surface(
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .weight(0.1f),
+                    shape = MaterialTheme.shapes.medium, border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+
                     ) {
-                        LazyColumn {
-                            items(instances.size) { index ->
-                                val instance = instances[index]
-                                Box(
-                                    modifier = Modifier
+                    LazyColumn {
+                        items(instances.size) { index ->
+                            val instance = instances[index]
+                            val interactionSource = remember { MutableInteractionSource() }
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        interactionSource = interactionSource,
+                                        indication = rememberRipple(bounded = true),
+                                        onClick = {
+                                            onRowSelected(instance)
+                                            onManualInstanceEdited("")
+                                            focusManager.clearFocus()
+                                        },
+                                    )
+                                    .focusable(true),
+                                color = if (instance == selectedRow) {
+                                    MaterialTheme.colorScheme.primaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.surface
+                                },
+                                tonalElevation = if (instance == selectedRow) {
+                                    16.dp
+                                } else {
+                                    0.dp
+                                },
+                            ) {
+                                Row(
+                                    Modifier
                                         .fillMaxWidth()
-                                        .clickable(
-                                            interactionSource = remember { MutableInteractionSource() },
-                                            indication = rememberRipple(bounded = true),
-                                            onClick = {
-                                                focusManager.clearFocus()
-                                                onRowSelected(instance)
-                                            },
-                                        )
-                                        .background(
-                                            if (instance == selectedRow) {
-                                                MaterialTheme.colorScheme.secondaryContainer
-                                            } else {
-                                                Color.Transparent
-                                            },
-                                        ),
+                                        .padding(16.dp),
+
+                                    horizontalArrangement = Arrangement.Start,
                                 ) {
-                                    Row(
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        horizontalArrangement = Arrangement.Start,
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.alignByBaseline(),
-                                            text = instance.displayName,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = if (instance == selectedRow) {
-                                                MaterialTheme.colorScheme.onSecondaryContainer
-                                            } else {
-                                                MaterialTheme.colorScheme.onSurface
-                                            },
-                                        )
-                                        Text(
-                                            modifier = Modifier
-                                                .padding(start = 16.dp)
-                                                .alignByBaseline(),
-                                            text = instance.baseUrl,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = if (instance == selectedRow) {
-                                                MaterialTheme.colorScheme.onSecondaryContainer
-                                            } else {
-                                                MaterialTheme.colorScheme.onSurface
-                                            },
-                                        )
-                                    }
+                                    Text(
+                                        modifier = Modifier.alignByBaseline(),
+                                        text = instance.displayName,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(start = 16.dp)
+                                            .alignByBaseline(),
+                                        text = instance.baseUrl,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = if (instance == selectedRow) {
+                                            MaterialTheme.colorScheme.onSecondaryContainer
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurface
+                                        },
+                                    )
                                 }
-                                Divider()
                             }
+                            Divider()
                         }
                     }
                 }
-
-                TextField(
-                    value = manualInstanceUrl,
-                    onValueChange = {
-                        onManualInstanceEdited(it)
-                    },
-                    label = { Text(text = stringResource(id = R.string.enter_instance_url)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp)
-                        .wrapContentHeight()
-                        .focusRequester(focusRequester),
-                    prefix = { Text(text = stringResource(id = R.string.instance_prefix)) },
-                    singleLine = true,
-                    keyboardActions = KeyboardActions(),
-                )
             }
 
-            PullRefreshIndicator(refreshing = isRefreshing, state = pullRefreshState)
+
+            TextField(
+                value = manualInstanceUrl,
+                onValueChange = {
+                    onRowSelected(null)
+                    onManualInstanceEdited(it)
+                },
+                label = { Text(text = stringResource(id = R.string.enter_instance_url)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+                    .wrapContentHeight()
+                    .focusable(true),
+                prefix = { Text(text = stringResource(id = R.string.instance_prefix)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        focusManager.clearFocus()
+                    },
+                ),
+            )
+            if (hideKeyboard) {
+                focusManager.clearFocus()
+                hideKeyboard = false
+            }
         }
+
+        PullRefreshIndicator(refreshing = isRefreshing, state = pullRefreshState)
+
     }
 }
+
 
 @Preview
 @Composable
