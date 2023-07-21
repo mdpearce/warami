@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.signin
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -143,9 +144,9 @@ fun InstanceSelectionScreenContent(
                     modifier = Modifier
                         .padding(24.dp)
                         .weight(0.1f),
-                    shadowElevation = 4.dp,
-                    shape = MaterialTheme.shapes.medium,
-                ) {
+                    shape = MaterialTheme.shapes.medium, border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+
+                    ) {
                     LazyColumn {
                         items(instances.size) { index ->
                             val instance = instances[index]
@@ -163,8 +164,13 @@ fun InstanceSelectionScreenContent(
                                         },
                                     )
                                     .focusable(true),
+                                color = if (instance == selectedRow) {
+                                    MaterialTheme.colorScheme.primaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.surface
+                                },
                                 tonalElevation = if (instance == selectedRow) {
-                                    4.dp
+                                    16.dp
                                 } else {
                                     0.dp
                                 },
@@ -180,11 +186,6 @@ fun InstanceSelectionScreenContent(
                                         modifier = Modifier.alignByBaseline(),
                                         text = instance.displayName,
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = if (instance == selectedRow) {
-                                            MaterialTheme.colorScheme.onPrimaryContainer
-                                        } else {
-                                            MaterialTheme.colorScheme.onSurface
-                                        },
                                     )
                                     Text(
                                         modifier = Modifier
