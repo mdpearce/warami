@@ -60,8 +60,9 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 val post = posts[index]
                 if (post != null) {
                     PostCard(
-                        communityName = post.community.name,
-                        creatorName = post.creator.name,
+                        communityName = post.community.title,
+                        creatorName = post.creator.displayName ?: post.creator.name,
+                        creatorAvatar = post.creator.avatarUrl,
                         postedTime = post.publishedAt.formatPeriod(
                             resources = LocalContext.current.resources,
                             comparison = currentTime.atZone(
