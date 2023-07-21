@@ -6,7 +6,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.neaniesoft.warami.featurefeed.CommentsViewModel
 import com.neaniesoft.warami.featurefeed.FeedViewModel
+import com.neaniesoft.warami.featurefeed.destinations.CommentsScreenDestination
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
 import com.neaniesoft.warami.signin.InstanceSelectionViewModel
 import com.neaniesoft.warami.signin.SignInViewModel
@@ -26,6 +28,7 @@ fun WaramiApp(
     instanceSelectionViewModel: () -> InstanceSelectionViewModel,
     signInViewModel: () -> SignInViewModel,
     homeViewModel: () -> HomeViewModel,
+    commentsViewModel: () -> CommentsViewModel,
 ) {
     AppTheme {
         val navController = rememberNavController()
@@ -53,6 +56,9 @@ fun WaramiApp(
                     }
                     dependency(HomeScreenDestination) {
                         homeViewModel
+                    }
+                    dependency(CommentsScreenDestination) {
+                        commentsViewModel
                     }
                 },
             ) {
