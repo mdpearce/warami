@@ -18,7 +18,7 @@ rootProject.name = "Warami"
 include(":app")
 include(":api")
 include(":common")
-include(":featurefeed")
+include(":feed")
 include(":ui")
 include(":domain")
 include(":data")

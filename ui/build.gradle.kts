@@ -15,7 +15,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":common"))
+    implementation(project(":feed"))
 
-    implementation(project(":featurefeed"))
     implementation(project(":signin"))
 }
