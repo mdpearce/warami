@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.featurefeed
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
@@ -55,6 +58,7 @@ fun FeedScreen(
     LaunchedEffect(key1 = navigation) {
         val destination = navigation
         if (destination != null) {
+            Log.d("FeedScreen", "Navigating to ${destination.route}")
             navigator.navigate(destination)
         }
     }

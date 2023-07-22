@@ -14,6 +14,7 @@ class GetCommentsUseCase(
 ) {
 
     suspend operator fun invoke(searchParameters: CommentSearchParameters, pageNumber: PageNumber): List<Comment> {
+
         return commentsRepository.getComments(searchParameters, pageNumber)
     }
 }

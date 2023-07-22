@@ -1,7 +1,7 @@
 package com.neaniesoft.warami.featurefeed
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.common.models.Comment
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.PostId
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
 
@@ -32,16 +31,23 @@ class CommentsViewModel(
     private val _error: MutableSharedFlow<Exception?> = MutableSharedFlow()
     val error = _error.asSharedFlow()
 
-    fun refresh(postId: PostId) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                try {
-                    val comments = getComments(buildCommentSearchParameters(postId), PageNumber(1))
-                    _comments.emit(comments)
-                } catch (e: CommentsRepositoryException) {
-                    _error.emit(e)
-                }
+    suspend fun refresh(postId: PostId) {
+        Log.d("CommentsViewModel", "refresh($postId)")
+        withContext(ioDispatcher) {
+            try {
+                Log.d("CommentsViewModel", "fetching comments")
+                val comments = getComments(buildCommentSearchParameters(postId), PageNumber(1))
+                Log.d("CommentsViewModel", "Emitting comments")
+                _comments.emit(comments)
+            } catch (e: CommentsRepositoryException) {
+                Log.d("CommentsViewMode", "Error: $e")
+                _error.emit(e)
             }
         }
+    }
+
+    suspend fun initialFetch(postId: PostId) {
+        _comments.emit(emptyList())
+        refresh(postId)
     }
 }

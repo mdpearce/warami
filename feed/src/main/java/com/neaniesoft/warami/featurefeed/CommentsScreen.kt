@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.featurefeed
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
@@ -26,11 +27,13 @@ fun CommentsScreen(
         commentsViewModel()
     }
 
-    val comments by viewModel.comments.collectAsState()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.refresh(postId)
+    Log.d("CommentsScreen", "PostId: $postId")
+    LaunchedEffect(key1 = postId) {
+        Log.d("CommentsScreen", "refreshing $postId")
+        viewModel.initialFetch(postId)
     }
+
+    val comments by viewModel.comments.collectAsState()
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
