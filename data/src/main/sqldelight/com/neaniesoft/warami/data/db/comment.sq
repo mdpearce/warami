@@ -1,0 +1,121 @@
+CREATE TABLE comment (
+    id INTEGER,
+    searchParams TEXT NOT NULL,
+    commentId INTEGER NOT NULL,
+    creatorId INTEGER NOT NULL,
+    postId INTEGER NOT NULL,
+    communityId INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    isRemoved INTEGER NOT NULL,
+    publishedAt TEXT NOT NULL,
+    isDeleted INTEGER NOT NULL,
+    apId TEXT NOT NULL,
+    isLocal INTEGER NOT NULL,
+    path TEXT NOT NULL,
+    isDistinguished INTEGER NOT NULL,
+    languageId INTEGER NOT NULL,
+    updatedAt TEXT,
+    aggregatesScore INTEGER NOT NULL,
+    aggregatesUpVotes INTEGER NOT NULL,
+    aggregatesDownVotes INTEGER NOT NULL,
+    aggregatesChildCount INTEGER NOT NULL,
+    aggregatesHotRank INTEGER NOT NULL,
+    isCreatorBannedFromCommunity INTEGER NOT NULL,
+    subscribed TEXT NOT NULL,
+    isSaved INTEGER NOT NULL,
+    isCreatorBlocked INTEGER NOT NULL,
+    myVote INTEGER,
+    FOREIGN KEY(creatorId) REFERENCES person(id)
+);
+
+CREATE INDEX comment_commentId ON comment (
+    commentId
+);
+
+CREATE INDEX comment_postId ON comment (
+    postId
+);
+
+CREATE INDEX comment_postIdSearchParams ON comment (
+    postId, searchParams
+);
+
+deleteAllForPost:
+DELETE FROM comment WHERE postId = :postId;
+
+insert:
+INSERT INTO comment (
+    searchParams,
+    commentId,
+    creatorId,
+    postId,
+    communityId,
+    content,
+    isRemoved,
+    publishedAt,
+    isDeleted,
+    apId,
+    isLocal,
+    path,
+    isDistinguished,
+    languageId,
+    updatedAt,
+    aggregatesScore,
+    aggregatesUpVotes,
+    aggregatesDownVotes,
+    aggregatesChildCount,
+    aggregatesHotRank,
+    isCreatorBannedFromCommunity,
+    subscribed,
+    isSaved,
+    isCreatorBlocked,
+    myVote
+) VALUES (
+    :searchParams,
+    :commentId,
+    :creatorId,
+    :postId,
+    :communityId,
+    :content,
+    :isRemoved,
+    :publishedAt,
+    :isDeleted,
+    :apId,
+    :isLocal,
+    :path,
+    :isDistinguished,
+    :languageId,
+    :updatedAt,
+    :aggregatesScore,
+    :aggregatesUpVotes,
+    :aggregatesDownVotes,
+    :aggregatesChildCount,
+    :aggregatesHotRank,
+    :isCreatorBannedFromCommunity,
+    :subscribed,
+    :isSaved,
+    :isCreatorBlocked,
+    :myVote
+);
+
+select:
+SELECT comment.*,
+    person.name AS creatorName,
+    person.isBanned AS creatorIsBanned,
+    person.publishedAt AS creatorPublishedAt,
+    person.actorId AS creatorActorId,
+    person.isLocal AS creatorIsLocal,
+    person.isDeleted AS creatorIsDeleted,
+    person.isAdmin AS creatorIsAdmin,
+    person.isBotAccount AS creatorIsBotAccount,
+    person.instanceId AS creatorInstanceId,
+    person.displayName AS creatorDisplayName,
+    person.avatarUrl AS creatorAvatarUrl,
+    person.updatedAt AS creatorUpdatedAt,
+    person.bio AS creatorBio,
+    person.bannerUrl AS creatorBannerUrl,
+    person.matrixUserId AS creatorMatrixUserId,
+    person.banExpires AS creatorBanExpires
+FROM comment
+INNER JOIN person ON comment.creatorId = person.id
+WHERE comment.searchParams = :searchParams ORDER BY path;
