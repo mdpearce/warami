@@ -12,6 +12,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,17 +25,17 @@ import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
-import me.tatarka.inject.annotations.Inject
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.ZoneId
-
-typealias FeedScreen = @Composable () -> Unit
 
 @OptIn(ExperimentalMaterialApi::class)
 @RootNavGraph(start = true)
 @Destination
-@Inject
 @Composable
-fun FeedScreen(feedViewModel: () -> FeedViewModel) {
+fun FeedScreen(
+    feedViewModel: () -> FeedViewModel,
+    navigator: DestinationsNavigator,
+) {
     val viewModel = viewModel {
         feedViewModel()
     }
@@ -49,6 +50,15 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
 
     val currentTime by viewModel.currentTime.collectAsState()
 
+    val navigation by viewModel.navigation.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = navigation) {
+        val destination = navigation
+        if (destination != null) {
+            navigator.navigate(destination)
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             state = listState,
@@ -60,6 +70,7 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                 val post = posts[index]
                 if (post != null) {
                     PostCard(
+                        postId = post.postId,
                         communityName = post.community.title,
                         creatorName = post.creator.displayName ?: post.creator.name,
                         creatorAvatar = post.creator.avatarUrl,
@@ -77,7 +88,8 @@ fun FeedScreen(feedViewModel: () -> FeedViewModel) {
                         score = post.aggregates.score,
                         embeddedText = post.body,
                         isFeaturedInCommunity = post.aggregates.isFeaturedCommunity,
-                        isFeaturedInLocal = post.aggregates.isFeaturedLocal
+                        isFeaturedInLocal = post.aggregates.isFeaturedLocal,
+                        onCardClicked = { postId -> viewModel.onPostClicked(postId) },
                     )
                 }
             }

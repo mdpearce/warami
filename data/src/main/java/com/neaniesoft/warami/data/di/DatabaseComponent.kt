@@ -10,6 +10,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.neaniesoft.warami.api.di.ApiComponent
 import com.neaniesoft.warami.api.infrastructure.ApiClient
 import com.neaniesoft.warami.data.R
+import com.neaniesoft.warami.data.db.CommentQueries
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.Database
 import com.neaniesoft.warami.data.db.InstanceQueries
@@ -95,6 +96,10 @@ abstract class DatabaseComponent(
     @Provides
     @DatabaseScope
     fun provideInstanceQueries(db: Database): InstanceQueries = db.instanceQueries
+
+    @Provides
+    @DatabaseScope
+    fun provideCommentQueries(db: Database) : CommentQueries = db.commentQueries
 
     @Provides
     @DatabaseScope

@@ -28,6 +28,7 @@ import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.models.Vote
 import com.neaniesoft.warami.common.models.Votes
+import com.neaniesoft.warami.common.models.compareTo
 import com.neaniesoft.warami.data.db.CommentQueries
 import com.neaniesoft.warami.data.db.PersonQueries
 import com.neaniesoft.warami.data.di.DatabaseScope
@@ -98,7 +99,7 @@ class CommentsRepository(
         }
 
         val mappedComments = commentQueries.transactionWithResult {
-            if (pageNumber == PageNumber(0)) {
+            if (pageNumber <= 1) {
                 commentQueries.deleteAllForPost(
                     commentSearchParameters.postId?.value?.toLong() ?: throw IllegalArgumentException(
                         "Post ID must be provided",
@@ -112,7 +113,7 @@ class CommentsRepository(
                     personQueries.upsert(
                         name = creator.name,
                         isBanned = creator.banned.toLong(),
-                        publishedAt = creator.published.parseZonedDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                        publishedAt = creator.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                         actorId = creator.actorId,
                         isLocal = creator.local.toLong(),
                         isDeleted = creator.deleted.toLong(),
@@ -120,12 +121,12 @@ class CommentsRepository(
                         instanceId = creator.instanceId.toLong(),
                         displayName = creator.displayName,
                         avatarUrl = creator.avatar,
-                        updatedAt = creator.updated?.let { it.parseZonedDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) },
+                        updatedAt = creator.updated?.let { it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME) },
                         bio = creator.bio,
                         bannerUrl = creator.banner,
                         matrixUserId = creator.matrixUserId,
                         banExpires = creator.banExpires?.let {
-                            it.parseZonedDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
                         },
                         id = creator.id.toLong(),
                         isBotAccount = creator.botAccount.toLong(),
