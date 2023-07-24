@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
 
@@ -25,7 +26,7 @@ class CommentsViewModel(
     private val ioDispatcher: IODispatcher,
 ) : ViewModel() {
 
-    private val _comments: MutableStateFlow<List<Comment>> = MutableStateFlow(emptyList())
+    private val _comments: MutableStateFlow<List<Pair<Comment, Int>>> = MutableStateFlow(emptyList())
     val comments = _comments.asStateFlow()
 
     private val _error: MutableSharedFlow<Exception?> = MutableSharedFlow()

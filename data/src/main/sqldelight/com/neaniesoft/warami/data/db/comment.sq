@@ -25,7 +25,8 @@ CREATE TABLE comment (
     isSaved INTEGER NOT NULL,
     isCreatorBlocked INTEGER NOT NULL,
     myVote INTEGER,
-    FOREIGN KEY(creatorId) REFERENCES person(id)
+    FOREIGN KEY(creatorId) REFERENCES person(id),
+    PRIMARY KEY(id)
 );
 
 CREATE INDEX comment_commentId ON comment (
@@ -118,4 +119,4 @@ SELECT comment.*,
     person.banExpires AS creatorBanExpires
 FROM comment
 INNER JOIN person ON comment.creatorId = person.id
-WHERE comment.searchParams = :searchParams ORDER BY path;
+WHERE comment.searchParams = :searchParams ORDER BY comment.id ASC;
