@@ -137,19 +137,20 @@ fun CommentRow(
         }
 
 
-        Surface(tonalElevation = (depth + 1).dp) {
+        Surface(tonalElevation = 4.dp) {
 
             Column(modifier = Modifier.padding(16.dp)) {
                 CommentHeader(creatorName = creatorName, creatorAvatarUri = creatorAvatarUri, score = score, time = time)
                 Surface(
                     modifier = Modifier.padding(top = 8.dp),
-                    tonalElevation = (depth + 1 + 8).dp,
+                    tonalElevation = 16.dp,
+                    shadowElevation = 2.dp,
                     shape = MaterialTheme.shapes.medium,
                 ) {
                     Text(
                         text = body,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(12.dp),
                         color = MaterialTheme.colorScheme.onSurface,
                     )
 
