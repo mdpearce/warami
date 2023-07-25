@@ -1,6 +1,8 @@
 package com.neaniesoft.warami.featurefeed
 
 import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -14,8 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,11 +40,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.neaniesoft.warami.common.extensions.formatPeriod
+import com.neaniesoft.warami.common.models.ChildCount
 import com.neaniesoft.warami.common.models.Comment
+import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.Score
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.viewModel
+import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.featurefeed.components.icons.CommentIcons
 import com.neaniesoft.warami.featurefeed.components.shapes.SpeechBubbleShape
 import com.ramcosta.composedestinations.annotation.Destination
@@ -69,18 +75,25 @@ fun CommentsScreen(
 
     val commentsWithDepth by viewModel.comments.collectAsState()
 
-    CommentsScreenContent(commentsWithDepth = commentsWithDepth)
+    CommentsScreenContent(
+        commentsWithDepth = commentsWithDepth,
+        onLoadMoreCommentsClicked = viewModel::onLoadMoreCommentsClicked,
+        maxDepth = BuildCommentSearchParametersUseCase.MAX_DEPTH
+    )
 }
 
 @Composable
 fun CommentsScreenContent(
     commentsWithDepth: List<Pair<Comment, Int>>,
+    onLoadMoreCommentsClicked: (CommentId) -> Unit,
+    maxDepth: Int,
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             items(commentsWithDepth.size) { index ->
                 val (comment, depth) = commentsWithDepth[index]
                 CommentRow(
+                    commentId = comment.commentId,
                     creatorName = comment.creator.displayName ?: comment.creator.name,
                     creatorAvatarUri = comment.creator.avatarUrl,
                     score = comment.counts.score,
@@ -89,6 +102,9 @@ fun CommentsScreenContent(
                     ),
                     body = comment.content,
                     depth = depth,
+                    maxDepth = maxDepth,
+                    childCount = comment.counts.childCount,
+                    onLoadMoreCommentsClicked = onLoadMoreCommentsClicked,
                 )
                 val nextDepth = commentsWithDepth.getOrNull(index + 1)?.second
                 if (nextDepth != depth) {
@@ -110,12 +126,16 @@ data class CommentForDisplay(
 
 @Composable
 fun CommentRow(
+    commentId: CommentId,
     creatorName: String,
     creatorAvatarUri: UriString?,
     score: Score,
     time: String,
     body: String,
     depth: Int,
+    maxDepth: Int,
+    childCount: ChildCount,
+    onLoadMoreCommentsClicked: (CommentId) -> Unit,
 ) {
 
     Row(
@@ -142,21 +162,48 @@ fun CommentRow(
 
         Surface(tonalElevation = 4.dp) {
 
-            Column(modifier = Modifier.padding(16.dp)) {
-                CommentHeader(creatorName = creatorName, creatorAvatarUri = creatorAvatarUri, score = score, time = time)
-                Surface(
-                    modifier = Modifier.padding(top = 8.dp),
-                    tonalElevation = 16.dp,
-                    shadowElevation = 2.dp,
-                    shape = SpeechBubbleShape(triangleSize = 6.dp),
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                 ) {
-                    Text(
-                        text = body,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 6.dp),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
+                    CommentHeader(creatorName = creatorName, creatorAvatarUri = creatorAvatarUri, score = score, time = time)
+                    Surface(
+                        modifier = Modifier.padding(top = 8.dp),
+                        tonalElevation = 16.dp,
+                        shadowElevation = 2.dp,
+                        shape = SpeechBubbleShape(triangleSize = 6.dp),
+                    ) {
+                        Text(
+                            text = body,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 6.dp),
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
 
+                    }
+                }
+
+                if (depth == maxDepth - 1 && childCount.value > 0) {
+                    val interactionSource = remember {
+                        MutableInteractionSource()
+                    }
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(interactionSource = interactionSource, indication = rememberRipple(bounded = true)) {
+                                onLoadMoreCommentsClicked(commentId)
+                            },
+                        tonalElevation = 16.dp,
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = pluralStringResource(id = R.plurals.load_more_comments, count = childCount.value, childCount.value),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
                 }
             }
 
@@ -171,12 +218,16 @@ fun CommentRowPreview() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             CommentRow(
+                commentId = CommentId(1),
                 creatorName = "Some person",
                 creatorAvatarUri = null,
                 score = Score(50),
                 time = "12 hours",
                 body = "Lorem ipsum dolor etc ueafh siueh fiushr giush ifuhage ifygsirgh iksh rfousoijf pdotijgpidjhrgkfhsge fuygsefy gsiurhg osr jglih eroughwiregf iwh grefkiuwh rogh woruhg ikwuehfiwug rigfh",
                 depth = 3,
+                maxDepth = 3,
+                childCount = ChildCount(3),
+                onLoadMoreCommentsClicked = {}
             )
         }
     }

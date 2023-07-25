@@ -3,6 +3,7 @@ package com.neaniesoft.warami.featurefeed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.neaniesoft.warami.common.models.Comment
+import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.data.di.IODispatcher
@@ -50,5 +51,9 @@ class CommentsViewModel(
     suspend fun initialFetch(postId: PostId) {
         _comments.emit(emptyList())
         refresh(postId)
+    }
+
+    fun onLoadMoreCommentsClicked(commentId: CommentId) {
+
     }
 }

@@ -12,7 +12,7 @@ import me.tatarka.inject.annotations.Inject
 class BuildCommentSearchParametersUseCase {
 
     companion object {
-        private const val MAX_DEPTH = 10
+        const val MAX_DEPTH = 2
     }
 
     operator fun invoke(postId: PostId): CommentSearchParameters {
