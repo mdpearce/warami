@@ -7,9 +7,10 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel(
+class HomeViewModel @Inject constructor(
     private val isLoggedIn: IsLoggedInUseCase,
     private val homeNavigator: HomeNavigator,
 ) : ViewModel() {

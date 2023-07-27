@@ -7,8 +7,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.neaniesoft.warami.api.di.ApiComponent
-import com.neaniesoft.warami.api.infrastructure.ApiClient
 import com.neaniesoft.warami.data.R
 import com.neaniesoft.warami.data.db.CommentQueries
 import com.neaniesoft.warami.data.db.CommunityQueries
@@ -19,117 +17,97 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
-import com.neaniesoft.warami.data.repositories.AccountRepository
-import com.neaniesoft.warami.data.repositories.ApiRepository
-import com.neaniesoft.warami.data.repositories.AuthRepository
 import com.neaniesoft.warami.data.repositories.adapters.ZonedDateTimeFromLocalTimeAdapter
-import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
-import com.neaniesoft.warami.data.repositories.post.PostRepository
 import com.neaniesoft.warami.data.repositories.post.PostTransactor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.addAdapter
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
-import okhttp3.OkHttpClient
 import java.time.Clock
 import java.time.format.DateTimeFormatter
+import javax.inject.Singleton
 
 typealias IODispatcher = CoroutineDispatcher
 
-@Component
-@DatabaseScope
-abstract class DatabaseComponent(
-    @Component val apiComponent: ApiComponent,
+@Module
+@InstallIn(SingletonComponent::class)
+class DataModule(
 ) {
-
-    abstract val postRepository: PostRepository
-    abstract val authRepository: AuthRepository
-    abstract val accountRepository: AccountRepository
-    abstract val instanceSettingsRepository: InstanceSettingsRepository
-    abstract val zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter
-    abstract val apiRepository: ApiRepository
-
     @Provides
-    @DatabaseScope
-    fun provideApiClientFn(): (String) -> ApiClient = apiComponent.provideApiClientFn(apiComponent.provideOkHttpClientBuilder())
-
-    @Provides
-    @DatabaseScope
-    fun provideContext(): Context = apiComponent.context
-
-    @Provides
-    @DatabaseScope
+    @Singleton
     fun provideClock(): Clock = Clock.systemDefaultZone()
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePostTransactor(postQueries: PostQueries): PostTransactor = postQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePostQueries(db: Database): PostQueries = db.postQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePostRemoteKeyQueries(db: Database): PostRemoteKeyQueries = db.postRemoteKeyQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideCommunityQueries(db: Database): CommunityQueries = db.communityQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePersonQueries(db: Database): PersonQueries = db.personQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePostAggregateQueries(db: Database): PostAggregateQueries =
         db.postAggregateQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun providePostSearchParamQueries(db: Database): PostSearchParamsQueries =
         db.postSearchParamsQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideInstanceQueries(db: Database): InstanceQueries = db.instanceQueries
 
     @Provides
-    @DatabaseScope
-    fun provideCommentQueries(db: Database) : CommentQueries = db.commentQueries
+    @Singleton
+    fun provideCommentQueries(db: Database): CommentQueries = db.commentQueries
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideLocalDateTimeFormatter(): DateTimeFormatter =
         DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideIODispatcher(): IODispatcher = Dispatchers.IO
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideDatabase(driver: SqlDriver): Database {
         return Database(driver)
     }
 
     @Provides
-    @DatabaseScope
+    @Singleton
     fun provideSqlDriver(context: Context): SqlDriver {
         return AndroidSqliteDriver(Database.Schema, context, "warami.db")
     }
 
-    @DatabaseScope
     @Provides
+    @Singleton
     fun remoteConfigSettings(): FirebaseRemoteConfigSettings = com.google.firebase.remoteconfig.ktx.remoteConfigSettings {
         minimumFetchIntervalInSeconds = 3600
     }
 
-    @DatabaseScope
     @Provides
+    @Singleton
     fun provideFirebaseRemoteConfig(settings: FirebaseRemoteConfigSettings): FirebaseRemoteConfig =
         Firebase.remoteConfig.apply {
             setDefaultsAsync(R.xml.remote_config_defaults)
@@ -137,15 +115,11 @@ abstract class DatabaseComponent(
         }
 
     @OptIn(ExperimentalStdlibApi::class)
-    @DatabaseScope
     @Provides
+    @Singleton
     fun provideMoshi(zonedDateTimeFromLocalTimeAdapter: ZonedDateTimeFromLocalTimeAdapter): Moshi {
         return Moshi.Builder()
             .addAdapter(zonedDateTimeFromLocalTimeAdapter)
             .build()
     }
-
-    @Provides
-    @DatabaseScope
-    fun provideOkHttpClient(): OkHttpClient = apiComponent.provideOkHttpClient(apiComponent.provideOkHttpClientBuilder())
 }

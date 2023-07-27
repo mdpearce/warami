@@ -1,7 +1,7 @@
 package com.neaniesoft.warami.domain.di
 
 import android.content.Context
-import com.neaniesoft.warami.data.di.DatabaseComponent
+import com.neaniesoft.warami.data.di.DataModule
 import com.neaniesoft.warami.domain.usecases.BuildPostSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetInstancesUseCase
 import com.neaniesoft.warami.domain.usecases.IsLoggedInUseCase
@@ -13,7 +13,7 @@ import me.tatarka.inject.annotations.Scope
 @Component
 @DomainScope
 abstract class DomainComponent(
-    @Component val dataComponent: DatabaseComponent,
+    @Component val dataComponent: DataModule,
 ) {
     @Provides
     @DomainScope

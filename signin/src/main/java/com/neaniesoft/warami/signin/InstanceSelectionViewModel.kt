@@ -7,6 +7,7 @@ import com.neaniesoft.warami.data.repositories.instance.InstanceRepository
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import com.neaniesoft.warami.domain.usecases.ConstructInstanceBaseUrlUseCase
 import com.ramcosta.composedestinations.spec.Direction
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,10 +16,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
 
-@Inject
-@SignInScope
-class InstanceSelectionViewModel(
+@HiltViewModel
+class InstanceSelectionViewModel @Inject constructor(
     private val instanceRepository: InstanceRepository,
     private val instanceSettingsRepository: InstanceSettingsRepository,
     private val signInNavigator: SignInNavigator,

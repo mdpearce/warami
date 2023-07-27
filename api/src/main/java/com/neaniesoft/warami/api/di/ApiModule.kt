@@ -1,27 +1,27 @@
 package com.neaniesoft.warami.api.di
 
-import android.content.Context
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.api.infrastructure.ApiClient
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Singleton
 
-@ApiScope
-@Component
-abstract class ApiComponent(
-    @get:Provides val context: Context,
-) {
+@Module
+@InstallIn(SingletonComponent::class)
+class ApiModule {
 
     @Provides
-    @ApiScope
+    @Singleton
     fun provideApi(apiClient: ApiClient): DefaultApi {
         return apiClient.createService(DefaultApi::class.java)
     }
 
     @Provides
-    @ApiScope
+    @Singleton
     fun provideOkHttpClientBuilder(): OkHttpClient.Builder {
         return OkHttpClient.Builder().addInterceptor(
             HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).apply {
@@ -31,13 +31,13 @@ abstract class ApiComponent(
     }
 
     @Provides
-    @ApiScope
+    @Singleton
     fun provideOkHttpClient(builder: OkHttpClient.Builder): OkHttpClient {
         return builder.build()
     }
 
     @Provides
-    @ApiScope
+    @Singleton
     fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient =
         { baseUrl ->
             ApiClient(baseUrl = "${baseUrl.trimEnd('/')}/api/v3", okHttpClientBuilder = clientBuilder)

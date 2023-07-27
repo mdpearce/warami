@@ -20,10 +20,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@DatabaseScope
-@Inject
-class InstanceRepository(
+@Singleton
+class InstanceRepository @Inject constructor(
     private val instanceQueries: InstanceQueries,
     private val client: OkHttpClient,
     private val remoteConfigRepository: RemoteConfigRepository,
