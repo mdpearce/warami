@@ -12,26 +12,23 @@ import com.neaniesoft.warami.data.repositories.DomainListingType
 import com.neaniesoft.warami.data.repositories.DomainSortType
 import com.neaniesoft.warami.domain.usecases.BuildPostSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetPagingDataForPostsUseCase
-import com.neaniesoft.warami.featurefeed.di.FeedScope
 import com.ramcosta.composedestinations.spec.Direction
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
 import java.time.Clock
 import java.time.Instant
-import kotlin.time.ExperimentalTime
+import javax.inject.Inject
 
-@OptIn(ExperimentalTime::class)
-@Inject
-@FeedScope
-class FeedViewModel(
+@HiltViewModel
+class FeedViewModel @Inject constructor(
     private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
-    getPagingData: GetPagingDataForPostsUseCase,
     private val clock: Clock,
     private val feedNavigator: FeedNavigator,
+    getPagingData: GetPagingDataForPostsUseCase,
 ) : ViewModel() {
 
     private val searchParameters = MutableStateFlow(

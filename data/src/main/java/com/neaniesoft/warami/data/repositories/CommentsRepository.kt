@@ -31,15 +31,15 @@ import com.neaniesoft.warami.common.models.Votes
 import com.neaniesoft.warami.common.models.compareTo
 import com.neaniesoft.warami.data.db.CommentQueries
 import com.neaniesoft.warami.data.db.PersonQueries
-import com.neaniesoft.warami.data.di.DatabaseScope
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@me.tatarka.inject.annotations.Inject
-@DatabaseScope
-class CommentsRepository(
+@Singleton
+class CommentsRepository @Inject constructor(
     private val commentQueries: CommentQueries,
     private val apiRepository: ApiRepository,
     private val personQueries: PersonQueries,
@@ -113,7 +113,8 @@ class CommentsRepository(
                     personQueries.upsert(
                         name = creator.name,
                         isBanned = creator.banned.toLong(),
-                        publishedAt = creator.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                        publishedAt = creator.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
+                            .format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                         actorId = creator.actorId,
                         isLocal = creator.local.toLong(),
                         isDeleted = creator.deleted.toLong(),
@@ -121,12 +122,16 @@ class CommentsRepository(
                         instanceId = creator.instanceId.toLong(),
                         displayName = creator.displayName,
                         avatarUrl = creator.avatar,
-                        updatedAt = creator.updated?.let { it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME) },
+                        updatedAt = creator.updated?.let {
+                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
+                                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                        },
                         bio = creator.bio,
                         bannerUrl = creator.banner,
                         matrixUserId = creator.matrixUserId,
                         banExpires = creator.banExpires?.let {
-                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
+                                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
                         },
                         id = creator.id.toLong(),
                         isBotAccount = creator.botAccount.toLong(),

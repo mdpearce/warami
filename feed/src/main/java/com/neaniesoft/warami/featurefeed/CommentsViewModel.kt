@@ -10,18 +10,16 @@ import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.CommentsRepositoryException
 import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetCommentsUseCase
-import com.neaniesoft.warami.featurefeed.di.FeedScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
 
-@Inject
-@FeedScope
-class CommentsViewModel(
+@HiltViewModel
+class CommentsViewModel @Inject constructor(
     private val buildCommentSearchParameters: BuildCommentSearchParametersUseCase,
     private val getComments: GetCommentsUseCase,
     private val ioDispatcher: IODispatcher,

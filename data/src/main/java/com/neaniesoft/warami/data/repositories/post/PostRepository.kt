@@ -19,14 +19,11 @@ import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
 import com.neaniesoft.warami.data.db.SelectPostsOffset
-import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
 import com.neaniesoft.warami.data.repositories.adapters.toDomain
-import kotlinx.coroutines.Dispatchers
-import me.tatarka.inject.annotations.Inject
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Clock
@@ -34,12 +31,12 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-typealias DbCommunity = com.neaniesoft.warami.data.db.Community
 
-@Inject
-@DatabaseScope
-class PostRepository(
+@Singleton
+class PostRepository @Inject constructor(
     private val apiRepository: ApiRepository,
     private val postQueries: PostQueries,
     private val communityQueries: CommunityQueries,
@@ -48,7 +45,7 @@ class PostRepository(
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val postRemoteKeyQueries: PostRemoteKeyQueries,
     private val localDateTimeFormatter: DateTimeFormatter,
-    private val coroutineDispatcher: IODispatcher = Dispatchers.IO,
+    private val coroutineDispatcher: IODispatcher,
     private val clock: Clock,
 ) {
     companion object {

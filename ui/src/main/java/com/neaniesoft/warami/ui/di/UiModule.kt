@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.ui.di
 
+import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.common.navigation.HomeNavigator
 import com.neaniesoft.warami.common.navigation.SignInNavigator
 import com.neaniesoft.warami.ui.nav.WaramiNavigator
@@ -23,4 +24,8 @@ class UiModule {
     @Provides
     @Singleton
     fun provideSignInNavigator(navigator: WaramiNavigator): SignInNavigator = navigator
+
+    @Provides
+    @Singleton
+    fun provideFeedNavigator(navigator: WaramiNavigator): FeedNavigator = navigator
 }

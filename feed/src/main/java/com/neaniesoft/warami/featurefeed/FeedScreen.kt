@@ -19,12 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
-import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -36,12 +34,9 @@ import java.time.ZoneId
 @Destination
 @Composable
 fun FeedScreen(
-    feedViewModel: () -> FeedViewModel,
     navigator: DestinationsNavigator,
+    viewModel: FeedViewModel = hiltViewModel(),
 ) {
-    val viewModel = viewModel {
-        feedViewModel()
-    }
 
     val posts = viewModel.posts.collectAsLazyPagingItems()
     val listState = rememberLazyListState()

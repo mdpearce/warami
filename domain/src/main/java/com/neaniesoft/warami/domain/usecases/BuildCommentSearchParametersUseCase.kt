@@ -4,12 +4,11 @@ import com.neaniesoft.warami.common.models.CommentSearchParameters
 import com.neaniesoft.warami.common.models.CommentSortType
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.PostId
-import com.neaniesoft.warami.domain.di.DomainScope
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Inject
-@DomainScope
-class BuildCommentSearchParametersUseCase {
+@Singleton
+class BuildCommentSearchParametersUseCase @Inject constructor() {
 
     companion object {
         const val MAX_DEPTH = 2

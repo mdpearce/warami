@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.neaniesoft.warami.common.extensions.formatPeriod
@@ -46,7 +47,6 @@ import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.Score
 import com.neaniesoft.warami.common.models.UriString
-import com.neaniesoft.warami.common.viewModel
 import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.featurefeed.components.icons.CommentIcons
 import com.neaniesoft.warami.featurefeed.components.shapes.SpeechBubbleShape
@@ -60,13 +60,9 @@ import java.time.ZonedDateTime
 @Composable
 fun CommentsScreen(
     postId: PostId,
-    commentsViewModel: () -> CommentsViewModel,
     navigator: DestinationsNavigator,
+    viewModel: CommentsViewModel = hiltViewModel(),
 ) {
-    val viewModel = viewModel {
-        commentsViewModel()
-    }
-
     Log.d("CommentsScreen", "PostId: $postId")
     LaunchedEffect(key1 = postId) {
         Log.d("CommentsScreen", "refreshing $postId")
@@ -78,7 +74,7 @@ fun CommentsScreen(
     CommentsScreenContent(
         commentsWithDepth = commentsWithDepth,
         onLoadMoreCommentsClicked = viewModel::onLoadMoreCommentsClicked,
-        maxDepth = BuildCommentSearchParametersUseCase.MAX_DEPTH
+        maxDepth = BuildCommentSearchParametersUseCase.MAX_DEPTH,
     )
 }
 
@@ -227,7 +223,7 @@ fun CommentRowPreview() {
                 depth = 3,
                 maxDepth = 3,
                 childCount = ChildCount(3),
-                onLoadMoreCommentsClicked = {}
+                onLoadMoreCommentsClicked = {},
             )
         }
     }
