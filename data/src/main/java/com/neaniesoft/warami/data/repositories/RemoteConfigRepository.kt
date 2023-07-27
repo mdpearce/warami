@@ -6,25 +6,26 @@ import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
-import com.neaniesoft.warami.data.di.DatabaseScope
 import kotlinx.coroutines.tasks.asDeferred
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@DatabaseScope
-@Inject
-class RemoteConfigRepository(private val remoteConfig: FirebaseRemoteConfig) {
+@Singleton
+class RemoteConfigRepository @Inject constructor(private val remoteConfig: FirebaseRemoteConfig) {
     init {
         remoteConfig.fetch().addOnCompleteListener {
             remoteConfig.activate()
-            remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
-                override fun onUpdate(configUpdate: ConfigUpdate) {
-                    remoteConfig.activate()
-                }
+            remoteConfig.addOnConfigUpdateListener(
+                object : ConfigUpdateListener {
+                    override fun onUpdate(configUpdate: ConfigUpdate) {
+                        remoteConfig.activate()
+                    }
 
-                override fun onError(error: FirebaseRemoteConfigException) {
-                    Log.e("RemoteConfigRepository", "Error updating remote config", error)
-                }
-            })
+                    override fun onError(error: FirebaseRemoteConfigException) {
+                        Log.e("RemoteConfigRepository", "Error updating remote config", error)
+                    }
+                },
+            )
         }
     }
 

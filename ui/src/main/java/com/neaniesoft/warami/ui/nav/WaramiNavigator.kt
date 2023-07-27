@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.ui.nav
 
+import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.common.navigation.HomeNavigator
@@ -24,7 +25,7 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
         return InstanceSelectionScreenDestination
     }
 
-    override fun commentsScreen(postId: PostId): Direction {
-        return CommentsScreenDestination(postId)
+    override fun commentsScreen(postId: PostId, parentCommentId: CommentId?): Direction {
+        return CommentsScreenDestination(postId, parentCommentId)
     }
 }

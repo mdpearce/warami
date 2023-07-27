@@ -1,20 +1,19 @@
 package com.neaniesoft.warami.data.repositories.adapters
 
-import com.neaniesoft.warami.data.di.DatabaseScope
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
-import me.tatarka.inject.annotations.Inject
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@DatabaseScope
-@Inject
-class ZonedDateTimeFromLocalTimeAdapter : JsonAdapter<ZonedDateTime>() {
+@Singleton
+class ZonedDateTimeFromLocalTimeAdapter @Inject constructor() : JsonAdapter<ZonedDateTime>() {
     override fun fromJson(reader: JsonReader): ZonedDateTime? {
         val string: String? = try {
             reader.nextString()
