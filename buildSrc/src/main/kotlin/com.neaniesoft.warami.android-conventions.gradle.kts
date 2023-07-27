@@ -2,6 +2,8 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     kotlin("android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
     id("com.android.library")
     id("com.google.devtools.ksp")
 }
@@ -46,7 +48,17 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
+    testImplementation(libs.dagger.hilt.android.testing)
+    kaptTest(libs.dagger.hilt.compiler)
+    androidTestImplementation(libs.dagger.hilt.android.testing)
+    kaptAndroidTest(libs.dagger.hilt.compiler)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

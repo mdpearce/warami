@@ -1,7 +1,7 @@
 [versions]
-kotlin = "1.8.21"
-android-gradle-plugin = "8.1.0-rc01"
-kotlin-compiler-extension = "1.4.7"
+kotlin = "1.9.0"
+android-gradle-plugin = "8.1.0"
+kotlin-compiler-extension = "1.5.1"
 lifecycle = "2.6.1"
 sdk-compile = "33"
 sdk-targer = "33"
@@ -13,7 +13,7 @@ okhttp = "4.11.0"
 coroutines = "1.7.1"
 sql-delight = "2.0.0-rc02"
 coil = "2.4.0"
-ksp = "1.8.21-1.0.11"
+ksp = "1.9.0-1.0.11"
 compose-destinations = "1.9.42-beta"
 kotlin-inject = "0.6.1"
 appcompat = "1.6.1"
@@ -23,6 +23,7 @@ paging = "3.1.1"
 datastore = "1.0.0"
 protobufPlugin = "0.9.3"
 protobuf = "3.23.0"
+hilt = "2.47"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -87,3 +88,8 @@ androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "d
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version = "0.3.4" }
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+dagger-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+dagger-hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+kotlin-kapt-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref="kotlin"}

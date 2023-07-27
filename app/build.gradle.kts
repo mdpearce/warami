@@ -6,6 +6,8 @@ plugins {
     id("com.google.devtools.ksp")
     id("org.jmailen.kotlinter")
     id("com.google.gms.google-services")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -54,6 +56,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(project(":api"))
     implementation(project(":common"))
@@ -63,6 +69,12 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":signin"))
 
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
+    testImplementation(libs.dagger.hilt.android.testing)
+    kaptTest(libs.dagger.hilt.compiler)
+    androidTestImplementation(libs.dagger.hilt.android.testing)
+    kaptAndroidTest(libs.dagger.hilt.compiler)
     implementation(libs.kotlin.inject.runtime)
     ksp(libs.kotlin.inject.compiler)
     implementation(libs.kotlin.stdlib.jdk8)
