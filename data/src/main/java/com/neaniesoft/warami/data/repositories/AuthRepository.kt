@@ -6,18 +6,18 @@ import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.neaniesoft.warami.api.di.AuthToken
-import com.neaniesoft.warami.data.di.DatabaseScope
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Inject
-@DatabaseScope
-class AuthRepository(
-    context: Context,
+@Singleton
+class AuthRepository @Inject constructor(
+    @ApplicationContext context: Context,
 ) {
     companion object {
         private const val AUTH_PREFS_FILENAME = "auth_repository"

@@ -5,7 +5,6 @@ import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.api.di.AuthToken
 import com.neaniesoft.warami.api.infrastructure.ApiClient
 import com.neaniesoft.warami.common.models.UriString
-import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.repositories.instance.InstanceSettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,11 +13,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@DatabaseScope
-@Inject
-class ApiRepository(
+@Singleton
+class ApiRepository @Inject constructor(
     private val apiClientFn: (baseUrl: String) -> ApiClient,
     private val instanceSettingsRepository: InstanceSettingsRepository,
     private val authRepository: AuthRepository,

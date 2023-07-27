@@ -75,6 +75,7 @@ dependencies {
     kaptTest(libs.dagger.hilt.compiler)
     androidTestImplementation(libs.dagger.hilt.android.testing)
     kaptAndroidTest(libs.dagger.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
