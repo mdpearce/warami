@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.ui.di
 
 import com.neaniesoft.warami.common.navigation.HomeNavigator
+import com.neaniesoft.warami.common.navigation.SignInNavigator
 import com.neaniesoft.warami.ui.nav.WaramiNavigator
 import dagger.Module
 import dagger.Provides
@@ -18,4 +19,8 @@ class UiModule {
     @Provides
     @Singleton
     fun provideWaramiNavigator(): WaramiNavigator = WaramiNavigator
+
+    @Provides
+    @Singleton
+    fun provideSignInNavigator(navigator: WaramiNavigator): SignInNavigator = navigator
 }

@@ -7,7 +7,6 @@ import com.neaniesoft.warami.common.extensions.toBoolean
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.data.db.InstanceQueries
-import com.neaniesoft.warami.data.di.DatabaseScope
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.RemoteConfigRepository
 import com.squareup.moshi.Moshi
@@ -15,7 +14,6 @@ import com.squareup.moshi.adapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import me.tatarka.inject.annotations.Inject
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.format.DateTimeFormatter
