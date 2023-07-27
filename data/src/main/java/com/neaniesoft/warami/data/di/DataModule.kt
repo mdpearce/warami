@@ -24,6 +24,7 @@ import com.squareup.moshi.addAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -96,7 +97,7 @@ class DataModule(
 
     @Provides
     @Singleton
-    fun provideSqlDriver(context: Context): SqlDriver {
+    fun provideSqlDriver(@ApplicationContext context: Context): SqlDriver {
         return AndroidSqliteDriver(Database.Schema, context, "warami.db")
     }
 

@@ -60,6 +60,7 @@ import java.time.ZonedDateTime
 @Composable
 fun CommentsScreen(
     postId: PostId,
+    parentCommentId: CommentId?,
     navigator: DestinationsNavigator,
     viewModel: CommentsViewModel = hiltViewModel(),
 ) {

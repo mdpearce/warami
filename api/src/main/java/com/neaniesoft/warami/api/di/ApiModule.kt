@@ -38,7 +38,7 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): (baseUrl: String) -> ApiClient =
+    fun provideApiClientFn(clientBuilder: OkHttpClient.Builder): Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient> =
         { baseUrl ->
             ApiClient(baseUrl = "${baseUrl.trimEnd('/')}/api/v3", okHttpClientBuilder = clientBuilder)
         }

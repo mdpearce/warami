@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiRepository @Inject constructor(
-    private val apiClientFn: (baseUrl: String) -> ApiClient,
+    private val apiClientFn: Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient>,
     private val instanceSettingsRepository: InstanceSettingsRepository,
     private val authRepository: AuthRepository,
 ) {
