@@ -64,7 +64,9 @@ fun CommentsScreen(
     viewModel: CommentsViewModel = hiltViewModel(),
 ) {
     Log.d("CommentsScreen", "PostId: $postId")
-    LaunchedEffect(key1 = postId, key2 = parentCommentId) {
+    val commentsWithDepth by viewModel.comments.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
         Log.d("CommentsScreen", "refreshing $postId, parent: $parentCommentId")
         viewModel.initialFetch(postId, parentCommentId)
     }
@@ -76,8 +78,6 @@ fun CommentsScreen(
             navigator.navigate(direction)
         }
     }
-
-    val commentsWithDepth by viewModel.comments.collectAsState()
 
     CommentsScreenContent(
         commentsWithDepth = commentsWithDepth,
