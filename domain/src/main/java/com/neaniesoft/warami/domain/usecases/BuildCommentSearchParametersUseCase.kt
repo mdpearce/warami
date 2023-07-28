@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class BuildCommentSearchParametersUseCase @Inject constructor() {
 
     companion object {
-        const val MAX_DEPTH = 2
+        const val MAX_DEPTH = 8
     }
 
     operator fun invoke(postId: PostId, parentCommentId: CommentId?): CommentSearchParameters {

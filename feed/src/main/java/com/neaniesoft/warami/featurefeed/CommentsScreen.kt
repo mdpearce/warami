@@ -150,9 +150,9 @@ fun CommentRow(
         if (depth >= 1) {
             repeat((1..depth).count()) {
                 val width = if (it == 0) {
-                    15.dp
+                    11.dp
                 } else {
-                    16.dp
+                    12.dp
                 }
                 Spacer(modifier = Modifier.width(width))
                 Divider(
@@ -229,8 +229,8 @@ fun CommentRowPreview() {
                 score = Score(50),
                 time = "12 hours",
                 body = "Lorem ipsum dolor etc ueafh siueh fiushr giush ifuhage ifygsirgh iksh rfousoijf pdotijgpidjhrgkfhsge fuygsefy gsiurhg osr jglih eroughwiregf iwh grefkiuwh rogh woruhg ikwuehfiwug rigfh",
-                depth = 3,
-                maxDepth = 3,
+                depth = 8,
+                maxDepth = 8,
                 childCount = ChildCount(3),
                 onLoadMoreCommentsClicked = { _, _ -> },
             )
