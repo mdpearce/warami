@@ -10,13 +10,13 @@ data class CommentSearchParameters(
     val communityId: CommunityId?,
     val communityName: String?,
     val postId: PostId?,
-    val parentId: Int?,
+    val parentId: CommentId?,
     val isSavedOnly: Boolean?,
 ) {
     val id: String
         get() {
             val plainText =
-                "${listingType?.value}:${commentSortType?.value}:$maxDepth:${communityId?.value}:$communityName:${postId?.value}:$parentId:$isSavedOnly"
+                "${listingType?.value}:${commentSortType?.value}:$maxDepth:${communityId?.value}:$communityName:${postId?.value}:${parentId?.value}:$isSavedOnly"
             return sha256(plainText)
         }
 

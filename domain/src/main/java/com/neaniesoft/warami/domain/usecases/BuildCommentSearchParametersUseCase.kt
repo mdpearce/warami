@@ -1,5 +1,6 @@
 package com.neaniesoft.warami.domain.usecases
 
+import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.CommentSearchParameters
 import com.neaniesoft.warami.common.models.CommentSortType
 import com.neaniesoft.warami.common.models.ListingType
@@ -14,7 +15,7 @@ class BuildCommentSearchParametersUseCase @Inject constructor() {
         const val MAX_DEPTH = 2
     }
 
-    operator fun invoke(postId: PostId): CommentSearchParameters {
+    operator fun invoke(postId: PostId, parentCommentId: CommentId?): CommentSearchParameters {
         return CommentSearchParameters(
             listingType = ListingType.ALL,
             commentSortType = CommentSortType.TOP,
@@ -23,7 +24,7 @@ class BuildCommentSearchParametersUseCase @Inject constructor() {
             communityId = null,
             communityName = null,
             isSavedOnly = null,
-            parentId = null,
+            parentId = parentCommentId,
         )
     }
 }

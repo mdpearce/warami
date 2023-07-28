@@ -44,6 +44,9 @@ CREATE INDEX comment_postIdSearchParams ON comment (
 deleteAllForPost:
 DELETE FROM comment WHERE postId = :postId;
 
+deleteAllForSearchParams:
+DELETE FROM comment WHERE searchParams = :searchParamsId;
+
 insert:
 INSERT INTO comment (
     searchParams,

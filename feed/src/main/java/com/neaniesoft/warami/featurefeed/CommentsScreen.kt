@@ -47,7 +47,6 @@ import com.neaniesoft.warami.common.models.CommentId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.Score
 import com.neaniesoft.warami.common.models.UriString
-import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.featurefeed.components.icons.CommentIcons
 import com.neaniesoft.warami.featurefeed.components.shapes.SpeechBubbleShape
 import com.ramcosta.composedestinations.annotation.Destination
@@ -65,9 +64,17 @@ fun CommentsScreen(
     viewModel: CommentsViewModel = hiltViewModel(),
 ) {
     Log.d("CommentsScreen", "PostId: $postId")
-    LaunchedEffect(key1 = postId) {
-        Log.d("CommentsScreen", "refreshing $postId")
-        viewModel.initialFetch(postId)
+    LaunchedEffect(key1 = postId, key2 = parentCommentId) {
+        Log.d("CommentsScreen", "refreshing $postId, parent: $parentCommentId")
+        viewModel.initialFetch(postId, parentCommentId)
+    }
+    val navigation by viewModel.navigation.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = navigation) {
+        val direction = navigation
+        if (direction != null) {
+            navigator.navigate(direction)
+        }
     }
 
     val commentsWithDepth by viewModel.comments.collectAsState()
@@ -75,21 +82,21 @@ fun CommentsScreen(
     CommentsScreenContent(
         commentsWithDepth = commentsWithDepth,
         onLoadMoreCommentsClicked = viewModel::onLoadMoreCommentsClicked,
-        maxDepth = BuildCommentSearchParametersUseCase.MAX_DEPTH,
     )
 }
 
 @Composable
 fun CommentsScreenContent(
     commentsWithDepth: List<Pair<Comment, Int>>,
-    onLoadMoreCommentsClicked: (CommentId) -> Unit,
-    maxDepth: Int,
+    onLoadMoreCommentsClicked: (PostId, CommentId) -> Unit,
 ) {
+    val maxDepth = remember(commentsWithDepth) { commentsWithDepth.maxByOrNull { it.second }?.second ?: 0 }
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             items(commentsWithDepth.size) { index ->
                 val (comment, depth) = commentsWithDepth[index]
                 CommentRow(
+                    postId = comment.postId,
                     commentId = comment.commentId,
                     creatorName = comment.creator.displayName ?: comment.creator.name,
                     creatorAvatarUri = comment.creator.avatarUrl,
@@ -123,6 +130,7 @@ data class CommentForDisplay(
 
 @Composable
 fun CommentRow(
+    postId: PostId,
     commentId: CommentId,
     creatorName: String,
     creatorAvatarUri: UriString?,
@@ -132,9 +140,8 @@ fun CommentRow(
     depth: Int,
     maxDepth: Int,
     childCount: ChildCount,
-    onLoadMoreCommentsClicked: (CommentId) -> Unit,
+    onLoadMoreCommentsClicked: (PostId, CommentId) -> Unit,
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -182,7 +189,7 @@ fun CommentRow(
                     }
                 }
 
-                if (depth == maxDepth - 1 && childCount.value > 0) {
+                if (depth == maxDepth && childCount.value > 0) {
                     val interactionSource = remember {
                         MutableInteractionSource()
                     }
@@ -190,7 +197,7 @@ fun CommentRow(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(interactionSource = interactionSource, indication = rememberRipple(bounded = true)) {
-                                onLoadMoreCommentsClicked(commentId)
+                                onLoadMoreCommentsClicked(postId, commentId)
                             },
                         tonalElevation = 16.dp,
                     ) {
@@ -215,6 +222,7 @@ fun CommentRowPreview() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             CommentRow(
+                postId = PostId(1),
                 commentId = CommentId(1),
                 creatorName = "Some person",
                 creatorAvatarUri = null,
@@ -224,7 +232,7 @@ fun CommentRowPreview() {
                 depth = 3,
                 maxDepth = 3,
                 childCount = ChildCount(3),
-                onLoadMoreCommentsClicked = {},
+                onLoadMoreCommentsClicked = { _, _ -> },
             )
         }
     }

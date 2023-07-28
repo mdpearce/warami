@@ -42,7 +42,23 @@ value class CreatorId(val value: Int)
 value class ApId(val value: String)
 
 @JvmInline
-value class CommentPath(val value: String)
+value class CommentPath(val value: String) {
+    override fun toString(): String {
+        return value
+    }
+}
+
+inline fun CommentPath.count(predicate: (Char) -> Boolean): Int {
+    return value.count(predicate)
+}
+
+fun CommentPath.startsWith(prefix: String, ignoreCase: Boolean = false): Boolean {
+    return value.startsWith(prefix, ignoreCase)
+}
+
+fun CommentPath.split(vararg delimiters: Char, ignoreCase: Boolean = false, limit: Int = 0): List<String> {
+    return value.split(delimiters = delimiters, ignoreCase = ignoreCase, limit = limit)
+}
 
 @JvmInline
 value class LanguageId(val value: Int)

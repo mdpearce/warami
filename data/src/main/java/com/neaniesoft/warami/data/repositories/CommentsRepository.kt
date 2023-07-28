@@ -76,7 +76,7 @@ class CommentsRepository @Inject constructor(
                     communityId = communityId?.value?.toBigDecimal(),
                     communityName = communityName,
                     postId = postId?.value?.toBigDecimal(),
-                    parentId = parentId?.toBigDecimal(),
+                    parentId = parentId?.value?.toBigDecimal(),
                     savedOnly = isSavedOnly,
                     auth = null, // TODO do... uh, auth.
                 )
@@ -100,12 +100,7 @@ class CommentsRepository @Inject constructor(
 
         val mappedComments = commentQueries.transactionWithResult {
             if (pageNumber <= 1) {
-                commentQueries.deleteAllForPost(
-                    commentSearchParameters.postId?.value?.toLong() ?: throw IllegalArgumentException(
-                        "Post ID must be provided",
-                        CommentsRepositoryException(),
-                    ),
-                )
+                commentQueries.deleteAllForSearchParams(commentSearchParameters.id)
             }
 
             apiComments.forEach { commentView ->
