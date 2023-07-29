@@ -132,8 +132,7 @@ class CommentsRepository @Inject constructor(
                         isBotAccount = creator.botAccount.toLong(),
                     )
 
-
-                    commentQueries.insert(
+                    commentQueries.upsert(
                         searchParams = commentSearchParameters.id,
                         commentId = comment.id.toLong(),
                         creatorId = creator.id.toLong(),

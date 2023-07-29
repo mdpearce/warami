@@ -16,4 +16,6 @@
         <item quantity="one">Load %1$d more comment</item>
         <item quantity="other">Load %1$d more comments</item>
     </plurals>
+
+    <string name="load_more_comments_page">Load more comments</string>
 </resources>

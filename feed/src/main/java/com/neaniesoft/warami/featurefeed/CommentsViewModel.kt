@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.common.models.Comment
 import com.neaniesoft.warami.common.models.CommentId
-import com.neaniesoft.warami.common.models.CommentPath
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.PostId
+import com.neaniesoft.warami.common.models.plus
 import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.CommentsRepositoryException
@@ -40,17 +40,30 @@ class CommentsViewModel @Inject constructor(
     private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
     val navigation = _navigation.asSharedFlow()
 
-    suspend fun refresh(postId: PostId, parentCommentId: CommentId?) {
+    private val pageNumber: MutableStateFlow<PageNumber> = MutableStateFlow(PageNumber(1))
+
+    private val _pageLoadingContent: MutableStateFlow<PageLoadingContent> = MutableStateFlow(PageLoadingContent.MaybeMoreResults)
+    val pageLoadingContent = _pageLoadingContent.asStateFlow()
+
+    private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
+    fun refresh(postId: PostId, parentCommentId: CommentId?) {
         Log.d("CommentsViewModel", "refresh($postId), parent: $parentCommentId")
-        withContext(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
+            _isRefreshing.emit(true)
             try {
                 Log.d("CommentsViewModel", "fetching comments")
-                val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), PageNumber(1))
+                val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
                 Log.d("CommentsViewModel", "Emitting comments")
                 _comments.emit(comments)
+                _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
+                pageNumber.value = pageNumber.value + 1
             } catch (e: CommentsRepositoryException) {
                 Log.d("CommentsViewMode", "Error: $e")
                 _error.emit(e)
+            } finally {
+                _isRefreshing.emit(false)
             }
         }
     }
@@ -66,4 +79,24 @@ class CommentsViewModel @Inject constructor(
             _navigation.emit(feedNavigator.commentsScreen(postId, commentId))
         }
     }
+
+    fun onLoadNextPage(postId: PostId, parentCommentId: CommentId?) {
+        viewModelScope.launch {
+            _pageLoadingContent.emit(PageLoadingContent.LoadingNextPage)
+            val currentCommentCount = comments.value.size
+            val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
+            _comments.emit(comments)
+            if (comments.size == currentCommentCount) {
+                _pageLoadingContent.emit(PageLoadingContent.NoResults)
+            } else {
+                _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
+            }
+        }
+    }
+}
+
+sealed class PageLoadingContent {
+    data object LoadingNextPage : PageLoadingContent()
+    data object NoResults : PageLoadingContent()
+    data object MaybeMoreResults : PageLoadingContent()
 }

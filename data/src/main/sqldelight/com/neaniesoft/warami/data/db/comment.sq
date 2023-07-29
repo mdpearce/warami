@@ -1,7 +1,6 @@
 CREATE TABLE comment (
-    id INTEGER,
-    searchParams TEXT NOT NULL,
     commentId INTEGER NOT NULL,
+    searchParams TEXT NOT NULL,
     creatorId INTEGER NOT NULL,
     postId INTEGER NOT NULL,
     communityId INTEGER NOT NULL,
@@ -26,7 +25,7 @@ CREATE TABLE comment (
     isCreatorBlocked INTEGER NOT NULL,
     myVote INTEGER,
     FOREIGN KEY(creatorId) REFERENCES person(id),
-    PRIMARY KEY(id)
+    PRIMARY KEY(commentId)
 );
 
 CREATE INDEX comment_commentId ON comment (
@@ -49,8 +48,8 @@ DELETE FROM comment WHERE searchParams = :searchParamsId;
 
 insert:
 INSERT INTO comment (
-    searchParams,
     commentId,
+    searchParams,
     creatorId,
     postId,
     communityId,
@@ -75,8 +74,8 @@ INSERT INTO comment (
     isCreatorBlocked,
     myVote
 ) VALUES (
-    :searchParams,
     :commentId,
+    :searchParams,
     :creatorId,
     :postId,
     :communityId,
@@ -122,4 +121,87 @@ SELECT comment.*,
     person.banExpires AS creatorBanExpires
 FROM comment
 INNER JOIN person ON comment.creatorId = person.id
-WHERE comment.searchParams = :searchParams ORDER BY comment.id ASC;
+WHERE comment.searchParams = :searchParams;
+
+upsert {
+    UPDATE comment SET
+        searchParams = :searchParams,
+        creatorId = :creatorId,
+        postId = :postId,
+        communityId = :communityId,
+        content = :content,
+        isRemoved = :isRemoved,
+        publishedAt = :publishedAt,
+        isDeleted = :isDeleted,
+        apId = :apId,
+        isLocal = :isLocal,
+        path = :path,
+        isDistinguished = :isDistinguished,
+        languageId = :languageId,
+        updatedAt = :updatedAt,
+        aggregatesScore = :aggregatesScore,
+        aggregatesUpVotes = :aggregatesUpVotes,
+        aggregatesDownVotes = :aggregatesDownVotes,
+        aggregatesChildCount = :aggregatesChildCount,
+        aggregatesHotRank = :aggregatesHotRank,
+        isCreatorBannedFromCommunity = :isCreatorBannedFromCommunity,
+        subscribed = :subscribed,
+        isSaved = :isSaved,
+        isCreatorBlocked = :isCreatorBlocked,
+        myVote = :myVote
+    WHERE commentId = :commentId;
+
+    INSERT OR IGNORE INTO comment (
+        commentId,
+        searchParams,
+        creatorId,
+        postId,
+        communityId,
+        content,
+        isRemoved,
+        publishedAt,
+        isDeleted,
+        apId,
+        isLocal,
+        path,
+        isDistinguished,
+        languageId,
+        updatedAt,
+        aggregatesScore,
+        aggregatesUpVotes,
+        aggregatesDownVotes,
+        aggregatesChildCount,
+        aggregatesHotRank,
+        isCreatorBannedFromCommunity,
+        subscribed,
+        isSaved,
+        isCreatorBlocked,
+        myVote
+    ) VALUES (
+        :commentId,
+        :searchParams,
+        :creatorId,
+        :postId,
+        :communityId,
+        :content,
+        :isRemoved,
+        :publishedAt,
+        :isDeleted,
+        :apId,
+        :isLocal,
+        :path,
+        :isDistinguished,
+        :languageId,
+        :updatedAt,
+        :aggregatesScore,
+        :aggregatesUpVotes,
+        :aggregatesDownVotes,
+        :aggregatesChildCount,
+        :aggregatesHotRank,
+        :isCreatorBannedFromCommunity,
+        :subscribed,
+        :isSaved,
+        :isCreatorBlocked,
+        :myVote
+    );
+}
