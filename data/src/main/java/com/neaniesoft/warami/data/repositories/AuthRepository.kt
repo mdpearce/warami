@@ -2,7 +2,6 @@ package com.neaniesoft.warami.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.neaniesoft.warami.api.di.AuthToken
@@ -12,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,7 +52,7 @@ class AuthRepository
         val jwt = _jwt.asStateFlow()
 
         fun onUpdateAuthToken(authToken: AuthToken) {
-            Log.d("AuthRepository", "onUpdateAuthToken: $authToken")
+            Timber.d("onUpdateAuthToken: $authToken")
             prefs.edit().putString(KEY_JWT, authToken.value).apply()
         }
     }

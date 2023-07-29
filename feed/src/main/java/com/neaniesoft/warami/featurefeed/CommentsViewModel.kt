@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.featurefeed
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.common.models.Comment
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,18 +50,18 @@ class CommentsViewModel
         val isRefreshing = _isRefreshing.asStateFlow()
 
         fun refresh(postId: PostId, parentCommentId: CommentId?) {
-            Log.d("CommentsViewModel", "refresh($postId), parent: $parentCommentId")
+            Timber.d("refresh($postId), parent: $parentCommentId")
             viewModelScope.launch(ioDispatcher) {
                 _isRefreshing.emit(true)
                 try {
-                    Log.d("CommentsViewModel", "fetching comments")
+                    Timber.d("fetching comments")
                     val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
-                    Log.d("CommentsViewModel", "Emitting comments")
+                    Timber.d("Emitting comments")
                     _comments.emit(comments)
                     _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
                     pageNumber.value = pageNumber.value + 1
                 } catch (e: CommentsRepositoryException) {
-                    Log.d("CommentsViewMode", "Error: $e")
+                    Timber.e(e)
                     _error.emit(e)
                 } finally {
                     _isRefreshing.emit(false)
@@ -75,7 +75,7 @@ class CommentsViewModel
         }
 
         fun onLoadMoreCommentsClicked(postId: PostId, commentId: CommentId) {
-            Log.d("CommentsViewModel", "More comments clicked: $commentId")
+            Timber.d("More comments clicked: $commentId")
             viewModelScope.launch {
                 _navigation.emit(feedNavigator.commentsScreen(postId, commentId))
             }

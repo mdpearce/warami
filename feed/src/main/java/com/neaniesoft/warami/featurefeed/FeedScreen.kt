@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.featurefeed
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +26,7 @@ import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import timber.log.Timber
 import java.time.ZoneId
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -52,7 +52,7 @@ fun FeedScreen(
     LaunchedEffect(key1 = navigation) {
         val destination = navigation
         if (destination != null) {
-            Log.d("FeedScreen", "Navigating to ${destination.route}")
+            Timber.d("Navigating to " + destination.route)
             navigator.navigate(destination)
         }
     }

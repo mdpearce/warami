@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.featurefeed
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -11,6 +10,7 @@ import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.featurefeed.components.comment.CommentsScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import timber.log.Timber
 
 @Destination
 @Composable
@@ -20,12 +20,12 @@ fun CommentsScreen(
     navigator: DestinationsNavigator,
     viewModel: CommentsViewModel = hiltViewModel(),
 ) {
-    Log.d("CommentsScreen", "PostId: $postId")
+    Timber.d("PostId: $postId")
     val commentsWithDepth by viewModel.comments.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        Log.d("CommentsScreen", "refreshing $postId, parent: $parentCommentId")
+        Timber.d("refreshing $postId, parent: $parentCommentId")
         viewModel.initialFetch(postId, parentCommentId)
     }
     val navigation by viewModel.navigation.collectAsState(initial = null)
