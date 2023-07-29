@@ -37,20 +37,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.neaniesoft.warami.common.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
 fun SignInScreen(
-    signInViewModel: () -> SignInViewModel,
     destinationsNavigator: DestinationsNavigator,
+    viewModel: SignInViewModel = hiltViewModel(),
 ) {
-    val viewModel = viewModel {
-        signInViewModel()
-    }
-
     val state by viewModel.screenState.collectAsState()
     val instanceName by viewModel.instanceDisplayName.collectAsState()
     val navigation by viewModel.navigation.collectAsState(initial = null)

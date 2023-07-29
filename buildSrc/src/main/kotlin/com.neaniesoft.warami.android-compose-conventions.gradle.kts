@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.accompanist.drawablepainter)
     implementation(libs.compose.destinations.core)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.compose.destinations.ksp)
     implementation(platform(libs.androidx.compose.bom))
     implementation("androidx.compose.ui:ui")

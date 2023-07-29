@@ -54,7 +54,6 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?,
                         contentDescription = stringResource(id = R.string.content_description_featured_local),
                     )
                 }
-
             }
         }
     }
@@ -67,7 +66,10 @@ fun PostContentRowPreview() {
         Surface(Modifier.fillMaxWidth()) {
             PostContentRow(
                 postTitle = "This is a long post title that will spill over to multiple lines",
-                thumbnailUrl = null, url = UriString("http://google.com"), isFeaturedCommunity = true, isFeaturedLocal = true,
+                thumbnailUrl = null,
+                url = UriString("http://google.com"),
+                isFeaturedCommunity = true,
+                isFeaturedLocal = true,
             )
         }
     }

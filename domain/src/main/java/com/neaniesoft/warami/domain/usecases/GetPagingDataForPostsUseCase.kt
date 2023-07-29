@@ -21,30 +21,29 @@ import com.neaniesoft.warami.data.db.SelectPostsOffset
 import com.neaniesoft.warami.data.repositories.post.PostRepository
 import com.neaniesoft.warami.data.repositories.post.PostTransactor
 import com.neaniesoft.warami.data.repositories.post.createPager
-import com.neaniesoft.warami.domain.di.DomainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import me.tatarka.inject.annotations.Inject
-import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Inject
-@DomainScope
-class GetPagingDataForPostsUseCase(
-    private val postRepository: PostRepository,
-    private val postTransactor: PostTransactor,
-    private val localDateTimeFormatter: DateTimeFormatter,
-) {
-    operator fun invoke(searchParams: PostSearchParameters): Flow<PagingData<Post>> {
-        return createPager(searchParams, postRepository, postTransactor).flow
-            .map { pagingData ->
-                pagingData.map { dbPost ->
-                    dbPost.toDomain(searchParams, localDateTimeFormatter)
+@Singleton
+class GetPagingDataForPostsUseCase
+    @Inject
+    constructor(
+        private val postRepository: PostRepository,
+        private val postTransactor: PostTransactor,
+    ) {
+        operator fun invoke(searchParams: PostSearchParameters): Flow<PagingData<Post>> {
+            return createPager(searchParams, postRepository, postTransactor).flow
+                .map { pagingData ->
+                    pagingData.map { dbPost ->
+                        dbPost.toDomain(searchParams)
+                    }
                 }
-            }
+        }
     }
-}
 
-private fun SelectPostsOffset.toDomain(searchParams: PostSearchParameters, localDateTimeFormatter: DateTimeFormatter): Post = Post(
+private fun SelectPostsOffset.toDomain(searchParams: PostSearchParameters): Post = Post(
     postId = PostId(postId.toInt()),
     insertedAt = insertedAt.parseZonedDateTime(),
     name = name,

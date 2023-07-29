@@ -12,11 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.UriString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostCard(
+    postId: PostId,
     communityName: String,
     creatorName: String,
     creatorAvatar: UriString?,
@@ -30,9 +32,10 @@ fun PostCard(
     embeddedText: String?,
     isFeaturedInCommunity: Boolean,
     isFeaturedInLocal: Boolean,
+    onCardClicked: (PostId) -> Unit,
 ) {
     Card(
-        onClick = {},
+        onClick = { onCardClicked(postId) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.padding(bottom = 16.dp),
     ) {
@@ -69,6 +72,7 @@ fun PostCard(
 fun PreviewPostCard() {
     Surface(modifier = Modifier.fillMaxSize()) {
         PostCard(
+            PostId(1),
             "communityName",
             "creatorName",
             null,
@@ -82,6 +86,7 @@ fun PreviewPostCard() {
             "Lorem ipsum foobar uhwef eakjf kje fksb kjf sieufh kswerjhgfiuwhrg wesn foje foih rdiu",
             true,
             true,
+            {},
         )
     }
 }

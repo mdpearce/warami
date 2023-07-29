@@ -11,4 +11,11 @@
     <string name="content_description_save_icon">Save Icon</string>
     <string name="content_description_featured_community">Post is featured in community</string>
     <string name="content_description_featured_local">Post is featured in local instance</string>
+
+    <plurals name="load_more_comments">
+        <item quantity="one">Load %1$d more comment</item>
+        <item quantity="other">Load %1$d more comments</item>
+    </plurals>
+
+    <string name="load_more_comments_page">Load more comments</string>
 </resources>
