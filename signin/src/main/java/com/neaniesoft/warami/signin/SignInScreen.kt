@@ -47,7 +47,6 @@ fun SignInScreen(
     destinationsNavigator: DestinationsNavigator,
     viewModel: SignInViewModel = hiltViewModel(),
 ) {
-
     val state by viewModel.screenState.collectAsState()
     val instanceName by viewModel.instanceDisplayName.collectAsState()
     val navigation by viewModel.navigation.collectAsState(initial = null)

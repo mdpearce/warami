@@ -47,6 +47,6 @@ fun CommentsScreen(
         isRefeshing = isRefreshing,
         onLoadMoreCommentsClicked = viewModel::onLoadMoreCommentsClicked,
         onNextPageClicked = { postId, commentId -> viewModel.onLoadNextPage(postId, commentId) },
-        onRefreshSelected = { postId, parentCommentId -> viewModel.refresh(postId, parentCommentId)}
+        onRefreshSelected = { postId, parentCommentId -> viewModel.refresh(postId, parentCommentId) },
     )
 }

@@ -80,9 +80,8 @@ fun CommentHeader(
         Text(
             text = time,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
-
     }
 }
 
@@ -91,9 +90,7 @@ fun CommentHeader(
 fun CommentHeaderPreview() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
-
             CommentHeader(creatorName = "Some person", creatorAvatarUri = null, score = Score(50), time = "12 hours")
-
         }
     }
 }

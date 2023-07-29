@@ -24,57 +24,59 @@ import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(
-    private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
-    private val clock: Clock,
-    private val feedNavigator: FeedNavigator,
-    getPagingData: GetPagingDataForPostsUseCase,
-) : ViewModel() {
+class FeedViewModel
+    @Inject
+    constructor(
+        private val buildPostSearchParameters: BuildPostSearchParametersUseCase,
+        private val clock: Clock,
+        private val feedNavigator: FeedNavigator,
+        getPagingData: GetPagingDataForPostsUseCase,
+    ) : ViewModel() {
 
-    private val searchParameters = MutableStateFlow(
-        buildPostSearchParameters(
-            sortType = SortType.ACTIVE,
-            listingType = ListingType.ALL,
-        ),
-    )
-
-    val posts = getPagingData.invoke(searchParameters.value).cachedIn(viewModelScope)
-
-    private val _currentTime: MutableStateFlow<Instant> = MutableStateFlow(clock.instant())
-    val currentTime = _currentTime.asStateFlow()
-
-    private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
-    val navigation = _navigation.asSharedFlow()
-
-    init {
-        viewModelScope.launch {
-            initializeClock()
-        }
-    }
-
-    fun onSearchParamsChanged(
-        listingType: DomainListingType? = null,
-        sortType: DomainSortType? = null,
-        communityId: CommunityId? = null,
-        communityName: String? = null,
-        isSavedOnly: Boolean? = null,
-    ) {
-        searchParameters.value = buildPostSearchParameters(
-            listingType,
-            sortType,
-            communityId,
-            communityName,
-            isSavedOnly,
+        private val searchParameters = MutableStateFlow(
+            buildPostSearchParameters(
+                sortType = SortType.ACTIVE,
+                listingType = ListingType.ALL,
+            ),
         )
-    }
 
-    private suspend fun initializeClock() {
-        _currentTime.emit(clock.instant())
-    }
+        val posts = getPagingData.invoke(searchParameters.value).cachedIn(viewModelScope)
 
-    fun onPostClicked(postId: PostId) {
-        viewModelScope.launch {
-            _navigation.emit(feedNavigator.commentsScreen(postId))
+        private val _currentTime: MutableStateFlow<Instant> = MutableStateFlow(clock.instant())
+        val currentTime = _currentTime.asStateFlow()
+
+        private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
+        val navigation = _navigation.asSharedFlow()
+
+        init {
+            viewModelScope.launch {
+                initializeClock()
+            }
+        }
+
+        fun onSearchParamsChanged(
+            listingType: DomainListingType? = null,
+            sortType: DomainSortType? = null,
+            communityId: CommunityId? = null,
+            communityName: String? = null,
+            isSavedOnly: Boolean? = null,
+        ) {
+            searchParameters.value = buildPostSearchParameters(
+                listingType,
+                sortType,
+                communityId,
+                communityName,
+                isSavedOnly,
+            )
+        }
+
+        private suspend fun initializeClock() {
+            _currentTime.emit(clock.instant())
+        }
+
+        fun onPostClicked(postId: PostId) {
+            viewModelScope.launch {
+                _navigation.emit(feedNavigator.commentsScreen(postId))
+            }
         }
     }
-}

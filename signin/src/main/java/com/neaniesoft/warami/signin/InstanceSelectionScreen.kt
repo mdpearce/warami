@@ -58,7 +58,6 @@ fun InstanceSelectionScreen(
     navigator: DestinationsNavigator,
     viewModel: InstanceSelectionViewModel = hiltViewModel(),
 ) {
-
     val instances by viewModel.instances.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val navigation by viewModel.navigation.collectAsState(initial = null)

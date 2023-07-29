@@ -35,7 +35,7 @@ fun PostCard(
     onCardClicked: (PostId) -> Unit,
 ) {
     Card(
-        onClick = {onCardClicked(postId)},
+        onClick = { onCardClicked(postId) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.padding(bottom = 16.dp),
     ) {

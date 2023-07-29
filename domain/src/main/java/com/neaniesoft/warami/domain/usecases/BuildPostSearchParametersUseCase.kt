@@ -8,20 +8,22 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BuildPostSearchParametersUseCase @Inject constructor() {
-    operator fun invoke(
-        listingType: DomainListingType? = null,
-        sortType: DomainSortType? = null,
-        communityId: CommunityId? = null,
-        communityName: String? = null,
-        isSavedOnly: Boolean? = null,
-    ): PostSearchParameters {
-        return PostSearchParameters(
-            listingType,
-            sortType,
-            communityId,
-            communityName,
-            isSavedOnly,
-        )
+class BuildPostSearchParametersUseCase
+    @Inject
+    constructor() {
+        operator fun invoke(
+            listingType: DomainListingType? = null,
+            sortType: DomainSortType? = null,
+            communityId: CommunityId? = null,
+            communityName: String? = null,
+            isSavedOnly: Boolean? = null,
+        ): PostSearchParameters {
+            return PostSearchParameters(
+                listingType,
+                sortType,
+                communityId,
+                communityName,
+                isSavedOnly,
+            )
+        }
     }
-}

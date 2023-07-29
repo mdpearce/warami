@@ -6,6 +6,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetCurrentInstanceDisplayNameUseCase @Inject constructor(private val instanceSettingsRepository: InstanceSettingsRepository) {
-    operator fun invoke(): Flow<String> = instanceSettingsRepository.currentInstanceName()
-}
+class GetCurrentInstanceDisplayNameUseCase
+    @Inject
+    constructor(private val instanceSettingsRepository: InstanceSettingsRepository) {
+        operator fun invoke(): Flow<String> = instanceSettingsRepository.currentInstanceName()
+    }

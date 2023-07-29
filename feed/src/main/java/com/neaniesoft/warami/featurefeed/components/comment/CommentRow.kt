@@ -65,9 +65,7 @@ fun CommentRow(
             }
         }
 
-
         Surface(tonalElevation = 4.dp) {
-
             Column(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
@@ -78,7 +76,7 @@ fun CommentRow(
                         creatorName = creatorName,
                         creatorAvatarUri = creatorAvatarUri,
                         score = score,
-                        time = time
+                        time = time,
                     )
                     Surface(
                         modifier = Modifier.padding(top = 8.dp),
@@ -93,11 +91,10 @@ fun CommentRow(
                                 start = 12.dp,
                                 end = 12.dp,
                                 top = 12.dp,
-                                bottom = 6.dp
+                                bottom = 6.dp,
                             ),
                             color = MaterialTheme.colorScheme.onSurface,
                         )
-
                     }
                 }
 
@@ -110,7 +107,7 @@ fun CommentRow(
                             .fillMaxWidth()
                             .clickable(
                                 interactionSource = interactionSource,
-                                indication = rememberRipple(bounded = true)
+                                indication = rememberRipple(bounded = true),
                             ) {
                                 onLoadMoreCommentsClicked(postId, commentId)
                             },
@@ -121,7 +118,7 @@ fun CommentRow(
                             text = pluralStringResource(
                                 id = R.plurals.load_more_comments,
                                 count = childCount.value,
-                                childCount.value
+                                childCount.value,
                             ),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -129,9 +126,7 @@ fun CommentRow(
                     }
                 }
             }
-
         }
-
     }
 }
 

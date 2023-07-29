@@ -10,19 +10,21 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val isLoggedIn: IsLoggedInUseCase,
-    private val homeNavigator: HomeNavigator,
-) : ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(
+        private val isLoggedIn: IsLoggedInUseCase,
+        private val homeNavigator: HomeNavigator,
+    ) : ViewModel() {
 
-    private val _navigation: MutableSharedFlow<DirectionDestinationSpec?> = MutableSharedFlow()
-    val navigation = _navigation.asSharedFlow()
+        private val _navigation: MutableSharedFlow<DirectionDestinationSpec?> = MutableSharedFlow()
+        val navigation = _navigation.asSharedFlow()
 
-    suspend fun onInit() {
-        if (isLoggedIn()) {
-            _navigation.emit(homeNavigator.feedScreen())
-        } else {
-            _navigation.emit(homeNavigator.instanceSelectScreen())
+        suspend fun onInit() {
+            if (isLoggedIn()) {
+                _navigation.emit(homeNavigator.feedScreen())
+            } else {
+                _navigation.emit(homeNavigator.instanceSelectScreen())
+            }
         }
     }
-}

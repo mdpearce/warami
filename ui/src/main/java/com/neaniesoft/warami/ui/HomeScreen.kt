@@ -13,7 +13,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator, viewModel: HomeViewModel = hiltViewModel()) {
-
     val navigationDestination by viewModel.navigation.collectAsState(initial = null)
 
     LaunchedEffect(key1 = Unit) {

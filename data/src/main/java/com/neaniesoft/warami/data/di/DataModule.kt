@@ -36,8 +36,7 @@ typealias IODispatcher = CoroutineDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule(
-) {
+class DataModule() {
     @Provides
     @Singleton
     fun provideClock(): Clock = Clock.systemDefaultZone()
@@ -97,7 +96,9 @@ class DataModule(
 
     @Provides
     @Singleton
-    fun provideSqlDriver(@ApplicationContext context: Context): SqlDriver {
+    fun provideSqlDriver(
+        @ApplicationContext context: Context,
+    ): SqlDriver {
         return AndroidSqliteDriver(Database.Schema, context, "warami.db")
     }
 

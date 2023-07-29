@@ -37,7 +37,6 @@ fun FeedScreen(
     navigator: DestinationsNavigator,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
-
     val posts = viewModel.posts.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
 

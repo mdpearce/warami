@@ -47,7 +47,6 @@ fun CommentsScreenContent(
             .fillMaxSize()
             .pullRefresh(pullRefreshState),
     ) {
-
         LazyColumn(state = listState) {
             items(commentsWithDepth.size) { index ->
                 val (comment, depth) = commentsWithDepth[index]
@@ -58,7 +57,8 @@ fun CommentsScreenContent(
                     creatorAvatarUri = comment.creator.avatarUrl,
                     score = comment.counts.score,
                     time = comment.publishedAt.formatPeriod(
-                        LocalContext.current.resources, Instant.now().atZone(ZoneId.of("UTC")),
+                        LocalContext.current.resources,
+                        Instant.now().atZone(ZoneId.of("UTC")),
                     ),
                     body = comment.content,
                     depth = depth,

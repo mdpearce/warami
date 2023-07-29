@@ -20,80 +20,81 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CommentsViewModel @Inject constructor(
-    private val buildCommentSearchParameters: BuildCommentSearchParametersUseCase,
-    private val getComments: GetCommentsUseCase,
-    private val feedNavigator: FeedNavigator,
-    private val ioDispatcher: IODispatcher,
-) : ViewModel() {
+class CommentsViewModel
+    @Inject
+    constructor(
+        private val buildCommentSearchParameters: BuildCommentSearchParametersUseCase,
+        private val getComments: GetCommentsUseCase,
+        private val feedNavigator: FeedNavigator,
+        private val ioDispatcher: IODispatcher,
+    ) : ViewModel() {
 
-    private val _comments: MutableStateFlow<List<Pair<Comment, Int>>> = MutableStateFlow(emptyList())
-    val comments = _comments.asStateFlow()
+        private val _comments: MutableStateFlow<List<Pair<Comment, Int>>> = MutableStateFlow(emptyList())
+        val comments = _comments.asStateFlow()
 
-    private val _error: MutableSharedFlow<Exception?> = MutableSharedFlow()
-    val error = _error.asSharedFlow()
+        private val _error: MutableSharedFlow<Exception?> = MutableSharedFlow()
+        val error = _error.asSharedFlow()
 
-    private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
-    val navigation = _navigation.asSharedFlow()
+        private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
+        val navigation = _navigation.asSharedFlow()
 
-    private val pageNumber: MutableStateFlow<PageNumber> = MutableStateFlow(PageNumber(1))
+        private val pageNumber: MutableStateFlow<PageNumber> = MutableStateFlow(PageNumber(1))
 
-    private val _pageLoadingContent: MutableStateFlow<PageLoadingContent> = MutableStateFlow(PageLoadingContent.MaybeMoreResults)
-    val pageLoadingContent = _pageLoadingContent.asStateFlow()
+        private val _pageLoadingContent: MutableStateFlow<PageLoadingContent> = MutableStateFlow(PageLoadingContent.MaybeMoreResults)
+        val pageLoadingContent = _pageLoadingContent.asStateFlow()
 
-    private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+        private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+        val isRefreshing = _isRefreshing.asStateFlow()
 
-    fun refresh(postId: PostId, parentCommentId: CommentId?) {
-        Log.d("CommentsViewModel", "refresh($postId), parent: $parentCommentId")
-        viewModelScope.launch(ioDispatcher) {
-            _isRefreshing.emit(true)
-            try {
-                Log.d("CommentsViewModel", "fetching comments")
+        fun refresh(postId: PostId, parentCommentId: CommentId?) {
+            Log.d("CommentsViewModel", "refresh($postId), parent: $parentCommentId")
+            viewModelScope.launch(ioDispatcher) {
+                _isRefreshing.emit(true)
+                try {
+                    Log.d("CommentsViewModel", "fetching comments")
+                    val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
+                    Log.d("CommentsViewModel", "Emitting comments")
+                    _comments.emit(comments)
+                    _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
+                    pageNumber.value = pageNumber.value + 1
+                } catch (e: CommentsRepositoryException) {
+                    Log.d("CommentsViewMode", "Error: $e")
+                    _error.emit(e)
+                } finally {
+                    _isRefreshing.emit(false)
+                }
+            }
+        }
+
+        suspend fun initialFetch(postId: PostId, parentCommentId: CommentId?) {
+            _comments.emit(emptyList())
+            refresh(postId, parentCommentId)
+        }
+
+        fun onLoadMoreCommentsClicked(postId: PostId, commentId: CommentId) {
+            Log.d("CommentsViewModel", "More comments clicked: $commentId")
+            viewModelScope.launch {
+                _navigation.emit(feedNavigator.commentsScreen(postId, commentId))
+            }
+        }
+
+        fun onLoadNextPage(postId: PostId, parentCommentId: CommentId?) {
+            viewModelScope.launch {
+                _pageLoadingContent.emit(PageLoadingContent.LoadingNextPage)
+                val currentCommentCount = comments.value.size
                 val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
-                Log.d("CommentsViewModel", "Emitting comments")
                 _comments.emit(comments)
-                _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
-                pageNumber.value = pageNumber.value + 1
-            } catch (e: CommentsRepositoryException) {
-                Log.d("CommentsViewMode", "Error: $e")
-                _error.emit(e)
-            } finally {
-                _isRefreshing.emit(false)
+                if (comments.size == currentCommentCount) {
+                    _pageLoadingContent.emit(PageLoadingContent.NoResults)
+                } else {
+                    _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
+                }
             }
         }
     }
-
-    suspend fun initialFetch(postId: PostId, parentCommentId: CommentId?) {
-        _comments.emit(emptyList())
-        refresh(postId, parentCommentId)
-    }
-
-    fun onLoadMoreCommentsClicked(postId: PostId, commentId: CommentId) {
-        Log.d("CommentsViewModel", "More comments clicked: $commentId")
-        viewModelScope.launch {
-            _navigation.emit(feedNavigator.commentsScreen(postId, commentId))
-        }
-    }
-
-    fun onLoadNextPage(postId: PostId, parentCommentId: CommentId?) {
-        viewModelScope.launch {
-            _pageLoadingContent.emit(PageLoadingContent.LoadingNextPage)
-            val currentCommentCount = comments.value.size
-            val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
-            _comments.emit(comments)
-            if (comments.size == currentCommentCount) {
-                _pageLoadingContent.emit(PageLoadingContent.NoResults)
-            } else {
-                _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
-            }
-        }
-    }
-}
 
 sealed class PageLoadingContent {
     data object LoadingNextPage : PageLoadingContent()

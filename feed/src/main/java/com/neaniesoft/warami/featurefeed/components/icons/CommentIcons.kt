@@ -20,7 +20,7 @@ object CommentIcons {
                 defaultWidth = 40.0.dp,
                 defaultHeight = 40.0.dp,
                 viewportWidth = 40.0f,
-                viewportHeight = 40.0f
+                viewportHeight = 40.0f,
             ).apply {
                 path(
                     fill = SolidColor(Color.Black),
@@ -31,7 +31,7 @@ object CommentIcons {
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(15.625f, 19.917f)
                     quadToRelative(-1.208f, 0f, -2.021f, -0.896f)

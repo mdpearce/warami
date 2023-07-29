@@ -27,19 +27,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetPagingDataForPostsUseCase @Inject constructor(
-    private val postRepository: PostRepository,
-    private val postTransactor: PostTransactor,
-) {
-    operator fun invoke(searchParams: PostSearchParameters): Flow<PagingData<Post>> {
-        return createPager(searchParams, postRepository, postTransactor).flow
-            .map { pagingData ->
-                pagingData.map { dbPost ->
-                    dbPost.toDomain(searchParams)
+class GetPagingDataForPostsUseCase
+    @Inject
+    constructor(
+        private val postRepository: PostRepository,
+        private val postTransactor: PostTransactor,
+    ) {
+        operator fun invoke(searchParams: PostSearchParameters): Flow<PagingData<Post>> {
+            return createPager(searchParams, postRepository, postTransactor).flow
+                .map { pagingData ->
+                    pagingData.map { dbPost ->
+                        dbPost.toDomain(searchParams)
+                    }
                 }
-            }
+        }
     }
-}
 
 private fun SelectPostsOffset.toDomain(searchParams: PostSearchParameters): Post = Post(
     postId = PostId(postId.toInt()),

@@ -17,42 +17,44 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApiRepository @Inject constructor(
-    private val apiClientFn: Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient>,
-    private val instanceSettingsRepository: InstanceSettingsRepository,
-    private val authRepository: AuthRepository,
-) {
+class ApiRepository
+    @Inject
+    constructor(
+        private val apiClientFn: Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient>,
+        private val instanceSettingsRepository: InstanceSettingsRepository,
+        private val authRepository: AuthRepository,
+    ) {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
+        private val scope = CoroutineScope(Dispatchers.Default)
 
-    private val _api: MutableStateFlow<DefaultApi> =
-        MutableStateFlow(apiClientFn("http://localhost/").createService(DefaultApi::class.java))
-    val api = _api.asStateFlow()
+        private val _api: MutableStateFlow<DefaultApi> =
+            MutableStateFlow(apiClientFn("http://localhost/").createService(DefaultApi::class.java))
+        val api = _api.asStateFlow()
 
-    init {
-        scope.launch {
-            instanceSettingsRepository.currentInstanceBaseUrl().distinctUntilChanged().collect { baseUriString ->
-                Log.d("ApiRepository", "baseUrl changed. collecting $baseUriString")
-                updateApi(baseUriString, authRepository.jwt.value?.let { AuthToken(it) })
+        init {
+            scope.launch {
+                instanceSettingsRepository.currentInstanceBaseUrl().distinctUntilChanged().collect { baseUriString ->
+                    Log.d("ApiRepository", "baseUrl changed. collecting $baseUriString")
+                    updateApi(baseUriString, authRepository.jwt.value?.let { AuthToken(it) })
+                }
+            }
+            scope.launch {
+                authRepository.jwt.collect { authToken ->
+                    Log.d("ApiRepository", "jwt changed, collecting $authToken")
+                    updateApi(
+                        instanceSettingsRepository.currentInstanceBaseUrl().firstOrNull() ?: UriString(""),
+                        authToken?.let { AuthToken(it) },
+                    )
+                }
             }
         }
-        scope.launch {
-            authRepository.jwt.collect { authToken ->
-                Log.d("ApiRepository", "jwt changed, collecting $authToken")
-                updateApi(
-                    instanceSettingsRepository.currentInstanceBaseUrl().firstOrNull() ?: UriString(""),
-                    authToken?.let { AuthToken(it) },
-                )
-            }
+
+        private suspend fun updateApi(baseUrl: UriString, authToken: AuthToken?) {
+            Log.d("ApiRepository", "Updating API baseUrl ${baseUrl.value} with auth token $authToken")
+            _api.emit(
+                apiClientFn(
+                    baseUrl.value,
+                ).createService(DefaultApi::class.java),
+            )
         }
     }
-
-    private suspend fun updateApi(baseUrl: UriString, authToken: AuthToken?) {
-        Log.d("ApiRepository", "Updating API baseUrl ${baseUrl.value} with auth token $authToken")
-        _api.emit(
-            apiClientFn(
-                baseUrl.value,
-            ).createService(DefaultApi::class.java),
-        )
-    }
-}
