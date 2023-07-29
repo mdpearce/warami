@@ -110,7 +110,9 @@ class CommentsRepository
                         personQueries.upsert(
                             name = creator.name,
                             isBanned = creator.banned.toLong(),
-                            publishedAt = creator.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
+                            publishedAt = creator.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(
+                                ZoneId.of("UTC"),
+                            )
                                 .format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                             actorId = creator.actorId,
                             isLocal = creator.local.toLong(),
@@ -142,7 +144,9 @@ class CommentsRepository
                             communityId = community.id.toLong(),
                             content = comment.content,
                             isRemoved = comment.removed.toLong(),
-                            publishedAt = comment.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
+                            publishedAt = comment.published.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(
+                                ZoneId.of("UTC"),
+                            )
                                 .format(
                                     DateTimeFormatter.ISO_ZONED_DATE_TIME,
                                 ),
