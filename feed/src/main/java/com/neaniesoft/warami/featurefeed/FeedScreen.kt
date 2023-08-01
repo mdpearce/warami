@@ -2,14 +2,11 @@ package com.neaniesoft.warami.featurefeed
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -24,13 +21,9 @@ fun FeedScreen(
     navigator: DestinationsNavigator,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
-    val posts = viewModel.posts.collectAsLazyPagingItems()
-    val listState = rememberLazyListState()
+    val listingType by viewModel.listingType.collectAsState()
 
-    val refreshIndicatorState = rememberPullRefreshState(
-        refreshing = posts.loadState.refresh == LoadState.Loading,
-        onRefresh = { posts.refresh() },
-    )
+    val listState = rememberLazyListState()
 
     val currentTime by viewModel.currentTime.collectAsState()
 
@@ -44,5 +37,7 @@ fun FeedScreen(
         }
     }
 
-    FeedScreenContent(listState, refreshIndicatorState, posts, currentTime, viewModel)
+    Timber.d("About to render screen content: $listState, ${viewModel.posts}, $currentTime, $listingType")
+
+    FeedScreenContent(listState, viewModel.posts, currentTime, { viewModel.onPostClicked(it) }, listingType = listingType)
 }

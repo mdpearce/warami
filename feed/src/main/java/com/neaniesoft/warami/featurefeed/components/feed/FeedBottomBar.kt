@@ -1,8 +1,11 @@
 package com.neaniesoft.warami.featurefeed.components.feed
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -22,9 +25,10 @@ fun FeedBottomBar(
     listingType: ListingType,
     onListTypeClicked: () -> Unit,
 ) {
-    BottomAppBar() {
+    BottomAppBar(tonalElevation = 8.dp, contentPadding = PaddingValues(start = 8.dp, end = 8.dp)) {
         Button(onClick = { onListTypeClicked() }) {
             Icon(
+                modifier = Modifier.size(24.dp),
                 imageVector = FeedIcons.rememberFilterList(),
                 contentDescription = stringResource(id = R.string.content_description_list_type),
             )
