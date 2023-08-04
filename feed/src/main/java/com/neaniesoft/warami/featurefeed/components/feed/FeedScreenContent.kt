@@ -18,14 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
+import com.neaniesoft.warami.featurefeed.ListingTypeMenuItem
 import com.neaniesoft.warami.featurefeed.components.card.PostCard
-import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.time.Instant
 import java.time.ZoneId
@@ -34,13 +33,18 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterialApi::class)
 fun FeedScreenContent(
     listState: LazyListState,
-    postsProvider: Flow<PagingData<Post>>,
+    posts: LazyPagingItems<Post>,
     currentTime: Instant,
     onPostClicked: (PostId) -> Unit,
     listingType: ListingType,
+    onListingTypeButtonClicked: () -> Unit,
+    listingTypeMenuItems: List<ListingTypeMenuItem>,
+    onDismissListingTypeMenu: () -> Unit,
+    onListingTypeSelected: (ListingType) -> Unit,
 ) {
-    Timber.d("Recompoising FeedScreenContent: listState: $listState, postsProvider: $postsProvider, currentTime: $currentTime, onPostClicked(): $onPostClicked, listingType: $listingType")
-    val posts = postsProvider.collectAsLazyPagingItems()
+    Timber.d(
+        "Recompoising FeedScreenContent: listState: $listState, pagingPosts: $posts, currentTime: $currentTime, onPostClicked(): $onPostClicked, listingType: $listingType",
+    )
     val refreshIndicatorState = rememberPullRefreshState(
         refreshing = posts.loadState.refresh == LoadState.Loading,
         onRefresh = { posts.refresh() },
@@ -49,7 +53,13 @@ fun FeedScreenContent(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            FeedBottomBar(listingType = listingType) {}
+            FeedBottomBar(
+                listingType = listingType,
+                onListTypeClicked = onListingTypeButtonClicked,
+                listingTypeMenuItems = listingTypeMenuItems,
+                onDismissListingTypeMenu = onDismissListingTypeMenu,
+                onListingTypeSelected = onListingTypeSelected,
+            )
         },
     ) { paddingValues ->
         Box(
