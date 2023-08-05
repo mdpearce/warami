@@ -45,6 +45,7 @@ class CommentsRepository
         private val commentQueries: CommentQueries,
         private val apiRepository: ApiRepository,
         private val personQueries: PersonQueries,
+        private val accountRepository: AccountRepository,
     ) {
         private val api: DefaultApi
             get() {
@@ -80,7 +81,7 @@ class CommentsRepository
                         postId = postId?.value?.toBigDecimal(),
                         parentId = parentId?.value?.toBigDecimal(),
                         savedOnly = isSavedOnly,
-                        auth = null, // TODO do... uh, auth.
+                        auth = accountRepository.authToken(),
                     )
                 } catch (e: IOException) {
                     throw CommentsRepositoryException("IO Error from API", e)
