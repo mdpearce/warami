@@ -12,6 +12,9 @@
     <string name="content_description_featured_community">Post is featured in community</string>
     <string name="content_description_featured_local">Post is featured in local instance</string>
     <string name="content_description_list_type">Change listing type</string>
+    <string name="content_description_listing_type_all">All communities</string>
+    <string name="content_description_listing_type_local">Local communities</string>
+    <string name="content_description_listing_type_subscribed">Subscribed communities</string>
 
     <plurals name="load_more_comments">
         <item quantity="one">Load %1$d more comment</item>
