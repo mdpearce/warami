@@ -39,4 +39,8 @@ class AccountRepository
             val jwt = authRepository.jwt.value
             return !jwt.isNullOrEmpty()
         }
+
+        fun authToken(): String? {
+            return authRepository.jwt.value
+        }
     }
