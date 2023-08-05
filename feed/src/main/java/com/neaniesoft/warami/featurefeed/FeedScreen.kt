@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -20,7 +21,7 @@ fun FeedScreen(
     navigator: DestinationsNavigator,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
-    val listingType by viewModel.listingType.collectAsState()
+    val listingType by viewModel.listingType.collectAsState(initial = ListingType.ALL)
 
     val listState = rememberLazyListState()
 
