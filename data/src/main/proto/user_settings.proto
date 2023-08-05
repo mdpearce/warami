@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.neaniesoft.warami.data";
+option java_multiple_files = true;
+
+message UserSettings {
+  FeedListingType feed_listing_type = 1;
+}
+
+enum FeedListingType {
+  UNSPECIFIED = 0;
+  ALL = 1;
+  SUBSCRIBED = 2;
+  LOCAL = 3;
+}
