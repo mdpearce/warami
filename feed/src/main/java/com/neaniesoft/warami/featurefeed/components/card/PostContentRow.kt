@@ -43,7 +43,7 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?,
                 if (isFeaturedCommunity) {
                     Icon(
                         modifier = Modifier
-                            .padding(end = 8.dp)
+                            .padding(8.dp)
                             .size(16.dp),
                         imageVector = PostIcons.rememberPushPin(),
                         contentDescription = stringResource(id = R.string.content_description_featured_community),
@@ -52,7 +52,8 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?,
                 }
                 if (isFeaturedLocal) {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.padding(8.dp)
+                            .size(16.dp),
                         imageVector = PostIcons.rememberPushPin(),
                         contentDescription = stringResource(id = R.string.content_description_featured_local),
                     )
