@@ -29,78 +29,78 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel
-@Inject
-constructor(
-    private val clock: Clock,
-    private val feedNavigator: FeedNavigator,
-    private val getPagingData: GetPagingDataForPostsUseCase,
-    private val isLoggedIn: IsLoggedInUseCase,
-    private val userSettingsRepository: UserSettingsRepository,
-) : ViewModel() {
+    @Inject
+    constructor(
+        private val clock: Clock,
+        private val feedNavigator: FeedNavigator,
+        private val getPagingData: GetPagingDataForPostsUseCase,
+        private val isLoggedIn: IsLoggedInUseCase,
+        private val userSettingsRepository: UserSettingsRepository,
+    ) : ViewModel() {
 
-    private val searchParameters = MutableStateFlow(
-        PostSearchParameters(null, SortType.ACTIVE, null, null, null),
-    )
+        private val searchParameters = MutableStateFlow(
+            PostSearchParameters(null, SortType.ACTIVE, null, null, null),
+        )
 
-    val postsFlow: Flow<PagingData<Post>> = userSettingsRepository.feedListingType()
-        .combine(searchParameters) { listingType, searchParameters ->
-            searchParameters.copy(listingType = listingType)
-        }.flatMapLatest { params ->
-            getPagingData(params)
-        }.cachedIn(viewModelScope)
+        val postsFlow: Flow<PagingData<Post>> = userSettingsRepository.feedListingType()
+            .combine(searchParameters) { listingType, searchParameters ->
+                searchParameters.copy(listingType = listingType)
+            }.flatMapLatest { params ->
+                getPagingData(params)
+            }.cachedIn(viewModelScope)
 
-    private val _currentTime: MutableStateFlow<Instant> = MutableStateFlow(clock.instant())
-    val currentTime = _currentTime.asStateFlow()
+        private val _currentTime: MutableStateFlow<Instant> = MutableStateFlow(clock.instant())
+        val currentTime = _currentTime.asStateFlow()
 
-    private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
-    val navigation = _navigation.asSharedFlow()
+        private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
+        val navigation = _navigation.asSharedFlow()
 
-    val listingType = userSettingsRepository.feedListingType()
+        val listingType = userSettingsRepository.feedListingType()
 
-    private val _listingTypeMenuItems: MutableStateFlow<List<ListingTypeMenuItem>> = MutableStateFlow(emptyList())
-    val listingTypeMenuItems = _listingTypeMenuItems.asStateFlow()
+        private val _listingTypeMenuItems: MutableStateFlow<List<ListingTypeMenuItem>> = MutableStateFlow(emptyList())
+        val listingTypeMenuItems = _listingTypeMenuItems.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            initializeClock()
+        init {
+            viewModelScope.launch {
+                initializeClock()
+            }
+        }
+
+        fun onListingTypeChanged(listingType: ListingType) {
+            viewModelScope.launch {
+                _listingTypeMenuItems.emit(emptyList()) // dismiss menu
+                userSettingsRepository.setFeedListingType(listingType)
+            }
+        }
+
+        fun onListingTypeButtonClicked() {
+            viewModelScope.launch {
+                _listingTypeMenuItems.emit(
+                    ListingType.values().map {
+                        when (it) {
+                            ListingType.ALL, ListingType.LOCAL -> ListingTypeMenuItem(it, true)
+                            ListingType.SUBSCRIBED -> ListingTypeMenuItem(it, isLoggedIn())
+                        }
+                    },
+                )
+            }
+        }
+
+        fun onListingTypeMenuDismissed() {
+            viewModelScope.launch {
+                _listingTypeMenuItems.emit(emptyList())
+            }
+        }
+
+        private suspend fun initializeClock() {
+            _currentTime.emit(clock.instant())
+        }
+
+        fun onPostClicked(postId: PostId) {
+            viewModelScope.launch {
+                _navigation.emit(feedNavigator.commentsScreen(postId))
+            }
         }
     }
-
-    fun onListingTypeChanged(listingType: ListingType) {
-        viewModelScope.launch {
-            _listingTypeMenuItems.emit(emptyList()) // dismiss menu
-            userSettingsRepository.setFeedListingType(listingType)
-        }
-    }
-
-    fun onListingTypeButtonClicked() {
-        viewModelScope.launch {
-            _listingTypeMenuItems.emit(
-                ListingType.values().map {
-                    when (it) {
-                        ListingType.ALL, ListingType.LOCAL -> ListingTypeMenuItem(it, true)
-                        ListingType.SUBSCRIBED -> ListingTypeMenuItem(it, isLoggedIn())
-                    }
-                },
-            )
-        }
-    }
-
-    fun onListingTypeMenuDismissed() {
-        viewModelScope.launch {
-            _listingTypeMenuItems.emit(emptyList())
-        }
-    }
-
-    private suspend fun initializeClock() {
-        _currentTime.emit(clock.instant())
-    }
-
-    fun onPostClicked(postId: PostId) {
-        viewModelScope.launch {
-            _navigation.emit(feedNavigator.commentsScreen(postId))
-        }
-    }
-}
 
 data class ListingTypeMenuItem(val listingType: ListingType, val isEnabled: Boolean)
