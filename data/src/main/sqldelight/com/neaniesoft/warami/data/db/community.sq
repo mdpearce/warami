@@ -81,3 +81,6 @@ upsert {
         :bannerUrl
     );
 }
+
+selectCommunity:
+SELECT * FROM community WHERE id == :id;

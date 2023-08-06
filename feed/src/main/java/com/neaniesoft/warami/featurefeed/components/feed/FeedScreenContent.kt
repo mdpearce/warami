@@ -33,6 +33,7 @@ import java.time.ZoneId
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 fun FeedScreenContent(
+    communityName: String?,
     listState: LazyListState,
     posts: LazyPagingItems<Post>,
     currentTime: Instant,
@@ -54,6 +55,9 @@ fun FeedScreenContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            FeedTopBar(communityName = communityName)
+        },
         bottomBar = {
             FeedBottomBar(
                 listingType = listingType,
@@ -101,7 +105,7 @@ fun FeedScreenContent(
                             isFeaturedInCommunity = post.aggregates.isFeaturedCommunity,
                             isFeaturedInLocal = post.aggregates.isFeaturedLocal,
                             onCardClicked = { postId -> onPostClicked(postId) },
-                            onCommunityNameClicked = onCommunityNameClicked
+                            onCommunityNameClicked = onCommunityNameClicked,
                         )
                     }
                 }

@@ -26,4 +26,6 @@
     <string name="listing_type_subscribed">Subscribed</string>
     <string name="listing_type_all">All</string>
     <string name="listing_type_local">Local</string>
+
+    <string name="screen_title_home">Home</string>
 </resources>

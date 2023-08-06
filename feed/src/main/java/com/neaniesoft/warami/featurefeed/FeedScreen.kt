@@ -33,6 +33,8 @@ fun FeedScreen(
 
     val listingTypeMenuItems by viewModel.listingTypeMenuItems.collectAsState()
 
+    val communityName by viewModel.communityName.collectAsState(initial = null)
+
     LaunchedEffect(
         key1 = communityId,
         block = {
@@ -53,6 +55,7 @@ fun FeedScreen(
     Timber.d("About to render screen content: $listState, $posts, $currentTime, $listingType")
 
     FeedScreenContent(
+        communityName,
         listState,
         posts,
         currentTime,
@@ -62,6 +65,6 @@ fun FeedScreen(
         listingTypeMenuItems = listingTypeMenuItems,
         onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
         onListingTypeSelected = viewModel::onListingTypeChanged,
-        onCommunityNameClicked = viewModel::onCommunityNameClicked
+        onCommunityNameClicked = viewModel::onCommunityNameClicked,
     )
 }
