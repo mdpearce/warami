@@ -37,7 +37,7 @@ fun PostHeaderRow(
     creatorAvatarUrl: UriString?,
     postedTime: String,
     thumbnailUrl: String?,
-    onCommunityNameClicked: (CommunityId) -> Unit
+    onCommunityNameClicked: (CommunityId) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -72,7 +72,7 @@ fun PostHeaderRow(
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         Spacer(modifier = Modifier.weight(0.1f))
         if (creatorAvatarUrl != null) {
@@ -112,7 +112,7 @@ fun PreviewPostHeaderRow() {
                 creatorAvatarUrl = null,
                 postedTime = "12 hours",
                 thumbnailUrl = null,
-                onCommunityNameClicked = {_->},
+                onCommunityNameClicked = { _ -> },
             )
         }
     }

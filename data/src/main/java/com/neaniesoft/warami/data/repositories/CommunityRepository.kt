@@ -17,32 +17,34 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CommunityRepository @Inject constructor(
-    private val communityQueries: CommunityQueries,
-    private val ioDispatcher: IODispatcher,
-) {
-    fun getCommunity(communityId: CommunityId): Flow<Community> {
-        return communityQueries.transactionWithResult {
-            communityQueries.selectCommunity(communityId.value.toLong()).asFlow()
-        }.mapToOne(ioDispatcher).map { db ->
-            Community(
-                id = CommunityId(db.id.toInt()),
-                name = db.name,
-                title = db.title,
-                isRemoved = db.isRemoved.toBoolean(),
-                publishedAt = db.published.parseZonedDateTime(),
-                isDeleted = db.isDeleted.toBoolean(),
-                isNsfw = db.isNsfw.toBoolean(),
-                actorId = ActorId(db.actorId),
-                isLocal = db.isLocal.toBoolean(),
-                isHidden = db.isHidden.toBoolean(),
-                isPostingRestrictedToMods = db.isPostingRestrictedToMods.toBoolean(),
-                instanceId = InstanceId(db.instanceId.toInt()),
-                description = db.description,
-                updatedAt = db.updatedAt?.parseZonedDateTime(),
-                icon = db.iconUrl?.let { UriString(it) },
-                banner = db.bannerUrl?.let { UriString(it) },
-            )
+class CommunityRepository
+    @Inject
+    constructor(
+        private val communityQueries: CommunityQueries,
+        private val ioDispatcher: IODispatcher,
+    ) {
+        fun getCommunity(communityId: CommunityId): Flow<Community> {
+            return communityQueries.transactionWithResult {
+                communityQueries.selectCommunity(communityId.value.toLong()).asFlow()
+            }.mapToOne(ioDispatcher).map { db ->
+                Community(
+                    id = CommunityId(db.id.toInt()),
+                    name = db.name,
+                    title = db.title,
+                    isRemoved = db.isRemoved.toBoolean(),
+                    publishedAt = db.published.parseZonedDateTime(),
+                    isDeleted = db.isDeleted.toBoolean(),
+                    isNsfw = db.isNsfw.toBoolean(),
+                    actorId = ActorId(db.actorId),
+                    isLocal = db.isLocal.toBoolean(),
+                    isHidden = db.isHidden.toBoolean(),
+                    isPostingRestrictedToMods = db.isPostingRestrictedToMods.toBoolean(),
+                    instanceId = InstanceId(db.instanceId.toInt()),
+                    description = db.description,
+                    updatedAt = db.updatedAt?.parseZonedDateTime(),
+                    icon = db.iconUrl?.let { UriString(it) },
+                    banner = db.bannerUrl?.let { UriString(it) },
+                )
+            }
         }
     }
-}
