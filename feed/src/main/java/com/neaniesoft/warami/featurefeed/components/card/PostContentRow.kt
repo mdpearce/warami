@@ -31,6 +31,9 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?,
         Text(
             text = postTitle,
             style = MaterialTheme.typography.titleMedium,
+            color = if (isFeaturedCommunity || isFeaturedLocal) {
+                MaterialTheme.colorScheme.primary
+            } else MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f),
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -61,7 +64,55 @@ fun PostContentRow(postTitle: String, thumbnailUrl: UriString?, url: UriString?,
 
 @Composable
 @Preview
-fun PostContentRowPreview() {
+fun PostContentRowPreviewNotFeatured() {
+    MaterialTheme {
+        Surface(Modifier.fillMaxWidth()) {
+            PostContentRow(
+                postTitle = "This is a long post title that will spill over to multiple lines",
+                thumbnailUrl = null,
+                url = UriString("http://google.com"),
+                isFeaturedCommunity = false,
+                isFeaturedLocal = false,
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PostContentRowPreviewFeaturedCommunity() {
+    MaterialTheme {
+        Surface(Modifier.fillMaxWidth()) {
+            PostContentRow(
+                postTitle = "This is a long post title that will spill over to multiple lines",
+                thumbnailUrl = null,
+                url = UriString("http://google.com"),
+                isFeaturedCommunity = true,
+                isFeaturedLocal = false,
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PostContentRowPreviewFeaturedLocal() {
+    MaterialTheme {
+        Surface(Modifier.fillMaxWidth()) {
+            PostContentRow(
+                postTitle = "This is a long post title that will spill over to multiple lines",
+                thumbnailUrl = null,
+                url = UriString("http://google.com"),
+                isFeaturedCommunity = false,
+                isFeaturedLocal = true,
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PostContentRowPreviewFeaturedBoth() {
     MaterialTheme {
         Surface(Modifier.fillMaxWidth()) {
             PostContentRow(
