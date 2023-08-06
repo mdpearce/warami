@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
@@ -19,6 +20,7 @@ import timber.log.Timber
 @Composable
 fun FeedScreen(
     navigator: DestinationsNavigator,
+    communityId: CommunityId? = null,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
     val listingType by viewModel.listingType.collectAsState(initial = ListingType.ALL)
@@ -30,6 +32,13 @@ fun FeedScreen(
     val navigation by viewModel.navigation.collectAsState(initial = null)
 
     val listingTypeMenuItems by viewModel.listingTypeMenuItems.collectAsState()
+
+    LaunchedEffect(
+        key1 = communityId,
+        block = {
+            viewModel.onCommunityId(communityId)
+        },
+    )
 
     val posts = viewModel.postsFlow.collectAsLazyPagingItems()
 
