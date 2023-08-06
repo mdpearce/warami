@@ -62,5 +62,6 @@ fun FeedScreen(
         listingTypeMenuItems = listingTypeMenuItems,
         onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
         onListingTypeSelected = viewModel::onListingTypeChanged,
+        onCommunityNameClicked = viewModel::onCommunityNameClicked
     )
 }

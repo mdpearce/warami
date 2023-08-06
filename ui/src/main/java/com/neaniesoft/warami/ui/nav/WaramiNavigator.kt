@@ -29,4 +29,8 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
     override fun commentsScreen(postId: PostId, parentCommentId: CommentId?): Direction {
         return CommentsScreenDestination(postId, parentCommentId)
     }
+
+    override fun feedScreenForCommunity(communityId: CommunityId): Direction {
+        return FeedScreenDestination(communityId)
+    }
 }

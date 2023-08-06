@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.UriString
 
@@ -19,6 +20,7 @@ import com.neaniesoft.warami.common.models.UriString
 @Composable
 fun PostCard(
     postId: PostId,
+    communityId: CommunityId,
     communityName: String,
     creatorName: String,
     creatorAvatar: UriString?,
@@ -33,6 +35,7 @@ fun PostCard(
     isFeaturedInCommunity: Boolean,
     isFeaturedInLocal: Boolean,
     onCardClicked: (PostId) -> Unit,
+    onCommunityNameClicked: (CommunityId) -> Unit,
 ) {
     Card(
         onClick = { onCardClicked(postId) },
@@ -42,14 +45,17 @@ fun PostCard(
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 PostHeaderRow(
+                    communityId = communityId,
                     communityName = communityName,
                     creatorName = creatorName,
                     creatorAvatarUrl = creatorAvatar,
                     postedTime = postedTime,
                     thumbnailUrl = communityThumbnailUri?.value,
+                    onCommunityNameClicked = onCommunityNameClicked,
                 )
 
                 PostContentRow(
+
                     postTitle = postTitle,
                     thumbnailUrl = postThumbnailUri,
                     url = postUri,
@@ -73,6 +79,7 @@ fun PreviewPostCard() {
     Surface(modifier = Modifier.fillMaxSize()) {
         PostCard(
             PostId(1),
+            CommunityId(1),
             "communityName",
             "creatorName",
             null,
@@ -87,6 +94,7 @@ fun PreviewPostCard() {
             true,
             true,
             {},
+            { _ -> },
         )
     }
 }

@@ -113,6 +113,12 @@ constructor(
             _navigation.emit(feedNavigator.commentsScreen(postId))
         }
     }
+
+    fun onCommunityNameClicked(communityId: CommunityId) {
+        viewModelScope.launch {
+            _navigation.emit(feedNavigator.feedScreenForCommunity(communityId))
+        }
+    }
 }
 
 data class ListingTypeMenuItem(val listingType: ListingType, val isEnabled: Boolean)
