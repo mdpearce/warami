@@ -20,6 +20,7 @@ import com.neaniesoft.warami.data.db.PostSearchParamsQueries
 import com.neaniesoft.warami.data.db.SelectBySearchParams
 import com.neaniesoft.warami.data.db.SelectPostsOffset
 import com.neaniesoft.warami.data.di.IODispatcher
+import com.neaniesoft.warami.data.repositories.AccountRepository
 import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
@@ -48,6 +49,7 @@ class PostRepository
         private val localDateTimeFormatter: DateTimeFormatter,
         private val coroutineDispatcher: IODispatcher,
         private val clock: Clock,
+        private val accountRepository: AccountRepository,
     ) {
         companion object {
             private const val POSTS_PER_PAGE = 20
@@ -73,6 +75,7 @@ class PostRepository
                     communityId = searchParameters.communityId?.value?.toBigDecimal(),
                     communityName = searchParameters.communityName,
                     savedOnly = searchParameters.isSavedOnly,
+                    auth = accountRepository.authToken(),
                 )
                 if (!response.isSuccessful) {
                     throw PostRepositoryException("Unsuccessful response from API when fetching fresh posts: ${response.code()}")
