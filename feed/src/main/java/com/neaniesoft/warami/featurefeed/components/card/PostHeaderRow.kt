@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.featurefeed.components.card
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,16 +25,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.R
 
 @Composable
 fun PostHeaderRow(
     communityName: String,
+    communityId: CommunityId,
     creatorName: String,
     creatorAvatarUrl: UriString?,
     postedTime: String,
     thumbnailUrl: String?,
+    onCommunityNameClicked: (CommunityId) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -64,7 +68,7 @@ fun PostHeaderRow(
         }
         Text(
             text = communityName,
-            modifier = Modifier.padding(start = 8.dp).weight(1.0f),
+            modifier = Modifier.padding(start = 8.dp).weight(1.0f).clickable { onCommunityNameClicked(communityId) },
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
@@ -102,11 +106,13 @@ fun PreviewPostHeaderRow() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
             PostHeaderRow(
+                communityId = CommunityId(1),
                 communityName = "Sample community with an extremely long name to wrap on 2 lines",
                 creatorName = "John Doe",
                 creatorAvatarUrl = null,
                 postedTime = "12 hours",
                 thumbnailUrl = null,
+                onCommunityNameClicked = { _ -> },
             )
         }
     }

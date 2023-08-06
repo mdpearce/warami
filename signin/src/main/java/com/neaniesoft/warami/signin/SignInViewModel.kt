@@ -6,7 +6,7 @@ import com.neaniesoft.warami.common.RemoteResult
 import com.neaniesoft.warami.common.navigation.SignInNavigator
 import com.neaniesoft.warami.domain.usecases.GetCurrentInstanceDisplayNameUseCase
 import com.neaniesoft.warami.domain.usecases.LoginUseCase
-import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.ramcosta.composedestinations.spec.Direction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +29,7 @@ class SignInViewModel
         private val _instanceDisplayName: MutableStateFlow<String> = MutableStateFlow("")
         val instanceDisplayName = _instanceDisplayName.asStateFlow()
 
-        private val _navigation: MutableSharedFlow<DirectionDestinationSpec?> = MutableSharedFlow()
+        private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
         val navigation = _navigation.asSharedFlow()
 
         init {
@@ -48,7 +48,7 @@ class SignInViewModel
                     is RemoteResult.Ok -> {
                         // Handle logged in
                         _screenState.emit(SignInScreenState.Idle)
-                        _navigation.emit(signInNavigator.feedScreen())
+                        _navigation.emit(signInNavigator.feedScreen(communityId = null))
                     }
 
                     is RemoteResult.Err -> {

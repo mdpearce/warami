@@ -1,6 +1,7 @@
 package com.neaniesoft.warami.ui.nav
 
 import com.neaniesoft.warami.common.models.CommentId
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.common.navigation.HomeNavigator
@@ -17,8 +18,8 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
         return SignInScreenDestination
     }
 
-    override fun feedScreen(): DirectionDestinationSpec {
-        return FeedScreenDestination
+    override fun feedScreen(communityId: CommunityId?): Direction {
+        return FeedScreenDestination(communityId)
     }
 
     override fun instanceSelectScreen(): DirectionDestinationSpec {
@@ -27,5 +28,9 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
 
     override fun commentsScreen(postId: PostId, parentCommentId: CommentId?): Direction {
         return CommentsScreenDestination(postId, parentCommentId)
+    }
+
+    override fun feedScreenForCommunity(communityId: CommunityId): Direction {
+        return FeedScreenDestination(communityId)
     }
 }

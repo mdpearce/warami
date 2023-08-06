@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
@@ -32,6 +33,7 @@ import java.time.ZoneId
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 fun FeedScreenContent(
+    communityName: String?,
     listState: LazyListState,
     posts: LazyPagingItems<Post>,
     currentTime: Instant,
@@ -41,6 +43,7 @@ fun FeedScreenContent(
     listingTypeMenuItems: List<ListingTypeMenuItem>,
     onDismissListingTypeMenu: () -> Unit,
     onListingTypeSelected: (ListingType) -> Unit,
+    onCommunityNameClicked: (CommunityId) -> Unit,
 ) {
     Timber.d(
         "Recompoising FeedScreenContent: listState: $listState, pagingPosts: $posts, currentTime: $currentTime, onPostClicked(): $onPostClicked, listingType: $listingType",
@@ -52,6 +55,9 @@ fun FeedScreenContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            FeedTopBar(communityName = communityName)
+        },
         bottomBar = {
             FeedBottomBar(
                 listingType = listingType,
@@ -79,6 +85,7 @@ fun FeedScreenContent(
                     if (post != null) {
                         PostCard(
                             postId = post.postId,
+                            communityId = post.community.id,
                             communityName = post.community.title,
                             creatorName = post.creator.displayName ?: post.creator.name,
                             creatorAvatar = post.creator.avatarUrl,
@@ -98,6 +105,7 @@ fun FeedScreenContent(
                             isFeaturedInCommunity = post.aggregates.isFeaturedCommunity,
                             isFeaturedInLocal = post.aggregates.isFeaturedLocal,
                             onCardClicked = { postId -> onPostClicked(postId) },
+                            onCommunityNameClicked = onCommunityNameClicked,
                         )
                     }
                 }
