@@ -24,6 +24,7 @@ import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.ListingTypeMenuItem
 import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import timber.log.Timber
@@ -44,6 +45,7 @@ fun FeedScreenContent(
     onDismissListingTypeMenu: () -> Unit,
     onListingTypeSelected: (ListingType) -> Unit,
     onCommunityNameClicked: (CommunityId) -> Unit,
+    onLinkClicked: (UriString) -> Unit,
 ) {
     Timber.d(
         "Recompoising FeedScreenContent: listState: $listState, pagingPosts: $posts, currentTime: $currentTime, onPostClicked(): $onPostClicked, listingType: $listingType",
@@ -106,6 +108,7 @@ fun FeedScreenContent(
                             isFeaturedInLocal = post.aggregates.isFeaturedLocal,
                             onCardClicked = { postId -> onPostClicked(postId) },
                             onCommunityNameClicked = onCommunityNameClicked,
+                            onLinkClicked = onLinkClicked,
                         )
                     }
                 }
