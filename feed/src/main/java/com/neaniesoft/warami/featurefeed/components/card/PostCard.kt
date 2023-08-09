@@ -36,6 +36,7 @@ fun PostCard(
     isFeaturedInLocal: Boolean,
     onCardClicked: (PostId) -> Unit,
     onCommunityNameClicked: (CommunityId) -> Unit,
+    onLinkClicked: (UriString) -> Unit,
 ) {
     Card(
         onClick = { onCardClicked(postId) },
@@ -55,12 +56,12 @@ fun PostCard(
                 )
 
                 PostContentRow(
-
                     postTitle = postTitle,
                     thumbnailUrl = postThumbnailUri,
                     url = postUri,
                     isFeaturedCommunity = isFeaturedInCommunity,
                     isFeaturedLocal = isFeaturedInLocal,
+                    onLinkClicked = onLinkClicked,
                 )
 
                 if (!embeddedText.isNullOrEmpty()) {
@@ -94,7 +95,8 @@ fun PreviewPostCard() {
             true,
             true,
             {},
-            { _ -> },
+            {},
+            {},
         )
     }
 }

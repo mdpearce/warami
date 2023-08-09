@@ -1,10 +1,13 @@
 package com.neaniesoft.warami.featurefeed
 
+import android.content.Intent
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.models.CommunityId
@@ -35,6 +38,8 @@ fun FeedScreen(
 
     val communityName by viewModel.communityName.collectAsState(initial = null)
 
+    val uriNavigation by viewModel.uriNavigation.collectAsState(initial = null)
+
     LaunchedEffect(
         key1 = communityId,
         block = {
@@ -52,6 +57,16 @@ fun FeedScreen(
         }
     }
 
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = uriNavigation) {
+        val uri = uriNavigation?.value?.toUri()
+        if (uri != null) {
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            context.startActivity(intent)
+        }
+    }
+
     Timber.d("About to render screen content: $listState, $posts, $currentTime, $listingType")
 
     FeedScreenContent(
@@ -66,5 +81,6 @@ fun FeedScreen(
         onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
         onListingTypeSelected = viewModel::onListingTypeChanged,
         onCommunityNameClicked = viewModel::onCommunityNameClicked,
+        onLinkClicked = viewModel::onLinkClicked
     )
 }
