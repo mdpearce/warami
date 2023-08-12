@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBar
+import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBarListingParams
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -66,12 +67,14 @@ fun FeedScreen(
         topBar = {},
         bottomBar = {
             FeedBottomBar(
-                listingType = listingType,
-                onListTypeClicked = viewModel::onListingTypeButtonClicked,
-                listingTypeMenuItems = listingTypeMenuItems,
-                onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
-                onListingTypeSelected = viewModel::onListingTypeChanged,
+                FeedBottomBarListingParams(
+                    listingType = listingType,
+                    onListTypeClicked = viewModel::onListingTypeButtonClicked,
+                    listingTypeMenuItems = listingTypeMenuItems,
+                    onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
+                    onListingTypeSelected = viewModel::onListingTypeChanged,
+                ),
             )
-        }
+        },
     )
 }
