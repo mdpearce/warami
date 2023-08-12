@@ -37,10 +37,11 @@ fun FeedScreenContent(
     onPostClicked: (PostId) -> Unit,
     onCommunityNameClicked: (CommunityId) -> Unit,
     onLinkClicked: (UriString) -> Unit,
+    topBar: @Composable () -> Unit,
     bottomBar: @Composable () -> Unit,
 ) {
     Timber.d(
-        "Recompoising FeedScreenContent: listState: $listState, pagingPosts: $posts, onPostClicked(): $onPostClicked",
+        "Recomposing FeedScreenContent: listState: $listState, pagingPosts: $posts, onPostClicked(): $onPostClicked",
     )
     val refreshIndicatorState = rememberPullRefreshState(
         refreshing = posts.loadState.refresh == LoadState.Loading,
@@ -49,7 +50,7 @@ fun FeedScreenContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-
+        topBar = topBar,
         bottomBar = bottomBar,
     ) { paddingValues ->
         Box(
