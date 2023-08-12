@@ -7,6 +7,7 @@ import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.common.navigation.HomeNavigator
 import com.neaniesoft.warami.common.navigation.SignInNavigator
 import com.neaniesoft.warami.featurefeed.destinations.CommentsScreenDestination
+import com.neaniesoft.warami.featurefeed.destinations.CommunityFeedScreenDestination
 import com.neaniesoft.warami.featurefeed.destinations.FeedScreenDestination
 import com.neaniesoft.warami.signin.destinations.InstanceSelectionScreenDestination
 import com.neaniesoft.warami.signin.destinations.SignInScreenDestination
@@ -18,8 +19,8 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
         return SignInScreenDestination
     }
 
-    override fun feedScreen(communityId: CommunityId?): Direction {
-        return FeedScreenDestination(communityId)
+    override fun homeFeedScreen(): Direction {
+        return FeedScreenDestination()
     }
 
     override fun instanceSelectScreen(): DirectionDestinationSpec {
@@ -31,6 +32,6 @@ object WaramiNavigator : SignInNavigator, HomeNavigator, FeedNavigator {
     }
 
     override fun feedScreenForCommunity(communityId: CommunityId): Direction {
-        return FeedScreenDestination(communityId)
+        return CommunityFeedScreenDestination(communityId)
     }
 }

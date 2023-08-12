@@ -6,5 +6,5 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
 interface SignInNavigator {
     fun signInScreen(): DirectionDestinationSpec
-    fun feedScreen(communityId: CommunityId?): Direction
+    fun homeFeedScreen(): Direction
 }

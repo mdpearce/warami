@@ -5,6 +5,6 @@ import com.ramcosta.composedestinations.spec.Direction
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
 interface HomeNavigator {
-    fun feedScreen(communityId: CommunityId?): Direction
+    fun homeFeedScreen(): Direction
     fun instanceSelectScreen(): DirectionDestinationSpec
 }

@@ -22,7 +22,7 @@ class HomeViewModel
 
         suspend fun onInit() {
             if (isLoggedIn()) {
-                _navigation.emit(homeNavigator.feedScreen(communityId = null))
+                _navigation.emit(homeNavigator.homeFeedScreen())
             } else {
                 _navigation.emit(homeNavigator.instanceSelectScreen())
             }

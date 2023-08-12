@@ -48,7 +48,7 @@ class SignInViewModel
                     is RemoteResult.Ok -> {
                         // Handle logged in
                         _screenState.emit(SignInScreenState.Idle)
-                        _navigation.emit(signInNavigator.feedScreen(communityId = null))
+                        _navigation.emit(signInNavigator.homeFeedScreen())
                     }
 
                     is RemoteResult.Err -> {
