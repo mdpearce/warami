@@ -283,7 +283,7 @@ object FeedIcons {
                 defaultWidth = 40.0.dp,
                 defaultHeight = 40.0.dp,
                 viewportWidth = 40.0f,
-                viewportHeight = 40.0f
+                viewportHeight = 40.0f,
             ).apply {
                 path(
                     fill = SolidColor(Color.Black),
@@ -294,7 +294,7 @@ object FeedIcons {
                     strokeLineCap = StrokeCap.Butt,
                     strokeLineJoin = StrokeJoin.Miter,
                     strokeLineMiter = 1f,
-                    pathFillType = PathFillType.NonZero
+                    pathFillType = PathFillType.NonZero,
                 ) {
                     moveTo(13.708f, 29.333f)
                     horizontalLineTo(6.542f)

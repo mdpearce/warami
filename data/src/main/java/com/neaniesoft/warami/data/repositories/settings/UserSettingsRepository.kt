@@ -16,41 +16,41 @@ import javax.inject.Singleton
 
 @Singleton
 class UserSettingsRepository
-    @Inject
-    constructor(
-        @ApplicationContext context: Context,
-    ) {
-        private val dataStore = context.userSettingsDataStore
+@Inject
+constructor(
+    @ApplicationContext context: Context,
+) {
+    private val dataStore = context.userSettingsDataStore
 
-        fun feedListingType(): Flow<ListingType> = dataStore.data.map { settings ->
-            settings.feedListingType
-        }.catch { emit(FeedListingType.ALL) }
-            .map { listingType ->
-                when (listingType) {
-                    FeedListingType.UNSPECIFIED -> ListingType.ALL
-                    FeedListingType.ALL -> ListingType.ALL
-                    FeedListingType.SUBSCRIBED -> ListingType.SUBSCRIBED
-                    FeedListingType.LOCAL -> ListingType.LOCAL
-                    FeedListingType.UNRECOGNIZED -> {
-                        Timber.w("Unrecognized value for FeedListingType: $listingType")
-                        ListingType.ALL
-                    }
+    fun feedListingType(): Flow<ListingType> = dataStore.data.map { settings ->
+        settings.feedListingType
+    }.catch { emit(FeedListingType.ALL) }
+        .map { listingType ->
+            when (listingType) {
+                FeedListingType.UNSPECIFIED -> ListingType.ALL
+                FeedListingType.ALL -> ListingType.ALL
+                FeedListingType.SUBSCRIBED -> ListingType.SUBSCRIBED
+                FeedListingType.LOCAL -> ListingType.LOCAL
+                FeedListingType.UNRECOGNIZED -> {
+                    Timber.w("Unrecognized value for FeedListingType: $listingType")
+                    ListingType.ALL
                 }
             }
+        }
 
-        suspend fun setFeedListingType(listingType: ListingType) {
-            val feedListingType = when (listingType) {
-                ListingType.ALL -> FeedListingType.ALL
-                ListingType.SUBSCRIBED -> FeedListingType.SUBSCRIBED
-                ListingType.LOCAL -> FeedListingType.LOCAL
-            }
-            dataStore.updateData { currentSettings ->
-                currentSettings.toBuilder()
-                    .setFeedListingType(feedListingType)
-                    .build()
-            }
+    suspend fun setFeedListingType(listingType: ListingType) {
+        val feedListingType = when (listingType) {
+            ListingType.ALL -> FeedListingType.ALL
+            ListingType.SUBSCRIBED -> FeedListingType.SUBSCRIBED
+            ListingType.LOCAL -> FeedListingType.LOCAL
+        }
+        dataStore.updateData { currentSettings ->
+            currentSettings.toBuilder()
+                .setFeedListingType(feedListingType)
+                .build()
         }
     }
+}
 
 private val Context.userSettingsDataStore: DataStore<UserSettings> by dataStore(
     fileName = "user_settings.proto",

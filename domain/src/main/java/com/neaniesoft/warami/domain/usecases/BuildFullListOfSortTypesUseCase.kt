@@ -1,8 +1,11 @@
 package com.neaniesoft.warami.domain.usecases
 
 import com.neaniesoft.warami.common.models.SortType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BuildFullListOfSortTypesUseCase {
+@Singleton
+class BuildFullListOfSortTypesUseCase @Inject constructor() {
     operator fun invoke(): List<SortType> = listOf(
         SortType.ACTIVE,
         SortType.HOT,

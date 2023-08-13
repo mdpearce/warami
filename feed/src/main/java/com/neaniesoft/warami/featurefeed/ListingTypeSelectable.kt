@@ -11,4 +11,3 @@ interface ListingTypeSelectable {
     fun onListingTypeButtonClicked()
     fun onListingTypeMenuDismissed()
 }
-

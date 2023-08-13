@@ -2,10 +2,12 @@ package com.neaniesoft.warami.featurefeed.components.feed
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -96,7 +98,9 @@ fun FeedBottomBar(
                                             Icon(
                                                 modifier = Modifier.size(24.dp),
                                                 imageVector = FeedIcons.rememberChecklist(),
-                                                contentDescription = stringResource(id = R.string.content_description_listing_type_subscribed),
+                                                contentDescription = stringResource(
+                                                    id = R.string.content_description_listing_type_subscribed,
+                                                ),
                                             )
                                         }
 
@@ -113,6 +117,7 @@ fun FeedBottomBar(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.width(16.dp))
             }
         }
         sortTypeParams?.let { params ->
@@ -149,7 +154,6 @@ fun FeedBottomBar(
                 }
             }
         }
-
     }
 }
 

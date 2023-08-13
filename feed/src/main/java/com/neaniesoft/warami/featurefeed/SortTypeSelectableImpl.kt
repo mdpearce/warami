@@ -39,5 +39,4 @@ class SortTypeSelectableImpl(
             _sortTypeMenuItems.emit(emptyList())
         }
     }
-
 }

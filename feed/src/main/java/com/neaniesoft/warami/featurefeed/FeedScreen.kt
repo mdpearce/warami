@@ -87,7 +87,6 @@ fun FeedScreen(
                     onSortTypeSelected = viewModel::onSortTypeChanged,
                 ),
             )
-
         },
     )
 }

@@ -18,43 +18,43 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiRepository
-    @Inject
-    constructor(
-        private val apiClientFn: Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient>,
-        private val instanceSettingsRepository: InstanceSettingsRepository,
-        private val authRepository: AuthRepository,
-    ) {
+@Inject
+constructor(
+    private val apiClientFn: Function1<@JvmSuppressWildcards String, @JvmSuppressWildcards ApiClient>,
+    private val instanceSettingsRepository: InstanceSettingsRepository,
+    private val authRepository: AuthRepository,
+) {
 
-        private val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
-        private val _api: MutableStateFlow<DefaultApi> =
-            MutableStateFlow(apiClientFn("http://localhost/").createService(DefaultApi::class.java))
-        val api = _api.asStateFlow()
+    private val _api: MutableStateFlow<DefaultApi> =
+        MutableStateFlow(apiClientFn("http://localhost/").createService(DefaultApi::class.java))
+    val api = _api.asStateFlow()
 
-        init {
-            scope.launch {
-                instanceSettingsRepository.currentInstanceBaseUrl().distinctUntilChanged().collect { baseUriString ->
-                    Timber.d("baseUrl changed. collecting $baseUriString")
-                    updateApi(baseUriString, authRepository.jwt.value?.let { AuthToken(it) })
-                }
-            }
-            scope.launch {
-                authRepository.jwt.collect { authToken ->
-                    Timber.d("jwt changed, collecting $authToken")
-                    updateApi(
-                        instanceSettingsRepository.currentInstanceBaseUrl().firstOrNull() ?: UriString(""),
-                        authToken?.let { AuthToken(it) },
-                    )
-                }
+    init {
+        scope.launch {
+            instanceSettingsRepository.currentInstanceBaseUrl().distinctUntilChanged().collect { baseUriString ->
+                Timber.d("baseUrl changed. collecting $baseUriString")
+                updateApi(baseUriString, authRepository.jwt.value?.let { AuthToken(it) })
             }
         }
-
-        private suspend fun updateApi(baseUrl: UriString, authToken: AuthToken?) {
-            Timber.d("Updating API baseUrl ${baseUrl.value} with auth token $authToken")
-            _api.emit(
-                apiClientFn(
-                    baseUrl.value,
-                ).createService(DefaultApi::class.java),
-            )
+        scope.launch {
+            authRepository.jwt.collect { authToken ->
+                Timber.d("jwt changed, collecting $authToken")
+                updateApi(
+                    instanceSettingsRepository.currentInstanceBaseUrl().firstOrNull() ?: UriString(""),
+                    authToken?.let { AuthToken(it) },
+                )
+            }
         }
     }
+
+    private suspend fun updateApi(baseUrl: UriString, authToken: AuthToken?) {
+        Timber.d("Updating API baseUrl ${baseUrl.value} with auth token $authToken")
+        _api.emit(
+            apiClientFn(
+                baseUrl.value,
+            ).createService(DefaultApi::class.java),
+        )
+    }
+}
