@@ -8,7 +8,6 @@ import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
-import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
@@ -17,14 +16,12 @@ import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKey
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
-import com.neaniesoft.warami.data.db.SelectBySearchParams
 import com.neaniesoft.warami.data.db.SelectPostsOffset
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.AccountRepository
 import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
-import com.neaniesoft.warami.data.repositories.adapters.toDomain
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Clock
@@ -46,7 +43,6 @@ constructor(
     private val postAggregateQueries: PostAggregateQueries,
     private val postSearchParamsQueries: PostSearchParamsQueries,
     private val postRemoteKeyQueries: PostRemoteKeyQueries,
-    private val localDateTimeFormatter: DateTimeFormatter,
     private val coroutineDispatcher: IODispatcher,
     private val clock: Clock,
     private val accountRepository: AccountRepository,

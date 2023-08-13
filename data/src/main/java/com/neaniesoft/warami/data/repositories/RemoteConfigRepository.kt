@@ -1,6 +1,5 @@
 package com.neaniesoft.warami.data.repositories
 
-import android.util.Log
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener

@@ -204,7 +204,7 @@ constructor(
                     path = CommentPath(dbComment.path),
                     isDistinguished = dbComment.isDistinguished.toBoolean(),
                     languageId = LanguageId(dbComment.languageId.toInt()),
-                    updatedAt = dbComment.updatedAt?.let { it.parseZonedDateTime() },
+                    updatedAt = dbComment.updatedAt?.parseZonedDateTime(),
                     counts = CommentAggregates(
                         score = Score(dbComment.aggregatesScore.toInt()),
                         votes = Votes(up = dbComment.aggregatesUpVotes.toInt(), down = dbComment.aggregatesDownVotes.toInt()),
