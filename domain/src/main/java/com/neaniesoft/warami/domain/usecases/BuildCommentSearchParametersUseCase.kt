@@ -10,23 +10,23 @@ import javax.inject.Singleton
 
 @Singleton
 class BuildCommentSearchParametersUseCase
-    @Inject
-    constructor() {
+@Inject
+constructor() {
 
-        companion object {
-            const val MAX_DEPTH = 8
-        }
-
-        operator fun invoke(postId: PostId, parentCommentId: CommentId?): CommentSearchParameters {
-            return CommentSearchParameters(
-                listingType = ListingType.ALL,
-                commentSortType = CommentSortType.TOP,
-                maxDepth = MAX_DEPTH,
-                postId = postId,
-                communityId = null,
-                communityName = null,
-                isSavedOnly = null,
-                parentId = parentCommentId,
-            )
-        }
+    companion object {
+        const val MAX_DEPTH = 8
     }
+
+    operator fun invoke(postId: PostId, parentCommentId: CommentId?): CommentSearchParameters {
+        return CommentSearchParameters(
+            listingType = ListingType.ALL,
+            commentSortType = CommentSortType.TOP,
+            maxDepth = MAX_DEPTH,
+            postId = postId,
+            communityId = null,
+            communityName = null,
+            isSavedOnly = null,
+            parentId = parentCommentId,
+        )
+    }
+}

@@ -2,6 +2,10 @@ package com.neaniesoft.warami.featurefeed
 
 import android.content.Intent
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -10,38 +14,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.neaniesoft.warami.common.models.ListingType
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBar
-import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBarListingParams
 import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBarSortTypeParams
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import timber.log.Timber
 
-@RootNavGraph(start = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun FeedScreen(
+fun CommunityFeedScreen(
     navigator: DestinationsNavigator,
-    viewModel: FeedViewModel = hiltViewModel(),
+    communityId: CommunityId,
+    viewModel: CommunityFeedViewModel = hiltViewModel(),
 ) {
-    val listingType by viewModel.listingType.collectAsState(initial = ListingType.ALL)
-
-    val sortType by viewModel.sortType.collectAsState()
-
     val listState = rememberLazyListState()
 
     val navigation by viewModel.navigation.collectAsState(initial = null)
 
-    val listingTypeMenuItems by viewModel.listingTypeMenuItems.collectAsState()
-
-    val sortTypeMenuItems by viewModel.sortTypeMenuItems.collectAsState()
-
     val uriNavigation by viewModel.uriNavigation.collectAsState(initial = null)
 
     val posts = viewModel.postsFlow.collectAsLazyPagingItems()
+
+    val community by viewModel.community.collectAsState(initial = null)
+
+    val sortType by viewModel.sortType.collectAsState()
+
+    val sortTypeMenuItems by viewModel.sortTypeMenuItems.collectAsState()
 
     LaunchedEffect(key1 = navigation) {
         val destination = navigation
@@ -61,7 +62,11 @@ fun FeedScreen(
         }
     }
 
-    Timber.d("About to render screen content: $listState, $posts, $listingType")
+    LaunchedEffect(key1 = communityId) {
+        viewModel.onCommunityId(communityId)
+    }
+
+    Timber.d("About to render screen content: $listState, $posts")
 
     FeedScreenContent(
         listState,
@@ -69,17 +74,15 @@ fun FeedScreen(
         { viewModel.onPostClicked(it) },
         onCommunityNameClicked = viewModel::onCommunityNameClicked,
         onLinkClicked = viewModel::onLinkClicked,
-        topBar = {},
+        topBar = {
+            community?.let { community ->
+                TopAppBar(title = { Text(text = community.title, style = MaterialTheme.typography.titleMedium) })
+            }
+        },
         bottomBar = {
             FeedBottomBar(
-                FeedBottomBarListingParams(
-                    listingType = listingType,
-                    onListTypeClicked = viewModel::onListingTypeButtonClicked,
-                    listingTypeMenuItems = listingTypeMenuItems,
-                    onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
-                    onListingTypeSelected = viewModel::onListingTypeChanged,
-                ),
-                FeedBottomBarSortTypeParams(
+                listingParams = null,
+                sortTypeParams = FeedBottomBarSortTypeParams(
                     sortType = sortType,
                     onSortTypeClicked = viewModel::onSortTypeButtonClicked,
                     sortTypeMenuItems = sortTypeMenuItems,

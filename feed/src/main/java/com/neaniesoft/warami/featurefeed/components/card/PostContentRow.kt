@@ -55,7 +55,8 @@ fun PostContentRow(
             }
             Box(
                 modifier = Modifier.clickable(
-                    interactionSource, LocalIndication.current,
+                    interactionSource,
+                    LocalIndication.current,
                     onClick = {
                         if (url != null) {
                             onLinkClicked(url)
@@ -101,7 +102,7 @@ fun PostContentRowPreviewNotFeatured() {
                 url = UriString("http://google.com"),
                 isFeaturedCommunity = false,
                 isFeaturedLocal = false,
-                onLinkClicked = {}
+                onLinkClicked = {},
             )
         }
     }
@@ -118,7 +119,7 @@ fun PostContentRowPreviewFeaturedCommunity() {
                 url = UriString("http://google.com"),
                 isFeaturedCommunity = true,
                 isFeaturedLocal = false,
-                onLinkClicked = {}
+                onLinkClicked = {},
             )
         }
     }
@@ -135,7 +136,7 @@ fun PostContentRowPreviewFeaturedLocal() {
                 url = UriString("http://google.com"),
                 isFeaturedCommunity = false,
                 isFeaturedLocal = true,
-                onLinkClicked = {}
+                onLinkClicked = {},
             )
         }
     }
@@ -152,7 +153,7 @@ fun PostContentRowPreviewFeaturedBoth() {
                 url = UriString("http://google.com"),
                 isFeaturedCommunity = true,
                 isFeaturedLocal = true,
-                onLinkClicked = {}
+                onLinkClicked = {},
             )
         }
     }

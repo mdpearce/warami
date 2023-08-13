@@ -21,34 +21,27 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.neaniesoft.warami.common.extensions.formatPeriod
 import com.neaniesoft.warami.common.models.CommunityId
-import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.UriString
-import com.neaniesoft.warami.featurefeed.ListingTypeMenuItem
 import com.neaniesoft.warami.featurefeed.components.card.PostCard
 import timber.log.Timber
-import java.time.Instant
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 fun FeedScreenContent(
-    communityName: String?,
     listState: LazyListState,
     posts: LazyPagingItems<Post>,
-    currentTime: Instant,
     onPostClicked: (PostId) -> Unit,
-    listingType: ListingType,
-    onListingTypeButtonClicked: () -> Unit,
-    listingTypeMenuItems: List<ListingTypeMenuItem>,
-    onDismissListingTypeMenu: () -> Unit,
-    onListingTypeSelected: (ListingType) -> Unit,
     onCommunityNameClicked: (CommunityId) -> Unit,
     onLinkClicked: (UriString) -> Unit,
+    topBar: @Composable () -> Unit,
+    bottomBar: @Composable () -> Unit,
 ) {
     Timber.d(
-        "Recompoising FeedScreenContent: listState: $listState, pagingPosts: $posts, currentTime: $currentTime, onPostClicked(): $onPostClicked, listingType: $listingType",
+        "Recomposing FeedScreenContent: listState: $listState, pagingPosts: $posts, onPostClicked(): $onPostClicked",
     )
     val refreshIndicatorState = rememberPullRefreshState(
         refreshing = posts.loadState.refresh == LoadState.Loading,
@@ -57,18 +50,8 @@ fun FeedScreenContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            FeedTopBar(communityName = communityName)
-        },
-        bottomBar = {
-            FeedBottomBar(
-                listingType = listingType,
-                onListTypeClicked = onListingTypeButtonClicked,
-                listingTypeMenuItems = listingTypeMenuItems,
-                onDismissListingTypeMenu = onDismissListingTypeMenu,
-                onListingTypeSelected = onListingTypeSelected,
-            )
-        },
+        topBar = topBar,
+        bottomBar = bottomBar,
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -93,9 +76,7 @@ fun FeedScreenContent(
                             creatorAvatar = post.creator.avatarUrl,
                             postedTime = post.publishedAt.formatPeriod(
                                 resources = LocalContext.current.resources,
-                                comparison = currentTime.atZone(
-                                    ZoneId.systemDefault(),
-                                ),
+                                comparison = ZonedDateTime.now(ZoneId.systemDefault()),
                             ),
                             communityThumbnailUri = post.community.icon,
                             postTitle = post.name,

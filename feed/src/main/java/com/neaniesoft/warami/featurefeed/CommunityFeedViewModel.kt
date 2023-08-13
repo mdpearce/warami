@@ -4,14 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.neaniesoft.warami.common.models.Community
 import com.neaniesoft.warami.common.models.CommunityId
-import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
+import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.navigation.FeedNavigator
-import com.neaniesoft.warami.data.repositories.settings.UserSettingsRepository
+import com.neaniesoft.warami.domain.usecases.GetCommunityUseCase
 import com.neaniesoft.warami.domain.usecases.GetPagingDataForPostsUseCase
 import com.ramcosta.composedestinations.spec.Direction
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,40 +22,46 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel
-@Inject
-constructor(
-    userSettingsRepository: UserSettingsRepository,
-    private val feedNavigator: FeedNavigator,
+class CommunityFeedViewModel @Inject constructor(
     private val getPagingData: GetPagingDataForPostsUseCase,
-    private val listingTypeSelectable: ListingTypeSelectable,
+    private val getCommunity: GetCommunityUseCase,
+    private val feedNavigator: FeedNavigator,
     private val sortTypeSelectable: SortTypeSelectable,
-) : ViewModel(), ListingTypeSelectable by listingTypeSelectable, SortTypeSelectable by sortTypeSelectable {
+) : ViewModel(), SortTypeSelectable by sortTypeSelectable {
 
-    private val searchParameters = MutableStateFlow(
-        PostSearchParameters(null, null, null, null, null),
-    )
+    private val searchParameters = MutableStateFlow(PostSearchParameters(null, SortType.ACTIVE, null, null, null))
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val postsFlow: Flow<PagingData<Post>> = userSettingsRepository.feedListingType()
-        .combine(searchParameters) { listingType, searchParameters ->
-            searchParameters.copy(listingType = listingType)
-        }.combine(sortType) { params, sortType ->
-            params.copy(sortType = sortType)
-        }.flatMapLatest { params ->
-            getPagingData(params)
-        }.cachedIn(viewModelScope)
+    private val communityId: MutableStateFlow<CommunityId?> = MutableStateFlow(null)
 
     private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
     val navigation = _navigation.asSharedFlow()
 
     private val _uriNavigation: MutableSharedFlow<UriString?> = MutableSharedFlow()
     val uriNavigation = _uriNavigation.asSharedFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val community: Flow<Community> = communityId.filterNotNull()
+        .flatMapLatest { id ->
+            getCommunity(id)
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val postsFlow: Flow<PagingData<Post>> =
+        searchParameters.combine(sortType) { searchParams, sortType ->
+            searchParams.copy(sortType = sortType)
+        }.flatMapLatest { params ->
+            getPagingData(params)
+        }.cachedIn(viewModelScope)
+
+    suspend fun onCommunityId(communityId: CommunityId) {
+        this.communityId.emit(communityId)
+    }
 
     fun onPostClicked(postId: PostId) {
         viewModelScope.launch {
@@ -74,5 +81,3 @@ constructor(
         }
     }
 }
-
-data class ListingTypeMenuItem(val listingType: ListingType, val isEnabled: Boolean)
