@@ -32,7 +32,8 @@ class CommunityFeedViewModel @Inject constructor(
     private val getPagingData: GetPagingDataForPostsUseCase,
     private val getCommunity: GetCommunityUseCase,
     private val feedNavigator: FeedNavigator,
-) : ViewModel() {
+    private val sortTypeSelectable: SortTypeSelectable,
+) : ViewModel(), SortTypeSelectable by sortTypeSelectable {
 
     private val searchParameters = MutableStateFlow(PostSearchParameters(null, SortType.ACTIVE, null, null, null))
 
@@ -51,9 +52,9 @@ class CommunityFeedViewModel @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val postsFlow: Flow<PagingData<Post>> = communityId.filterNotNull()
-        .combine(searchParameters) { communityId, searchParameters ->
-            searchParameters.copy(communityId = communityId)
+    val postsFlow: Flow<PagingData<Post>> =
+        searchParameters.combine(sortType) { searchParams, sortType ->
+            searchParams.copy(sortType = sortType)
         }.flatMapLatest { params ->
             getPagingData(params)
         }.cachedIn(viewModelScope)

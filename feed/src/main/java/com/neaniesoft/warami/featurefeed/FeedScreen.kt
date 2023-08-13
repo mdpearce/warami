@@ -13,6 +13,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBar
 import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBarListingParams
+import com.neaniesoft.warami.featurefeed.components.feed.FeedBottomBarSortTypeParams
 import com.neaniesoft.warami.featurefeed.components.feed.FeedScreenContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -28,11 +29,15 @@ fun FeedScreen(
 ) {
     val listingType by viewModel.listingType.collectAsState(initial = ListingType.ALL)
 
+    val sortType by viewModel.sortType.collectAsState()
+
     val listState = rememberLazyListState()
 
     val navigation by viewModel.navigation.collectAsState(initial = null)
 
     val listingTypeMenuItems by viewModel.listingTypeMenuItems.collectAsState()
+
+    val sortTypeMenuItems by viewModel.sortTypeMenuItems.collectAsState()
 
     val uriNavigation by viewModel.uriNavigation.collectAsState(initial = null)
 
@@ -74,7 +79,15 @@ fun FeedScreen(
                     onDismissListingTypeMenu = viewModel::onListingTypeMenuDismissed,
                     onListingTypeSelected = viewModel::onListingTypeChanged,
                 ),
+                FeedBottomBarSortTypeParams(
+                    sortType = sortType,
+                    onSortTypeClicked = viewModel::onSortTypeButtonClicked,
+                    sortTypeMenuItems = sortTypeMenuItems,
+                    onDismissSortTypeMenu = viewModel::onSortTypeMenuDismissed,
+                    onSortTypeSelected = viewModel::onSortTypeChanged,
+                ),
             )
+
         },
     )
 }

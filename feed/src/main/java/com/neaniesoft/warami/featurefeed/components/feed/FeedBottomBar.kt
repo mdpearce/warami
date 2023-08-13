@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.common.models.ListingType
+import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.featurefeed.ListingTypeMenuItem
 import com.neaniesoft.warami.featurefeed.R
 import com.neaniesoft.warami.featurefeed.components.icons.FeedIcons
@@ -27,6 +28,7 @@ import com.neaniesoft.warami.featurefeed.components.icons.FeedIcons
 @Composable
 fun FeedBottomBar(
     listingParams: FeedBottomBarListingParams?,
+    sortTypeParams: FeedBottomBarSortTypeParams?,
 ) {
     BottomAppBar(tonalElevation = 8.dp, contentPadding = PaddingValues(start = 8.dp, end = 8.dp)) {
         listingParams?.let { params ->
@@ -113,7 +115,62 @@ fun FeedBottomBar(
                 }
             }
         }
+        sortTypeParams?.let { params ->
+            with(params) {
+                Box {
+                    Button(onClick = { onSortTypeClicked() }) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = FeedIcons.rememberSort(),
+                            contentDescription = stringResource(id = R.string.content_description_sort_type),
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = stringResource(
+                                id = sortType.toStringResource(),
+                            ),
+                        )
+                    }
+
+                    DropdownMenu(expanded = params.sortTypeMenuItems.isNotEmpty(), onDismissRequest = onDismissSortTypeMenu) {
+                        params.sortTypeMenuItems.forEach { type ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = stringResource(
+                                            id = type.toStringResource(),
+                                        ),
+                                    )
+                                },
+                                onClick = { onSortTypeSelected(type) },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
     }
+}
+
+private fun SortType.toStringResource(): Int = when (this) {
+    SortType.HOT -> R.string.sort_type_hot
+    SortType.NEW -> R.string.sort_type_new
+    SortType.OLD -> R.string.sort_type_old
+    SortType.ACTIVE -> R.string.sort_type_active
+    SortType.TOP_DAY -> R.string.sort_type_top_day
+    SortType.TOP_WEEK -> R.string.sort_type_top_week
+    SortType.TOP_MONTH -> R.string.sort_type_top_month
+    SortType.TOP_YEAR -> R.string.sort_type_top_year
+    SortType.TOP_ALL -> R.string.sort_type_top_all
+    SortType.MOST_COMMENTS -> R.string.sort_type_most_comments
+    SortType.NEW_COMMENTS -> R.string.sort_type_new_comments
+    SortType.TOP_HOUR -> R.string.sort_type_top_hour
+    SortType.TOP_SIX_HOUR -> R.string.sort_type_top_six_hour
+    SortType.TOP_TWELVE_HOUR -> R.string.sort_type_top_twelve_hours
+    SortType.TOP_THREE_MONTHS -> R.string.sort_type_top_three_months
+    SortType.TOP_SIX_MONTHS -> R.string.sort_type_top_six_months
+    SortType.TOP_NINE_MONTHS -> R.string.sort_type_top_nine_months
 }
 
 data class FeedBottomBarListingParams(
@@ -122,6 +179,14 @@ data class FeedBottomBarListingParams(
     val listingTypeMenuItems: List<ListingTypeMenuItem>,
     val onDismissListingTypeMenu: () -> Unit,
     val onListingTypeSelected: (ListingType) -> Unit,
+)
+
+data class FeedBottomBarSortTypeParams(
+    val sortType: SortType,
+    val onSortTypeClicked: () -> Unit,
+    val sortTypeMenuItems: List<SortType>,
+    val onDismissSortTypeMenu: () -> Unit,
+    val onSortTypeSelected: (SortType) -> Unit,
 )
 
 @Preview
@@ -136,6 +201,13 @@ fun PreviewFeedBottomBar() {
                     listingTypeMenuItems = emptyList(),
                     onDismissListingTypeMenu = {},
                     onListingTypeSelected = {},
+                ),
+                FeedBottomBarSortTypeParams(
+                    sortType = SortType.ACTIVE,
+                    onSortTypeClicked = {},
+                    sortTypeMenuItems = emptyList(),
+                    onDismissSortTypeMenu = {},
+                    onSortTypeSelected = {},
                 ),
             )
         }
@@ -155,6 +227,13 @@ fun PreviewFeedBottomBarListingTypeExpanded() {
                     onDismissListingTypeMenu = {},
                     onListingTypeSelected = {},
                 ),
+                FeedBottomBarSortTypeParams(
+                    sortType = SortType.ACTIVE,
+                    onSortTypeClicked = {},
+                    sortTypeMenuItems = emptyList(),
+                    onDismissSortTypeMenu = {},
+                    onSortTypeSelected = {},
+                ),
             )
         }
     }
@@ -172,6 +251,13 @@ fun PreviewFeedBottomBarListingTypeExpandedDisabledItem() {
                     listingTypeMenuItems = ListingType.values().map { ListingTypeMenuItem(it, it != ListingType.SUBSCRIBED) },
                     onDismissListingTypeMenu = {},
                     onListingTypeSelected = {},
+                ),
+                FeedBottomBarSortTypeParams(
+                    sortType = SortType.ACTIVE,
+                    onSortTypeClicked = {},
+                    sortTypeMenuItems = emptyList(),
+                    onDismissSortTypeMenu = {},
+                    onSortTypeSelected = {},
                 ),
             )
         }

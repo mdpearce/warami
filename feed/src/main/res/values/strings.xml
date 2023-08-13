@@ -12,6 +12,7 @@
     <string name="content_description_featured_community">Post is featured in community</string>
     <string name="content_description_featured_local">Post is featured in local instance</string>
     <string name="content_description_list_type">Change listing type</string>
+    <string name="content_description_sort_type">Change sorting type</string>
     <string name="content_description_listing_type_all">All communities</string>
     <string name="content_description_listing_type_local">Local communities</string>
     <string name="content_description_listing_type_subscribed">Subscribed communities</string>
@@ -26,6 +27,24 @@
     <string name="listing_type_subscribed">Subscribed</string>
     <string name="listing_type_all">All</string>
     <string name="listing_type_local">Local</string>
+
+    <string name="sort_type_hot">Hot</string>
+    <string name="sort_type_new">New</string>
+    <string name="sort_type_old">Old</string>
+    <string name="sort_type_active">Active</string>
+    <string name="sort_type_top_day">Top Day</string>
+    <string name="sort_type_top_week">Top Week</string>
+    <string name="sort_type_top_month">Top Month</string>
+    <string name="sort_type_top_year">Top Year</string>
+    <string name="sort_type_top_all">Top All Time</string>
+    <string name="sort_type_most_comments">Most Comments</string>
+    <string name="sort_type_new_comments">New Comments</string>
+    <string name="sort_type_top_hour">Top Hour</string>
+    <string name="sort_type_top_six_hour">Top Six Hours</string>
+    <string name="sort_type_top_twelve_hours">Top Twelve Hours</string>
+    <string name="sort_type_top_three_months">Top Three Hours</string>
+    <string name="sort_type_top_six_months">Top Six Months</string>
+    <string name="sort_type_top_nine_months">Top Nine Months</string>
 
     <string name="screen_title_home">Home</string>
 </resources>
