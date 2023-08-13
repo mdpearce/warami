@@ -122,17 +122,13 @@ constructor(
                         instanceId = creator.instanceId.toLong(),
                         displayName = creator.displayName,
                         avatarUrl = creator.avatar,
-                        updatedAt = creator.updated?.let {
-                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
-                                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                        },
+                        updatedAt = creator.updated?.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME)?.atZone(ZoneId.of("UTC"))
+                            ?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                         bio = creator.bio,
                         bannerUrl = creator.banner,
                         matrixUserId = creator.matrixUserId,
-                        banExpires = creator.banExpires?.let {
-                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC"))
-                                .format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                        },
+                        banExpires = creator.banExpires?.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME)?.atZone(ZoneId.of("UTC"))
+                            ?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
                         id = creator.id.toLong(),
                         isBotAccount = creator.botAccount.toLong(),
                     )
@@ -157,11 +153,10 @@ constructor(
                         path = comment.path,
                         isDistinguished = comment.distinguished.toLong(),
                         languageId = comment.languageId.toLong(),
-                        updatedAt = comment.updated?.let {
-                            it.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME).atZone(ZoneId.of("UTC")).format(
+                        updatedAt = comment.updated?.parseLocalDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME)?.atZone(ZoneId.of("UTC"))
+                            ?.format(
                                 DateTimeFormatter.ISO_ZONED_DATE_TIME,
-                            )
-                        },
+                            ),
                         aggregatesScore = counts.score.toLong(),
                         aggregatesUpVotes = counts.upvotes.toLong(),
                         aggregatesDownVotes = counts.downvotes.toLong(),
@@ -196,7 +191,7 @@ constructor(
                         bio = dbComment.creatorBio,
                         bannerUrl = dbComment.creatorBannerUrl?.let { UriString(it) },
                         matrixUserId = dbComment.creatorMatrixUserId,
-                        banExpiresAt = dbComment.creatorBanExpires?.let { it.parseZonedDateTime() },
+                        banExpiresAt = dbComment.creatorBanExpires?.parseZonedDateTime(),
                     ),
                     postId = PostId(dbComment.postId.toInt()),
                     communityId = CommunityId(dbComment.communityId.toInt()),

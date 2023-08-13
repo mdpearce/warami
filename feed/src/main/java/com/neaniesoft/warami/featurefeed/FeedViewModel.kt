@@ -29,9 +29,9 @@ import javax.inject.Inject
 class FeedViewModel
 @Inject
 constructor(
+    userSettingsRepository: UserSettingsRepository,
     private val feedNavigator: FeedNavigator,
     private val getPagingData: GetPagingDataForPostsUseCase,
-    private val userSettingsRepository: UserSettingsRepository,
     private val listingTypeSelectable: ListingTypeSelectable,
     private val sortTypeSelectable: SortTypeSelectable,
 ) : ViewModel(), ListingTypeSelectable by listingTypeSelectable, SortTypeSelectable by sortTypeSelectable {

@@ -6,7 +6,9 @@ import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.asDeferred
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,13 +26,14 @@ constructor(private val remoteConfig: FirebaseRemoteConfig) {
                     }
 
                     override fun onError(error: FirebaseRemoteConfigException) {
-                        Log.e("RemoteConfigRepository", "Error updating remote config", error)
+                        Timber.e(error, "Error updating remote config")
                     }
                 },
             )
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun fetchAndActivate(): Boolean {
         return remoteConfig.fetchAndActivate().asDeferred(CancellationTokenSource()).await()
     }

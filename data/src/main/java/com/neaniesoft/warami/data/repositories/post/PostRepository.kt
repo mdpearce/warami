@@ -51,15 +51,9 @@ constructor(
     private val clock: Clock,
     private val accountRepository: AccountRepository,
 ) {
-    companion object {
-        private const val POSTS_PER_PAGE = 20
-    }
 
     private val api: DefaultApi
         get() = apiRepository.api.value
-
-    private fun SelectBySearchParams.toDomain(searchParameters: PostSearchParameters): Post =
-        this.toDomain(localDateTimeFormatter, searchParameters)
 
     suspend fun getFreshPosts(
         searchParameters: PostSearchParameters,
@@ -81,19 +75,13 @@ constructor(
                 throw PostRepositoryException("Unsuccessful response from API when fetching fresh posts: ${response.code()}")
             }
             val body = response.body() ?: throw PostRepositoryException("API response was empty while fetching fresh posts")
-            return body.posts.map { postView ->
+            body.posts.map { postView ->
                 postView.toDomain(searchParameters, clock.instant().atZone(ZoneId.of("UTC")))
             }
         } catch (e: IOException) {
             throw PostRepositoryException("IO error communicating with API", e)
         } catch (e: HttpException) {
             throw PostRepositoryException("HTTP error communicating with API", e)
-        }
-    }
-
-    fun getCachedPostIds(searchParameters: PostSearchParameters): List<PostId> {
-        return postQueries.transactionWithResult {
-            postQueries.selectPostIdsForSearchParams(searchParameters.id).executeAsList().map { PostId(it.toInt()) }
         }
     }
 

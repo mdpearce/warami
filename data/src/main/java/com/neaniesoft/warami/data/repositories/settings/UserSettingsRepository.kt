@@ -31,7 +31,7 @@ constructor(
                 FeedListingType.ALL -> ListingType.ALL
                 FeedListingType.SUBSCRIBED -> ListingType.SUBSCRIBED
                 FeedListingType.LOCAL -> ListingType.LOCAL
-                FeedListingType.UNRECOGNIZED -> {
+                FeedListingType.UNRECOGNIZED, null -> {
                     Timber.w("Unrecognized value for FeedListingType: $listingType")
                     ListingType.ALL
                 }
