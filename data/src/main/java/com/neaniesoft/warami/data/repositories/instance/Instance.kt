@@ -43,7 +43,7 @@ internal data class Instance(
     @Json(name = "time")
     val time: Long,
     @Json(name = "score")
-    val score: Int,
+    val score: Double,
     @Json(name = "uptime")
     val uptime: InstanceUptime?,
     @Json(name = "isSuspicious")
@@ -115,7 +115,7 @@ internal data class InstanceUptime(
     @Json(name = "date_laststats")
     val dateLastStats: ZonedDateTime?,
     @Json(name = "score")
-    val score: Int?,
+    val score: Double?,
     @Json(name = "status")
     val status: Int?,
 )
