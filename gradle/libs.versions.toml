@@ -78,7 +78,7 @@ kotlin-inject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ks
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinter-plugin = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "5.6.2" }
-androidx-security-crypto = { module = "androidx.security:security-crypto", version = "1.1.0-alpha06" }
+androidx-security-crypto = { module = "androidx.security:security-crypto-ktx", version = "1.1.0-alpha06" }
 google-services-plugin = { module = "com.google.gms:google-services", version.ref = "google-services-plugin" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "32.1.1" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }

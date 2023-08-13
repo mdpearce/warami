@@ -2,6 +2,8 @@ package com.neaniesoft.warami.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.neaniesoft.warami.api.di.AuthToken
@@ -17,8 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRepository
-@Inject
-constructor(
+@Inject constructor(
     @ApplicationContext context: Context,
 ) {
     companion object {
@@ -28,15 +29,26 @@ constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val key = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+    private val spec = KeyGenParameterSpec.Builder(
+        MasterKey.DEFAULT_MASTER_KEY_ALIAS,
+        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
+    ).apply {
+        setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+        setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+        setKeySize(MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE)
+    }.build()
 
-    private val prefs: SharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        AUTH_PREFS_FILENAME,
-        key,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-    )
+    private val masterKey = MasterKey.Builder(context).apply {
+        setKeyGenParameterSpec(spec)
+    }.build()
+
+    private val prefs: SharedPreferences by lazy {
+        EncryptedSharedPreferences(
+            context,
+            AUTH_PREFS_FILENAME,
+            masterKey,
+        )
+    }
 
     init {
         prefs.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
