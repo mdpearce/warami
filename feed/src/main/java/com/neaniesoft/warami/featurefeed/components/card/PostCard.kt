@@ -38,6 +38,7 @@ fun PostCard(
     onCommunityNameClicked: (CommunityId) -> Unit,
     onLinkClicked: (UriString) -> Unit,
 ) {
+
     Card(
         onClick = { onCardClicked(postId) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
