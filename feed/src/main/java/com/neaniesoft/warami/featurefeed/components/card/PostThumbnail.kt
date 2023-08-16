@@ -18,9 +18,11 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.R
+import timber.log.Timber
 
 @Composable
-fun PostContentRowThumbnail(thumbnailUrl: UriString?, url: UriString?) {
+fun PostThumbnail(thumbnailUrl: UriString?, url: UriString?) {
+    Timber.d("ThumbnailUrl: $thumbnailUrl, url: $url")
     if (thumbnailUrl != null) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).crossfade(true)

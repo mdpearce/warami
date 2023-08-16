@@ -3,6 +3,7 @@
     <string name="content_description_avatar_icon">User avatar</string>
     <string name="content_description_community_icon">Community Icon</string>
     <string name="content_description_post_thumbnail">Post Thumbnail Icon</string>
+    <string name="content_description_post_large_image">Post Image</string>
     <string name="content_description_post_icon">Post Icon</string>
     <string name="content_description_post_link">Post Link Icon</string>
     <string name="content_description_comments_icon">Comments Icon</string>
