@@ -9,12 +9,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.UriString
+import com.neaniesoft.warami.domain.extensions.isImageUrl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +40,14 @@ fun PostCard(
     onCommunityNameClicked: (CommunityId) -> Unit,
     onLinkClicked: (UriString) -> Unit,
 ) {
+    val imageUri: UriString? = remember(postUri) {
+        if (postUri.isImageUrl()) {
+            postUri
+        } else {
+            null
+        }
+    }
+
     Card(
         onClick = { onCardClicked(postId) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -55,14 +65,24 @@ fun PostCard(
                     onCommunityNameClicked = onCommunityNameClicked,
                 )
 
-                PostContentRow(
-                    postTitle = postTitle,
-                    thumbnailUrl = postThumbnailUri,
-                    url = postUri,
-                    isFeaturedCommunity = isFeaturedInCommunity,
-                    isFeaturedLocal = isFeaturedInLocal,
-                    onLinkClicked = onLinkClicked,
-                )
+                if (imageUri != null) {
+                    PostContentLargeImageRow(
+                        postTitle = postTitle,
+                        imageUri = imageUri,
+                        isFeaturedInCommunity = isFeaturedInCommunity,
+                        isFeaturedInLocal = isFeaturedInLocal,
+                        onLinkClicked = onLinkClicked,
+                    )
+                } else {
+                    PostContentWithThumbnailRow(
+                        postTitle = postTitle,
+                        thumbnailUrl = postThumbnailUri,
+                        url = postUri,
+                        isFeaturedCommunity = isFeaturedInCommunity,
+                        isFeaturedLocal = isFeaturedInLocal,
+                        onLinkClicked = onLinkClicked,
+                    )
+                }
 
                 if (!embeddedText.isNullOrEmpty()) {
                     PostExtendedContentTextRow(embeddedText)

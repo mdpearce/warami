@@ -28,7 +28,7 @@ import com.neaniesoft.warami.featurefeed.R
 import com.neaniesoft.warami.featurefeed.components.icons.PostIcons
 
 @Composable
-fun PostContentRow(
+fun PostContentWithThumbnailRow(
     postTitle: String,
     thumbnailUrl: UriString?,
     url: UriString?,
@@ -64,7 +64,7 @@ fun PostContentRow(
                     },
                 ),
             ) {
-                PostContentRowThumbnail(thumbnailUrl = thumbnailUrl, url = url)
+                PostThumbnail(thumbnailUrl = thumbnailUrl, url = url)
             }
             Row {
                 if (isFeaturedCommunity) {
@@ -96,7 +96,7 @@ fun PostContentRow(
 fun PostContentRowPreviewNotFeatured() {
     MaterialTheme {
         Surface(Modifier.fillMaxWidth()) {
-            PostContentRow(
+            PostContentWithThumbnailRow(
                 postTitle = "This is a long post title that will spill over to multiple lines",
                 thumbnailUrl = null,
                 url = UriString("http://google.com"),
@@ -113,7 +113,7 @@ fun PostContentRowPreviewNotFeatured() {
 fun PostContentRowPreviewFeaturedCommunity() {
     MaterialTheme {
         Surface(Modifier.fillMaxWidth()) {
-            PostContentRow(
+            PostContentWithThumbnailRow(
                 postTitle = "This is a long post title that will spill over to multiple lines",
                 thumbnailUrl = null,
                 url = UriString("http://google.com"),
@@ -130,7 +130,7 @@ fun PostContentRowPreviewFeaturedCommunity() {
 fun PostContentRowPreviewFeaturedLocal() {
     MaterialTheme {
         Surface(Modifier.fillMaxWidth()) {
-            PostContentRow(
+            PostContentWithThumbnailRow(
                 postTitle = "This is a long post title that will spill over to multiple lines",
                 thumbnailUrl = null,
                 url = UriString("http://google.com"),
@@ -147,7 +147,7 @@ fun PostContentRowPreviewFeaturedLocal() {
 fun PostContentRowPreviewFeaturedBoth() {
     MaterialTheme {
         Surface(Modifier.fillMaxWidth()) {
-            PostContentRow(
+            PostContentWithThumbnailRow(
                 postTitle = "This is a long post title that will spill over to multiple lines",
                 thumbnailUrl = null,
                 url = UriString("http://google.com"),
