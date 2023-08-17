@@ -12,6 +12,7 @@ import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.data.repositories.settings.UserSettingsRepository
+import com.neaniesoft.warami.domain.extensions.isImageUrl
 import com.neaniesoft.warami.domain.usecases.GetPagingDataForPostsUseCase
 import com.ramcosta.composedestinations.spec.Direction
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,7 +71,11 @@ constructor(
 
     fun onLinkClicked(uri: UriString) {
         viewModelScope.launch {
-            _uriNavigation.emit(uri)
+            if (uri.isImageUrl()) {
+                _navigation.emit(feedNavigator.fullScreenImage(uri))
+            } else {
+                _uriNavigation.emit(uri)
+            }
         }
     }
 }
