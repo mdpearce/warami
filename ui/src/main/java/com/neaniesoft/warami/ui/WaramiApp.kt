@@ -26,7 +26,7 @@ fun WaramiApp() {
 
         val context = LocalContext.current
         val activity = remember { context.findActivity() }
-        
+
         DisposableEffect(key1 = navController) {
             val listener = NavController.OnDestinationChangedListener { _, destination, arguments ->
                 Timber.d("Destination route: ${destination.route}, and fullscreen destination = ${FullScreenImageDestination.route}")
@@ -43,7 +43,7 @@ fun WaramiApp() {
                 navController.removeOnDestinationChangedListener(listener)
             }
         }
-        
+
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
