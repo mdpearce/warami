@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
@@ -29,16 +30,16 @@ import timber.log.Timber
 fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
 
     val anchors = mapOf(
-        0f to "Initial",
-        -screenHeight.toFloat() to "TopOffScreen",
-        screenHeight.toFloat() to "BottomOffScreen",
+        0f to SwipeAnchors.Initial,
+        -screenHeight.toFloat() to SwipeAnchors.TopOffScreen,
+        screenHeight.toFloat() to SwipeAnchors.BottomOffScreen,
     )
 
-    val swipeableState = rememberSwipeableState(initialValue = "Initial")
+    val swipeableState: SwipeableState<SwipeAnchors> = rememberSwipeableState(initialValue = SwipeAnchors.Initial)
 
     Timber.d("CurrentState: ${swipeableState.currentValue}")
 
-    if (swipeableState.currentValue == "TopOffScreen" || swipeableState.currentValue == "BottomOffScreen") {
+    if (swipeableState.currentValue is SwipeAnchors.TopOffScreen || swipeableState.currentValue is SwipeAnchors.BottomOffScreen) {
         navigator.popBackStack()
     }
 
@@ -65,3 +66,9 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
 
 val screenHeight: Int
     get() = Resources.getSystem().displayMetrics.heightPixels
+
+private sealed class SwipeAnchors {
+    data object Initial : SwipeAnchors()
+    data object TopOffScreen : SwipeAnchors()
+    data object BottomOffScreen : SwipeAnchors()
+}
