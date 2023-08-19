@@ -19,4 +19,6 @@ dependencies {
     testImplementation(libs.androidx.paging.common)
 
     implementation(libs.compose.markdown)
+
+    implementation(libs.zoomable)
 }

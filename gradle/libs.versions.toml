@@ -1,10 +1,10 @@
 [versions]
 kotlin = "1.9.0"
-android-gradle-plugin = "8.1.0"
+android-gradle-plugin = "8.2.0-alpha15"
 kotlin-compiler-extension = "1.5.1"
 lifecycle = "2.6.1"
-sdk-compile = "33"
-sdk-targer = "33"
+sdk-compile = "34"
+sdk-targer = "34"
 sdk-min = "30"
 kotlin-jvm-target = "17"
 retrofit = "2.9.0"
@@ -95,3 +95,4 @@ dagger-hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-g
 kotlin-kapt-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
+zoomable = { module = "net.engawapg.lib:zoomable", version = "1.5.0" }
