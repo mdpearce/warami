@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
@@ -12,6 +13,7 @@ import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -23,6 +25,8 @@ import coil.request.ImageRequest
 import com.neaniesoft.warami.common.models.UriString
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -42,6 +46,7 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
         )
 
         val swipeableState = rememberSwipeableState(initialValue = INITIAL)
+        val zoomState = rememberZoomState()
 
         LaunchedEffect(key1 = swipeableState.isAnimationRunning) {
             if (swipeableState.isAnimationRunning) {
@@ -70,6 +75,7 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
         val alpha = 1f - (abs(swipeableState.offset.value) / screenHeight.toFloat()).coerceIn(0f, 1f)
 
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .offset(y = (swipeableState.offset.value / LocalDensity.current.density).dp)
                 .swipeable(
@@ -96,7 +102,9 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
                 ),
         ) {
             AsyncImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .zoomable(zoomState = zoomState, enableOneFingerZoom = true),
                 model = ImageRequest.Builder(LocalContext.current).crossfade(true).data(imageUri.value).build(),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
