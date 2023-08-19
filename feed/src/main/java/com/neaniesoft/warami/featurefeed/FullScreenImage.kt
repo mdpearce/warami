@@ -11,6 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -29,24 +30,41 @@ import kotlin.math.abs
 @Destination
 @Composable
 fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
-
     Surface(
         modifier = Modifier
             .fillMaxSize(),
         color = Color.Black,
     ) {
         val anchors = mapOf(
-            0f to "Initial",
-            -screenHeight.toFloat() to "TopOffScreen",
-            screenHeight.toFloat() to "BottomOffScreen",
+            0f to INITIAL,
+            -screenHeight.toFloat() to TOP_OFF_SCREEN,
+            screenHeight.toFloat() to BOTTOM_OFF_SCREEN,
         )
 
-        val swipeableState = rememberSwipeableState(initialValue = "Initial")
+        val swipeableState = rememberSwipeableState(initialValue = INITIAL)
 
-        Timber.d("CurrentState: ${swipeableState.currentValue}")
+        LaunchedEffect(key1 = swipeableState.isAnimationRunning) {
+            if (swipeableState.isAnimationRunning) {
+                val direction = when (swipeableState.direction) {
+                    1f -> {
+                        DIRECTION_DOWNWARDS
+                    }
 
-        if (swipeableState.currentValue == "TopOffScreen" || swipeableState.currentValue == "BottomOffScreen") {
-            navigator.popBackStack()
+                    -1f -> {
+                        DIRECTION_UPWARDS
+                    }
+
+                    else -> {
+                        DIRECTION_STATIC
+                    }
+                }
+                if ((direction == DIRECTION_UPWARDS && swipeableState.targetValue == TOP_OFF_SCREEN) ||
+                    (direction == DIRECTION_DOWNWARDS && swipeableState.targetValue == BOTTOM_OFF_SCREEN)
+                ) {
+                    Timber.d("Fling off-screen started. Popping back-stack")
+                    navigator.popBackStack()
+                }
+            }
         }
 
         val alpha = 1f - (abs(swipeableState.offset.value) / screenHeight.toFloat()).coerceIn(0f, 1f)
@@ -61,8 +79,8 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
                     resistance = null,
                     thresholds = { _, targetValue ->
                         val threshold: Float = when (targetValue) {
-                            "Initial" -> 0.5f
-                            "TopOffScreen", "BottomOffScreen" -> {
+                            INITIAL -> 0.5f
+                            TOP_OFF_SCREEN, BOTTOM_OFF_SCREEN -> {
                                 if (abs(swipeableState.offset.value) >= screenHeight / 2) {
                                     0f
                                 } else {
@@ -77,7 +95,6 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
                     velocityThreshold = 200.dp,
                 ),
         ) {
-            Timber.d("offset: ${swipeableState.offset.value} and in dp: ${swipeableState.offset.value.dp}")
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
                 model = ImageRequest.Builder(LocalContext.current).crossfade(true).data(imageUri.value).build(),
@@ -88,6 +105,14 @@ fun FullScreenImage(imageUri: UriString, navigator: DestinationsNavigator) {
         }
     }
 }
+
+private const val TOP_OFF_SCREEN = "TopOffScreen"
+private const val BOTTOM_OFF_SCREEN = "BottomOffScreen"
+private const val INITIAL = "Initial"
+
+private const val DIRECTION_UPWARDS = "upwards"
+private const val DIRECTION_DOWNWARDS = "downwards"
+private const val DIRECTION_STATIC = "static"
 
 val screenHeight: Int
     get() = Resources.getSystem().displayMetrics.heightPixels
