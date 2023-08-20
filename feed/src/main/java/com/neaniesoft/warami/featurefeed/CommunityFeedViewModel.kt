@@ -53,11 +53,15 @@ class CommunityFeedViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val postsFlow: Flow<PagingData<Post>> =
-        searchParameters.combine(sortType) { searchParams, sortType ->
-            searchParams.copy(sortType = sortType)
-        }.flatMapLatest { params ->
-            getPagingData(params)
-        }.cachedIn(viewModelScope)
+        communityId.filterNotNull()
+            .combine(searchParameters) { communityId, searchParams ->
+                searchParams.copy(communityId = communityId)
+            }
+            .combine(sortType) { searchParams, sortType ->
+                searchParams.copy(sortType = sortType)
+            }.flatMapLatest { params ->
+                getPagingData(params)
+            }.cachedIn(viewModelScope)
 
     suspend fun onCommunityId(communityId: CommunityId) {
         this.communityId.emit(communityId)
