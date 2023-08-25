@@ -31,6 +31,7 @@ import com.neaniesoft.warami.common.models.Votes
 import com.neaniesoft.warami.common.models.compareTo
 import com.neaniesoft.warami.data.db.CommentQueries
 import com.neaniesoft.warami.data.db.PersonQueries
+import com.neaniesoft.warami.data.repositories.post.PostRepository
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.ZoneId
@@ -46,6 +47,7 @@ constructor(
     private val apiRepository: ApiRepository,
     private val personQueries: PersonQueries,
     private val accountRepository: AccountRepository,
+    private val postRepository: PostRepository,
 ) {
     private val api: DefaultApi
         get() {

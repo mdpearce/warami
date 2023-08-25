@@ -18,9 +18,96 @@ import com.neaniesoft.warami.common.models.SubscribedType
 import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.models.Votes
 import com.neaniesoft.warami.data.db.SelectBySearchParams
+import com.neaniesoft.warami.data.db.SelectPostForPostIdByInsertTime
 import com.neaniesoft.warami.data.repositories.DomainPost
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
+fun SelectPostForPostIdByInsertTime.toDomain(): Post {
+    val community = Community(
+        id = CommunityId(communityId.toInt()),
+        name = communityName,
+        title = communityTitle,
+        isRemoved = communityIsRemoved.toBoolean(),
+        publishedAt = communityPublished.parseZonedDateTime(),
+        isDeleted = communityIsDeleted.toBoolean(),
+        isNsfw = communityIsNsfw.toBoolean(),
+        actorId = ActorId(communityActorId),
+        isLocal = communityIsLocal.toBoolean(),
+        isHidden = communityIsHidden.toBoolean(),
+        isPostingRestrictedToMods = communityIsPostingRestrictedToMods.toBoolean(),
+        instanceId = InstanceId(communityInstanceId.toInt()),
+        description = communityDescription,
+        updatedAt = communityUpdatedAt?.parseZonedDateTime(),
+        icon = communityIconUrl?.let { UriString(it) },
+        banner = communityBannerUrl?.let { UriString(it) },
+    )
+    val creator = Person(
+        id = PersonId(creatorId.toInt()),
+        name = creatorName,
+        isBanned = creatorIsBanned.toBoolean(),
+        publishedAt = creatorPublishedAt.parseZonedDateTime(),
+        actorId = ActorId(creatorActorId),
+        isLocal = creatorIsLocal.toBoolean(),
+        isDeleted = creatorIsDeleted.toBoolean(),
+        isAdmin = creatorIsAdmin.toBoolean(),
+        isBotAccount = creatorIsBotAccount.toBoolean(),
+        instanceId = InstanceId(creatorInstanceId.toInt()),
+        displayName = creatorDisplayName,
+        avatarUrl = creatorAvatarUrl?.let { UriString(it) },
+        updatedAt = creatorUpdatedAt?.parseZonedDateTime(),
+        bio = creatorBio,
+        bannerUrl = creatorBannerUrl?.let { UriString(it) },
+        matrixUserId = creatorMatrixUserId,
+        banExpiresAt = creatorBanExpires?.parseZonedDateTime(),
+    )
+    val counts = PostAggregates(
+        id = aggregates.toInt(),
+        postId = PostId(postId.toInt()),
+        commentCount = countsComments.toInt(),
+        score = countsScore.toInt(),
+        votes = Votes(up = countsUpVotes.toInt(), down = countsDownVotes.toInt()),
+        publishedAt = countsPublishedAt.parseZonedDateTime(),
+        newestCommentTimeNecro = countsNewestCommentTime.parseZonedDateTime(),
+        newestComment = countsNewestCommentTime.parseZonedDateTime(),
+        isFeaturedCommunity = countsIsFeaturedCommunity.toBoolean(),
+        isFeaturedLocal = countsIsFeaturedLocal.toBoolean(),
+        hotRank = countsHotRank.toInt(),
+        hotRankActive = countsHotRankActive.toInt(),
+    )
+
+    return Post(
+        postId = PostId(postId.toInt()),
+        insertedAt = insertedAt.parseZonedDateTime(),
+        name = name,
+        creator = creator,
+        community = community,
+        isRemoved = isRemoved.toBoolean(),
+        isLocked = isLocked.toBoolean(),
+        publishedAt = publishedAt.parseZonedDateTime(),
+        isDeleted = isDeleted.toBoolean(),
+        isNsfw = isNsfw.toBoolean(),
+        apId = apId,
+        isLocal = isLocal.toBoolean(),
+        languageId = languageId.toInt(),
+        isFeaturedCommunity = isFeaturedCommunity.toBoolean(),
+        url = url?.let { UriString(it) },
+        body = body,
+        updatedAt = updatedAt?.parseZonedDateTime(),
+        embedTitle = embedTitle,
+        embedDescription = embedDescription,
+        thumbnail = thumbnailUrl?.let { UriString(it) },
+        embedVideo = embedVideoUrl?.let { UriString(it) },
+        isCreatorBannedFromCommunity = isCreatorBannedFromCommunity.toBoolean(),
+        aggregates = counts,
+        subscribedTyped = SubscribedType.parse(subscribedType),
+        isSaved = isSaved.toBoolean(),
+        isRead = isRead.toBoolean(),
+        isCreatorBlocked = isCreatorBlocked.toBoolean(),
+        myVote = myVote?.toInt(),
+        searchParameters = PostSearchParameters(null, null, null, null, null),
+    )
+}
 
 fun SelectBySearchParams.toDomain(
     dateTimeFormatter: DateTimeFormatter,

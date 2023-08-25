@@ -12,12 +12,18 @@ import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.CommentsRepositoryException
 import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetCommentsUseCase
+import com.neaniesoft.warami.domain.usecases.GetPostUseCase
 import com.ramcosta.composedestinations.spec.Direction
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,6 +34,7 @@ class CommentsViewModel
 constructor(
     private val buildCommentSearchParameters: BuildCommentSearchParametersUseCase,
     private val getComments: GetCommentsUseCase,
+    private val getPost: GetPostUseCase,
     private val feedNavigator: FeedNavigator,
     private val ioDispatcher: IODispatcher,
 ) : ViewModel() {
@@ -49,10 +56,17 @@ constructor(
     private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+    private val postId = MutableStateFlow<PostId?>(null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val post = postId.mapNotNull { it }
+        .flatMapConcat { getPost(it) }
+
     fun refresh(postId: PostId, parentCommentId: CommentId?) {
         Timber.d("refresh($postId), parent: $parentCommentId")
         viewModelScope.launch(ioDispatcher) {
             _isRefreshing.emit(true)
+            this@CommentsViewModel.postId.emit(postId)
             try {
                 Timber.d("fetching comments")
                 val comments = getComments(buildCommentSearchParameters(postId, parentCommentId), pageNumber.value)
