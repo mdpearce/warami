@@ -132,7 +132,6 @@ fun PostCardContent(
     }
 }
 
-
 @Preview
 @Composable
 fun PreviewPostCard() {

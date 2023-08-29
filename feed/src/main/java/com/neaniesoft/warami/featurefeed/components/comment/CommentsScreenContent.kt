@@ -56,7 +56,6 @@ fun CommentsScreenContent(
             .pullRefresh(pullRefreshState),
     ) {
         LazyColumn(state = listState) {
-
             item {
                 if (post != null) {
                     with(post) {
