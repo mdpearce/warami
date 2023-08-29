@@ -103,7 +103,7 @@ fun CommentsScreenContent(
                     onLoadMoreCommentsClicked = onLoadMoreCommentsClicked,
                 )
                 val nextDepth = commentsWithDepth.getOrNull(index + 1)?.second
-                if (nextDepth != depth) {
+                if (nextDepth != depth || nextDepth == 0) {
                     Divider()
                 }
             }
