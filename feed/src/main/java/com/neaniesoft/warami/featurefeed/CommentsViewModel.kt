@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neaniesoft.warami.common.models.Comment
 import com.neaniesoft.warami.common.models.CommentId
+import com.neaniesoft.warami.common.models.CommunityId
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.PostId
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.common.models.plus
 import com.neaniesoft.warami.common.navigation.FeedNavigator
 import com.neaniesoft.warami.data.di.IODispatcher
 import com.neaniesoft.warami.data.repositories.CommentsRepositoryException
+import com.neaniesoft.warami.domain.extensions.isImageUrl
 import com.neaniesoft.warami.domain.usecases.BuildCommentSearchParametersUseCase
 import com.neaniesoft.warami.domain.usecases.GetCommentsUseCase
 import com.neaniesoft.warami.domain.usecases.GetPostUseCase
@@ -20,9 +23,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -47,6 +48,9 @@ constructor(
 
     private val _navigation: MutableSharedFlow<Direction?> = MutableSharedFlow()
     val navigation = _navigation.asSharedFlow()
+
+    private val _uriNavigation: MutableSharedFlow<UriString?> = MutableSharedFlow()
+    val uriNavigation = _uriNavigation.asSharedFlow()
 
     private val pageNumber: MutableStateFlow<PageNumber> = MutableStateFlow(PageNumber(1))
 
@@ -105,6 +109,22 @@ constructor(
                 _pageLoadingContent.emit(PageLoadingContent.NoResults)
             } else {
                 _pageLoadingContent.emit(PageLoadingContent.MaybeMoreResults)
+            }
+        }
+    }
+
+    fun onCommunityClicked(communityId: CommunityId) {
+        viewModelScope.launch {
+            _navigation.emit(feedNavigator.feedScreenForCommunity(communityId))
+        }
+    }
+
+    fun onLinkClicked(uriString: UriString) {
+        viewModelScope.launch {
+            if (uriString.isImageUrl()) {
+                _navigation.emit(feedNavigator.fullScreenImage(uriString))
+            } else {
+                _uriNavigation.emit(uriString)
             }
         }
     }

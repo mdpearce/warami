@@ -19,10 +19,15 @@ import androidx.compose.ui.platform.LocalContext
 import com.neaniesoft.warami.common.extensions.formatPeriod
 import com.neaniesoft.warami.common.models.Comment
 import com.neaniesoft.warami.common.models.CommentId
+import com.neaniesoft.warami.common.models.CommunityId
+import com.neaniesoft.warami.common.models.Post
 import com.neaniesoft.warami.common.models.PostId
+import com.neaniesoft.warami.common.models.UriString
 import com.neaniesoft.warami.featurefeed.PageLoadingContent
+import com.neaniesoft.warami.featurefeed.components.card.PostCardContent
 import java.time.Instant
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -32,6 +37,9 @@ fun CommentsScreenContent(
     pageLoadingContent: PageLoadingContent,
     isRefeshing: Boolean,
     commentsWithDepth: List<Pair<Comment, Int>>,
+    post: Post?,
+    onCommunityNameClicked: (CommunityId) -> Unit,
+    onLinkClicked: (UriString) -> Unit,
     onLoadMoreCommentsClicked: (PostId, CommentId) -> Unit,
     onNextPageClicked: (PostId, CommentId?) -> Unit,
     onRefreshSelected: (PostId, CommentId?) -> Unit,
@@ -48,8 +56,37 @@ fun CommentsScreenContent(
             .pullRefresh(pullRefreshState),
     ) {
         LazyColumn(state = listState) {
+
+            item {
+                if (post != null) {
+                    with(post) {
+                        PostCardContent(
+                            communityId = community.id,
+                            communityName = community.title,
+                            creatorName = creator.displayName ?: creator.name,
+                            creatorAvatar = creator.avatarUrl,
+                            postedTime = publishedAt.formatPeriod(
+                                resources = LocalContext.current.resources,
+                                comparison = ZonedDateTime.now(ZoneId.systemDefault()),
+                            ),
+                            communityThumbnailUri = post.community.icon,
+                            postTitle = post.name,
+                            postThumbnailUri = post.thumbnail,
+                            postUri = post.url,
+                            commentCount = post.aggregates.commentCount,
+                            score = post.aggregates.score,
+                            embeddedText = post.body,
+                            isFeaturedInCommunity = post.aggregates.isFeaturedCommunity,
+                            isFeaturedInLocal = post.aggregates.isFeaturedLocal,
+                            onCommunityNameClicked = onCommunityNameClicked,
+                            onLinkClicked = onLinkClicked,
+                        )
+                    }
+                }
+            }
+
             items(commentsWithDepth.size) { index ->
-                val (comment, depth) = commentsWithDepth[index]
+                val (comment, depth) = commentsWithDepth[index] // account for post header item
                 CommentRow(
                     postId = comment.postId,
                     commentId = comment.commentId,

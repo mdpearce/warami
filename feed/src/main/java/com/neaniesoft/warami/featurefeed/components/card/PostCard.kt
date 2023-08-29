@@ -40,6 +40,51 @@ fun PostCard(
     onCommunityNameClicked: (CommunityId) -> Unit,
     onLinkClicked: (UriString) -> Unit,
 ) {
+    Card(
+        onClick = { onCardClicked(postId) },
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier.padding(bottom = 16.dp),
+    ) {
+        PostCardContent(
+            communityId,
+            communityName,
+            creatorName,
+            creatorAvatar,
+            postedTime,
+            communityThumbnailUri,
+            onCommunityNameClicked,
+            postTitle,
+            isFeaturedInCommunity,
+            isFeaturedInLocal,
+            onLinkClicked,
+            postThumbnailUri,
+            postUri,
+            embeddedText,
+            commentCount,
+            score,
+        )
+    }
+}
+
+@Composable
+fun PostCardContent(
+    communityId: CommunityId,
+    communityName: String,
+    creatorName: String,
+    creatorAvatar: UriString?,
+    postedTime: String,
+    communityThumbnailUri: UriString?,
+    onCommunityNameClicked: (CommunityId) -> Unit,
+    postTitle: String,
+    isFeaturedInCommunity: Boolean,
+    isFeaturedInLocal: Boolean,
+    onLinkClicked: (UriString) -> Unit,
+    postThumbnailUri: UriString?,
+    postUri: UriString?,
+    embeddedText: String?,
+    commentCount: Int,
+    score: Int,
+) {
     val imageUri: UriString? = remember(postUri) {
         if (postUri.isImageUrl()) {
             postUri
@@ -47,52 +92,46 @@ fun PostCard(
             null
         }
     }
+    Surface(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            PostHeaderRow(
+                communityId = communityId,
+                communityName = communityName,
+                creatorName = creatorName,
+                creatorAvatarUrl = creatorAvatar,
+                postedTime = postedTime,
+                thumbnailUrl = communityThumbnailUri?.value,
+                onCommunityNameClicked = onCommunityNameClicked,
+            )
 
-    Card(
-        onClick = { onCardClicked(postId) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.padding(bottom = 16.dp),
-    ) {
-        Surface(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                PostHeaderRow(
-                    communityId = communityId,
-                    communityName = communityName,
-                    creatorName = creatorName,
-                    creatorAvatarUrl = creatorAvatar,
-                    postedTime = postedTime,
-                    thumbnailUrl = communityThumbnailUri?.value,
-                    onCommunityNameClicked = onCommunityNameClicked,
+            if (imageUri != null) {
+                PostContentLargeImageRow(
+                    postTitle = postTitle,
+                    imageUri = imageUri,
+                    isFeaturedInCommunity = isFeaturedInCommunity,
+                    isFeaturedInLocal = isFeaturedInLocal,
+                    onLinkClicked = onLinkClicked,
                 )
-
-                if (imageUri != null) {
-                    PostContentLargeImageRow(
-                        postTitle = postTitle,
-                        imageUri = imageUri,
-                        isFeaturedInCommunity = isFeaturedInCommunity,
-                        isFeaturedInLocal = isFeaturedInLocal,
-                        onLinkClicked = onLinkClicked,
-                    )
-                } else {
-                    PostContentWithThumbnailRow(
-                        postTitle = postTitle,
-                        thumbnailUrl = postThumbnailUri,
-                        url = postUri,
-                        isFeaturedCommunity = isFeaturedInCommunity,
-                        isFeaturedLocal = isFeaturedInLocal,
-                        onLinkClicked = onLinkClicked,
-                    )
-                }
-
-                if (!embeddedText.isNullOrEmpty()) {
-                    PostExtendedContentTextRow(embeddedText)
-                }
-
-                PostSummaryRow(commentCount = commentCount, score = score)
+            } else {
+                PostContentWithThumbnailRow(
+                    postTitle = postTitle,
+                    thumbnailUrl = postThumbnailUri,
+                    url = postUri,
+                    isFeaturedCommunity = isFeaturedInCommunity,
+                    isFeaturedLocal = isFeaturedInLocal,
+                    onLinkClicked = onLinkClicked,
+                )
             }
+
+            if (!embeddedText.isNullOrEmpty()) {
+                PostExtendedContentTextRow(embeddedText)
+            }
+
+            PostSummaryRow(commentCount = commentCount, score = score)
         }
     }
 }
+
 
 @Preview
 @Composable
