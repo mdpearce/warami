@@ -1,6 +1,8 @@
 package com.neaniesoft.warami.data.repositories.post
 
 import androidx.paging.PagingSource
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.paging3.QueryPagingSource
 import com.neaniesoft.warami.api.apis.DefaultApi
 import com.neaniesoft.warami.common.adapters.toDomain
@@ -8,6 +10,7 @@ import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.PageNumber
 import com.neaniesoft.warami.common.models.Post
+import com.neaniesoft.warami.common.models.PostId
 import com.neaniesoft.warami.common.models.PostSearchParameters
 import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.db.PersonQueries
@@ -22,6 +25,9 @@ import com.neaniesoft.warami.data.repositories.AccountRepository
 import com.neaniesoft.warami.data.repositories.ApiRepository
 import com.neaniesoft.warami.data.repositories.adapters.toApi
 import com.neaniesoft.warami.data.repositories.adapters.toDb
+import com.neaniesoft.warami.data.repositories.adapters.toDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Clock
@@ -79,6 +85,12 @@ constructor(
         } catch (e: HttpException) {
             throw PostRepositoryException("HTTP error communicating with API", e)
         }
+    }
+
+    fun post(postId: PostId): Flow<Post?> = postQueries.transactionWithResult {
+        postQueries.selectPostForPostIdByInsertTime(postId.value.toLong()).asFlow()
+            .mapToOneOrNull(coroutineDispatcher)
+            .map { it?.toDomain() }
     }
 
     fun emptyCache(searchParameters: PostSearchParameters) {
