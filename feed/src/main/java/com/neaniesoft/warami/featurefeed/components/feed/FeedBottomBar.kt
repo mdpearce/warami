@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.neaniesoft.warami.common.models.Community
 import com.neaniesoft.warami.common.models.ListingType
 import com.neaniesoft.warami.common.models.SortType
 import com.neaniesoft.warami.featurefeed.ListingTypeMenuItem
@@ -31,6 +35,7 @@ import com.neaniesoft.warami.featurefeed.components.icons.FeedIcons
 fun FeedBottomBar(
     listingParams: FeedBottomBarListingParams?,
     sortTypeParams: FeedBottomBarSortTypeParams?,
+    communitiesParams: FeedBottomBarCommunitiesParams?,
 ) {
     BottomAppBar(tonalElevation = 8.dp, contentPadding = PaddingValues(start = 8.dp, end = 8.dp)) {
         listingParams?.let { params ->
@@ -154,6 +159,18 @@ fun FeedBottomBar(
                 }
             }
         }
+        Spacer(modifier = Modifier.weight(0.1f))
+        communitiesParams?.let {
+            with(it) {
+                IconButton(onClick = { onCommunitiesClicked() }) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(id = R.string.content_description_communities),
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -193,6 +210,11 @@ data class FeedBottomBarSortTypeParams(
     val onSortTypeSelected: (SortType) -> Unit,
 )
 
+data class FeedBottomBarCommunitiesParams(
+    val onCommunitiesClicked: () -> Unit,
+    val onCommunityClicked: (Community) -> Unit,
+)
+
 @Preview
 @Composable
 fun PreviewFeedBottomBar() {
@@ -213,6 +235,9 @@ fun PreviewFeedBottomBar() {
                     onDismissSortTypeMenu = {},
                     onSortTypeSelected = {},
                 ),
+                FeedBottomBarCommunitiesParams(
+                    {}, {},
+                )
             )
         }
     }
@@ -238,6 +263,9 @@ fun PreviewFeedBottomBarListingTypeExpanded() {
                     onDismissSortTypeMenu = {},
                     onSortTypeSelected = {},
                 ),
+                FeedBottomBarCommunitiesParams(
+                    {}, {},
+                )
             )
         }
     }
@@ -263,6 +291,9 @@ fun PreviewFeedBottomBarListingTypeExpandedDisabledItem() {
                     onDismissSortTypeMenu = {},
                     onSortTypeSelected = {},
                 ),
+                FeedBottomBarCommunitiesParams(
+                    {}, {}
+                )
             )
         }
     }

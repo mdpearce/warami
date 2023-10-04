@@ -14,6 +14,7 @@
     <string name="content_description_featured_local">Post is featured in local instance</string>
     <string name="content_description_list_type">Change listing type</string>
     <string name="content_description_sort_type">Change sorting type</string>
+    <string name="content_description_communities">List subscribed communities</string>
     <string name="content_description_listing_type_all">All communities</string>
     <string name="content_description_listing_type_local">Local communities</string>
     <string name="content_description_listing_type_subscribed">Subscribed communities</string>
