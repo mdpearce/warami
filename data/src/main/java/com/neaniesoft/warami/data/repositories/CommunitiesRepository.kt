@@ -2,6 +2,7 @@ package com.neaniesoft.warami.data.repositories
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.neaniesoft.warami.api.models.ListingType
 import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toBoolean
 import com.neaniesoft.warami.common.models.ActorId
@@ -16,6 +17,8 @@ import com.neaniesoft.warami.data.db.SubscribedCommunityQueries
 import com.neaniesoft.warami.data.di.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,23 +41,23 @@ class CommunitiesRepository @Inject constructor(
 
 
     suspend fun updateSubscribedCommunities() {
-//        try {
-//            val communitiesApiResponse = apiRepository.api.value.listCommunities(
-//                type = ListingType.subscribed,
-//                auth = authRepository.jwt.value
-//            )
-//            val body = communitiesApiResponse.body()
-//            val errorBody = communitiesApiResponse.errorBody()
-//            if (communitiesApiResponse.isSuccessful && body != null) {
-//                val apiCommunities = body.communities
-//
-//            }
-//
-//        } catch (e: HttpException) {
-//
-//        } catch (e: IOException) {
-//
-//        }
+        try {
+            val communitiesApiResponse = apiRepository.api.value.listCommunities(
+                type = ListingType.subscribed,
+                auth = authRepository.jwt.value
+            )
+            val body = communitiesApiResponse.body()
+            val errorBody = communitiesApiResponse.errorBody()
+            if (communitiesApiResponse.isSuccessful && body != null) {
+                val apiCommunities = body.communities
+                // TODO Update this in the db
+            }
+
+        } catch (e: HttpException) {
+
+        } catch (e: IOException) {
+
+        }
     }
 
 }
