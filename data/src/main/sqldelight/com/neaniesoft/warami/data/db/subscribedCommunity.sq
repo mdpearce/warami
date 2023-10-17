@@ -1,0 +1,51 @@
+CREATE TABLE subscribedCommunity (
+    id INTEGER,
+    communityId INTEGER NOT NULL,
+    subscribedType TEXT NOT NULL,
+    PRIMARY KEY(id)
+);
+
+CREATE INDEX subscribedCommunityCommunityId ON subscribedCommunity (
+    communityId
+);
+
+CREATE INDEX subscribedCommunitySubscribedType ON subscribedCommunity (
+    subscribedType
+);
+
+upsertSubscribedType {
+    UPDATE subscribedCommunity
+    SET subscribedType = :subscribedType
+    WHERE communityId = :communityId;
+
+    INSERT OR IGNORE INTO subscribedCommunity(
+        communityId,
+        subscribedType
+    ) VALUES (
+        :communityId,
+        :subscribedType
+    );
+}
+
+selectSubscribedCommunities:
+SELECT
+            c.id,
+            c.name,
+            c.title,
+            c.isRemoved,
+            c.published,
+            c.isDeleted,
+            c.isNsfw,
+            c.actorId,
+            c.isLocal,
+            c.isHidden,
+            c.isPostingRestrictedToMods,
+            c.instanceId,
+            c.description,
+            c.updatedAt,
+            c.iconUrl,
+            c.bannerUrl,
+            COALESCE(sc.subscribedType) AS subscriptionStatus
+FROM community c
+LEFT JOIN subscribedCommunity sc ON c.id = sc.communityId
+WHERE sc.subscribedType IN (:subscribedValue, :pendingValue) OR sc.subscribedType IS NULL;

@@ -17,6 +17,7 @@ import com.neaniesoft.warami.data.db.PostAggregateQueries
 import com.neaniesoft.warami.data.db.PostQueries
 import com.neaniesoft.warami.data.db.PostRemoteKeyQueries
 import com.neaniesoft.warami.data.db.PostSearchParamsQueries
+import com.neaniesoft.warami.data.db.SubscribedCommunityQueries
 import com.neaniesoft.warami.data.repositories.adapters.ZonedDateTimeFromLocalTimeAdapter
 import com.neaniesoft.warami.data.repositories.post.PostTransactor
 import com.squareup.moshi.Moshi
@@ -78,6 +79,10 @@ class DataModule() {
     @Provides
     @Singleton
     fun provideCommentQueries(db: Database): CommentQueries = db.commentQueries
+
+    @Provides
+    @Singleton
+    fun provideSubscribedCommunityQueries(db: Database): SubscribedCommunityQueries = db.subscribedCommunityQueries
 
     @Provides
     @Singleton
