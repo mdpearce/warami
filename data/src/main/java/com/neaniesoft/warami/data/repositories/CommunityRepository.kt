@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOne
 import com.neaniesoft.warami.common.extensions.parseZonedDateTime
 import com.neaniesoft.warami.common.extensions.toBoolean
+import com.neaniesoft.warami.common.extensions.toLong
 import com.neaniesoft.warami.common.models.ActorId
 import com.neaniesoft.warami.common.models.Community
 import com.neaniesoft.warami.common.models.CommunityId
@@ -13,6 +14,7 @@ import com.neaniesoft.warami.data.db.CommunityQueries
 import com.neaniesoft.warami.data.di.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,6 +47,32 @@ constructor(
                 icon = db.iconUrl?.let { UriString(it) },
                 banner = db.bannerUrl?.let { UriString(it) },
             )
+        }
+    }
+
+    fun updateCommunity(community: Community) {
+        communityQueries.transaction {
+            with(community) {
+                communityQueries.upsert(
+                    name = name,
+                    title = title,
+                    isRemoved = isRemoved.toLong(),
+                    published = publishedAt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                    isDeleted = isDeleted.toLong(),
+                    isNsfw = isNsfw.toLong(),
+                    actorId = actorId.value,
+                    isLocal = isLocal.toLong(),
+                    isHidden = isHidden.toLong(),
+                    isPostingRestrictedToMods = isPostingRestrictedToMods.toLong(),
+                    instanceId = instanceId.value.toLong(),
+                    description = description,
+                    updatedAt = updatedAt?.format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                    iconUrl = icon?.value,
+                    bannerUrl = banner?.value,
+                    id = id.value.toLong(),
+                    // TODO extract this - it is identical to the use in PostRepository
+                )
+            }
         }
     }
 }

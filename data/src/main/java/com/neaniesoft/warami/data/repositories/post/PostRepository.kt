@@ -164,6 +164,7 @@ constructor(
                     iconUrl = icon?.value,
                     bannerUrl = banner?.value,
                     id = id.value.toLong(),
+                    // TODO: Extract this. It is identical to the usage in CommunityRepository
                 )
             }
 

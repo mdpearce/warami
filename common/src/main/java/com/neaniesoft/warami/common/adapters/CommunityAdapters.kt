@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 typealias ApiCommunity = Community
 typealias DomainCommunity = com.neaniesoft.warami.common.models.Community
 
+
 fun ApiCommunity.toDomain(): DomainCommunity = DomainCommunity(
     id = CommunityId(id.intValueExact()),
     name = name,
@@ -30,3 +31,4 @@ fun ApiCommunity.toDomain(): DomainCommunity = DomainCommunity(
     icon = icon?.let { UriString(it) },
     banner = banner?.let { UriString(it) },
 )
+
